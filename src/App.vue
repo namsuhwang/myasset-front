@@ -1,10 +1,22 @@
 <template>
 <!--    <img alt="Vue logo" src="./assets/logo.png" /> -->
-    <HelloWorld msg="Welcome My Asset Portfolio" />
+  <HelloWorld msg="Welcome My Asset Portfolio" />
+  <h3>개발자 : {{ developer }}</h3>
 </template>
 
 <script setup>
 import HelloWorld from './components/HelloWorld.vue'
+</script>
+
+<script>
+export default {
+  name: "App",
+  data(){
+    return {
+      developer: "황남수"
+    }
+  }
+}
 </script>
 
 <style>
