@@ -4,11 +4,9 @@
   <h3>개발자 : {{ developer }}</h3>
 </template>
 
-<script setup>
-import HelloWorld from './components/HelloWorld.vue'
-</script>
-
 <script>
+import HelloWorld from './components/HelloWorld.vue'
+
 export default {
   name: "App",
   data(){
