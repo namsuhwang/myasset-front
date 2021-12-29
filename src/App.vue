@@ -1,65 +1,71 @@
 <template>
-  <h5>자산관리로 부자되자 [{{selMenuItem.name}}]</h5>  
-<nav class="navbar navbar-expand-lg navbar-light bg-light"><div class="dropdown">
-</div>
-  <div class="container-fluid">
+  <h5>자산관리로 부자되자 [{{selMenuItem.name}}]</h5>   
 
-  <div class="dropdown">
-    <button
-      class="btn btn-primary dropdown-toggle"
-      type="button" id="dropdownMenuButton1"
-      data-bs-toggle="dropdown"
-      aria-expanded="false">
+  <div class="container-fluid">
+    <nav class="nav">
+      <a class="nav-link dropdown-toggle ms_menulabel" style="color:white" href="#" id="navbarDropdownMenuLink" role="button"  data-bs-toggle="dropdown" aria-expanded="false">
       {{selMenuItem.name}}
-    </button>
-    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-      <li v-for="(menuItem, idx) in menuItems" :key="idx" >
-        <a class="dropdown-item" @click="selMenuItem = menuItem" href="#">{{menuItem.name}}</a>
-      </li>
-    </ul>
-    </div>
-    <a class="navbar-brand" href="#">Navbar</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav">
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Features</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Pricing</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link disabled">Disabled</a>
+      </a>
+      <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+        <li v-for="(menuItem, i) in menuItems" :key="i" >
+          <a class="dropdown-item" @click="selMenuItem = menuItem" href="#">{{menuItem.name}}</a>
         </li>
       </ul>
-    </div>
+      <a v-for="(subMenu, j) in selMenuItem.subMenus" :key="j" href="#" class="nav-item nav-link active">{{ subMenu.name }}</a>
+    </nav>
   </div>
-</nav>
-<!--    <img alt="Vue logo" src="./assets/logo.png" /> -->
-  <HelloWorld msg="Welcome My Asset Portfolio" />
-  <h3>개발자 : {{ developer }}</h3>
+  
+  <button @click="restTestCallGet()">Get Test</button>
+  <button @click="restTestCallPost()">Post Test</button>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import menuItems from './assets/menu.js';
+import axios from 'axios';
+
+// axios.defaults.baseURL = 'http://namsuhwang.synology.me:8090/myasset';
+// axios.defaults.headers.post['Content-Type'] = 'application/json;charset=utf-8';
+// axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
 
 export default {
   name: "App",
   data(){
     return {
-      selMenuItem: {id:'menu_01', name:'자산현황'},
-      menuItems: [
-        {id:'menu_01', name:'자산현황'},
-        {id:'menu_02', name:'부동산'},
-        {id:'menu_03', name:'주식'},
-        {id:'menu_04', name:'시스템'}
-        ],
+      selMenuItem: menuItems[0],
+      menuItems: menuItems,
+      subItems: menuItems[0].subMenus,
       developer: "황남수"
+    }
+  },
+  methods: {
+    restTestCallPost(){
+
+      // alert("1");
+      var callUrl = "/myasset/test/post";
+      //alert(callUrl);
+      axios.post(callUrl, {param1:"3333"})
+            .then((response)=>{
+              // 성공시 처리
+              var data = response.data;
+              alert(data);
+            }) ;
+
+      //alert(callUrl);
+    },
+
+    restTestCallGet(){
+
+      // alert("1");
+      var callUrl = "/myasset/test/get";
+      //alert(callUrl);
+      axios.get(callUrl)
+            .then((response)=>{
+              // 성공시 처리
+              var data = response.data;
+              alert(data);
+            }) ;
+
+      //alert(callUrl);
     }
   }
 }
@@ -74,4 +80,8 @@ export default {
   color: #2c3e50;
   margin-top: 10px;
 }
+.ms_menulabel {
+  background-color: darkslateblue; 
+  border-radius: 10px;
+} 
 </style>
