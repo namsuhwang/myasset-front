@@ -1,5 +1,5 @@
 <template>
-  <h5>자산관리로 부자되자 [{{selMenuItem.name}}]</h5>   
+  <h5>자산관리로 부자되자 {{selMenuItem.name}} </h5>   
 
   <div class="container-fluid">
     <nav class="nav">
@@ -15,59 +15,57 @@
     </nav>
   </div>
   
-  <button @click="restTestCallGet()">Get Test</button>
-  <button @click="restTestCallPost()">Post Test</button>
+  <!-- <button @click="restTestCallGet()">Get Test</button>-->
+  <!-- <button @click="restTestCallPost()">Post Test</button>  -->
+  <TotalAsset />
 </template>
 
 <script>
 import menuItems from './assets/menu.js';
 import axios from 'axios';
+import TotalAsset from './components/TotalAsset.vue';
 
 // axios.defaults.baseURL = 'http://namsuhwang.synology.me:8090/myasset';
 // axios.defaults.headers.post['Content-Type'] = 'application/json;charset=utf-8';
 // axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
 
 export default {
-  name: "App",
-  data(){
-    return {
-      selMenuItem: menuItems[0],
-      menuItems: menuItems,
-      subItems: menuItems[0].subMenus,
-      developer: "황남수"
-    }
-  },
-  methods: {
-    restTestCallPost(){
-
-      // alert("1");
-      var callUrl = "/myasset/test/post";
-      //alert(callUrl);
-      axios.post(callUrl, {param1:"3333"})
-            .then((response)=>{
-              // 성공시 처리
-              var data = response.data;
-              alert(data);
-            }) ;
-
-      //alert(callUrl);
+    name: "App",
+    data() {
+        return {
+            selMenuItem: menuItems[0],
+            menuItems: menuItems,
+            subItems: menuItems[0].subMenus,
+            developer: "황남수"
+        };
     },
-
-    restTestCallGet(){
-
-      // alert("1");
-      var callUrl = "/myasset/test/get";
-      //alert(callUrl);
-      axios.get(callUrl)
-            .then((response)=>{
-              // 성공시 처리
-              var data = response.data;
-              alert(data);
-            }) ;
-
-      //alert(callUrl);
-    }
-  }
+    methods: {
+        restTestCallPost() {
+            // alert("1");
+            var callUrl = "/myasset/test/post";
+            //alert(callUrl);
+            axios.post(callUrl, { param1: "3333" })
+                .then((response) => {
+                // 성공시 처리
+                var data = response.data;
+                alert(data);
+            });
+            //alert(callUrl);
+        },
+        restTestCallGet() {
+            // alert("1");
+            var callUrl = "/myasset/test/get";
+            //alert(callUrl);
+            axios.get(callUrl)
+                .then((response) => {
+                // 성공시 처리
+                var data = response.data;
+                alert(data);
+            });
+            //alert(callUrl);
+        }
+    },
+    components: { TotalAsset }
 }
 </script>
 

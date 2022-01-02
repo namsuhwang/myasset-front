@@ -3,8 +3,8 @@ export default
     {
         id:'menu_01', name:'자산현황',
         subMenus:[      
-            {id:'menu_01_01', name:'자산조회'},
-            {id:'menu_01_02', name:'종합현황'},
+            {id:'menu_01_01', name:'종합현황'},
+            {id:'menu_01_02', name:'자산조회'},
             {id:'menu_01_03', name:'부동산'},
             {id:'menu_01_04', name:'부동산'}
         ]

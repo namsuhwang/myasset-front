@@ -3,9 +3,10 @@ module.exports = {
         port: 8081,
         proxy: {
           '^/myasset':{
-            target: 'http://namsuhwang.synology.me:8090',
+            target: 'http://myasset.ddns.net:8090',
             changeOrigin: true
           },
-        }
+        },
+        disableHostCheck: true
       }
   };
