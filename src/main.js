@@ -4,6 +4,7 @@ import mitt from 'mitt'
 import 'bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import router from './router';
+import commonUtil from "./assets/commonUtil";
 
 let emitter = mitt();
 let app = createApp(App)
@@ -14,4 +15,4 @@ app.config.globalProperties.emitter = emitter;
 import store from './store/store.js'
 // import './registerServiceWorker'
 
-app.use(store).use(router).mount('#app')
+app.use(store).use(router).use(commonUtil).mount('#app')

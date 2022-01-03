@@ -18,7 +18,8 @@ const store = createStore({
   mutations:{
     setTotalAssetSummary(state, totalAssetSummary){
         state.totalAssetSummary = totalAssetSummary;
-    } 
+    },
+    
   },
   actions:{ 
       // 종합현황 요약

@@ -11,19 +11,24 @@
           <a class="dropdown-item" @click="selMenuItem = menuItem" href="#">{{menuItem.name}}</a>
         </li>
       </ul>
-      <a v-for="(subMenu, j) in selMenuItem.subMenus" :key="j" href="#" class="nav-item nav-link active">{{ subMenu.name }}</a>
+      <!-- <a v-for="(subMenu, j) in selMenuItem.subMenus" :key="j" href="#" class="nav-item nav-link active">{{ subMenu.name }}</a> -->
+      <router-link v-for="(subMenu, j) in selMenuItem.subMenus" :key="j" :to="subMenu.path" class="nav-item nav-link active">{{ subMenu.name }}
+
+      </router-link>
     </nav>
   </div>
   
   <!-- <button @click="restTestCallGet()">Get Test</button>-->
   <!-- <button @click="restTestCallPost()">Post Test</button>  -->
-  <TotalAsset />
+  <div class="mt-4">
+    <router-view /> 
+  </div>  
 </template>
 
 <script>
 import menuItems from './assets/menu.js';
 import axios from 'axios';
-import TotalAsset from './components/TotalAsset.vue';
+// import TotalAsset from './components/TotalAsset.vue';
 
 // axios.defaults.baseURL = 'http://namsuhwang.synology.me:8090/myasset';
 // axios.defaults.headers.post['Content-Type'] = 'application/json;charset=utf-8';
@@ -65,7 +70,9 @@ export default {
             //alert(callUrl);
         }
     },
-    components: { TotalAsset }
+    components: { 
+      // TotalAsset 
+    }
 }
 </script>
 

@@ -1,7 +1,6 @@
 <template>
     <div class="container">
-        <h5>순자산 {{ String($store.state.totalAssetSummary.netAsset ).replace(/\B(?=(\d{3})+(?!\d))/g, ',') }} 원</h5>
-        <!-- <h5>순자산 {{ String(summaryData.netAsset ).replace(/\B(?=(\d{3})+(?!\d))/g, ',') }} 원</h5> -->
+        <h5>순자산 {{ this.$won($store.state.totalAssetSummary.netAsset) }}</h5>
     </div>
 </template>
 
