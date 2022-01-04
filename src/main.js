@@ -5,6 +5,7 @@ import 'bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import router from './router';
 import commonUtil from "./assets/commonUtil";
+import store from './store/store';
 
 let emitter = mitt();
 let app = createApp(App)
@@ -12,7 +13,7 @@ let app = createApp(App)
 // 글로벌 변수 보관함
 app.config.globalProperties.emitter = emitter;
 
-import store from './store/store.js'
+
 // import './registerServiceWorker'
 
 app.use(store).use(router).use(commonUtil).mount('#app')

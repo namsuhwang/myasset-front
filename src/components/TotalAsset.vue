@@ -1,6 +1,8 @@
 <template>
     <div class="container">
-        <h5>순자산 {{ this.$won($store.state.totalAssetSummary.netAsset) }}</h5>
+        <h5>순자산(직접 조회) {{ this.$won($store.state.StoreTotalAsset.totalAssetSummary.netAsset) }}</h5>
+        <h5>순자산(computed) {{ this.$won(getTotalSummary.netAsset) }}</h5>
+        <h5>순자산(지역변수) {{ this.$won(netAsset) }}</h5>
     </div>
 </template>
 
@@ -10,26 +12,19 @@ import { mapMutations, mapState, mapActions } from 'vuex';
 export default {
     name: 'TotalAsset',
     data(){
-        return {
-            // netAsset: 0,    
+        return { 
+            netAsset: 0, 
         }
-    },   
-    // beforeMount(){
-    //     this.$store.dispatch('getTotalAssetSummary', 1);
-    //     console.log("aaa:" + $store.state.totalAssetSummary.netAsset);
-    //     this.netAsset = $store.state.totalAssetSummary;
-    // },
+    },    
+    computed: {
+        getTotalSummary(){
+            this.netAsset = this.$store.state.StoreTotalAsset.totalAssetSummary.netAsset;
+            return this.$store.state.StoreTotalAsset.totalAssetSummary;
+        }
+    },
     created(){
-        this.$store.dispatch('getTotalAssetSummary', 1);
-        // console.log("aaa:" + $store.state.totalAssetSummary.netAsset);
-        // this.netAsset = $store.state.totalAssetSummary;
-        // this.summaryData = $store.state.totalAssetSummary;
-    },
-    filters: { 
-        comma (val) { 
-            return String(val).replace(/\B(?=(\d{3})+(?!\d))/g, ',') 
-        } 
-    },
+        this.$store.dispatch('StoreTotalAsset/getTotalAssetSummary', 1);
+    } 
 }
 </script>
 
