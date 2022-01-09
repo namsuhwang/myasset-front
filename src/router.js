@@ -1,6 +1,7 @@
 import { createWebHistory, createRouter } from "vue-router";
 import TotalAsset from './components/TotalAsset.vue';
 import BankMain from './components/BankMain.vue';
+import BankDetail from './components/BankDetail.vue';
 
 const routes = [
   {
@@ -8,6 +9,9 @@ const routes = [
   },
   {
     path: "/asset/bank", component: BankMain
+  },
+  {
+    path: "/asset/bank/reg", component: BankDetail
   }
 
   // 404 Not Found

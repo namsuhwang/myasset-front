@@ -1,8 +1,22 @@
 const methods = {
-    comma3(str){
+    comma3(str){ 
+        if(str == null){
+            return "0";
+        }
+        
+        if(str.length <= 3){
+            return str;
+        }
         return str.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     },
     won(str){        
+        if(str == null){
+            return "0 원";
+        }
+        
+        if(str.length <= 3){
+            return str + " 원";
+        }
         return str.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " 원";
     }
 }

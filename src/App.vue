@@ -26,6 +26,7 @@
 </template>
 
 <script>
+import { mapMutations, mapState, mapActions } from 'vuex';
 import menuItems from './assets/menu.js';
 import axios from 'axios';
 // import TotalAsset from './components/TotalAsset.vue';
@@ -69,6 +70,9 @@ export default {
             });
             //alert(callUrl);
         }
+    },
+    mounted() {
+        this.$store.dispatch('StoreCommon/getCommonCodeInit');
     },
     components: { 
       // TotalAsset 
