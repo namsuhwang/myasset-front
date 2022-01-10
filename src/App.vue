@@ -1,5 +1,5 @@
 <template>
-  <h5>자산관리로 부자되자 {{selMenuItem.name}} </h5>   
+  <h5>자산관리로 부자되자</h5>   
 
   <div class="container-fluid">
     <nav class="nav">
@@ -17,9 +17,7 @@
       </router-link>
     </nav>
   </div>
-  
-  <!-- <button @click="restTestCallGet()">Get Test</button>-->
-  <!-- <button @click="restTestCallPost()">Post Test</button>  -->
+  <hr>
   <div class="mt-4">
     <router-view /> 
   </div>  
