@@ -1,6 +1,6 @@
 module.exports = {
     devServer: {
-        overlay: false,
+        // overlay: false,
         // port: 8080,
         proxy: {
           '^/myasset':{

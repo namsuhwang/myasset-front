@@ -5,8 +5,9 @@
   "scripts": {
     "dev": "vite",
     "serve": "vue-cli-service serve",
-    "build-dev": "vue-cli-service build --mode dev",
-    "build-opr": "vue-cli-service build --mode ope"
+    "build": "vue-cli-service build",
+    "build-dev": "vue-cli-service build --mode development",
+    "build-opr": "vue-cli-service build --mode production"
   },
   "dependencies": {
     "@popperjs/core": "^2.11.0",

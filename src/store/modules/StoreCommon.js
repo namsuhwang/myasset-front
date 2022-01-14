@@ -45,31 +45,36 @@ const StoreCommon = {
 	},
 	actions: { 
 		getCommonCodeInit({commit, state}) {	
-            axios.post('/myasset/common/codelist', {divCode : 'FC_CODE', codeDesc : 'BANK'} )
+            axios.post(process.env.VUE_APP_REST_BASE_URL 
+                + '/myasset/common/codelist', {divCode : 'FC_CODE', codeDesc : 'BANK'} )
             .then((response)=>{
                 console.log(response.data); 
                 commit('setBankCodeList', response.data);
             });
                      
-            axios.post('/myasset/common/codelist', {divCode : 'BANK_ACNO_TYPE', codeDesc : ''} )
+            axios.post(process.env.VUE_APP_REST_BASE_URL 
+                + '/myasset/common/codelist', {divCode : 'BANK_ACNO_TYPE', codeDesc : ''} )
             .then((response)=>{
                 console.log(response.data); 
                 commit('setBankAcnoTypeList', response.data);
             });
                      
-            axios.post('/myasset/common/codelist', {divCode : 'FC_CODE', codeDesc : 'STOCK'} )
+            axios.post(process.env.VUE_APP_REST_BASE_URL 
+                + '/myasset/common/codelist', {divCode : 'FC_CODE', codeDesc : 'STOCK'} )
             .then((response)=>{
                 console.log(response.data); 
                 commit('setStockCodeList', response.data);
             });
                      
-            axios.post('/myasset/common/codelist', {divCode : 'ASSET_TYPE', codeDesc : ''} )
+            axios.post(process.env.VUE_APP_REST_BASE_URL 
+                + '/myasset/common/codelist', {divCode : 'ASSET_TYPE', codeDesc : ''} )
             .then((response)=>{
                 console.log(response.data); 
                 commit('setAssetTypeList', response.data);
             });
                      
-            axios.post('/myasset/common/codelist', {divCode : 'RE_TYPE', codeDesc : ''} )
+            axios.post(process.env.VUE_APP_REST_BASE_URL 
+                + '/myasset/common/codelist', {divCode : 'RE_TYPE', codeDesc : ''} )
             .then((response)=>{
                 console.log(response.data); 
                 commit('setReTypeList', response.data);

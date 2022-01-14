@@ -1,6 +1,6 @@
 <template>
   <h5>자산관리로 부자되자</h5>   
-
+<!-- {{$process.env}} -->
   <div class="container-fluid">
     <nav class="nav">
       <a class="nav-link dropdown-toggle ms_menulabel" style="color:white" href="#" id="navbarDropdownMenuLink" role="button"  data-bs-toggle="dropdown" aria-expanded="false">
