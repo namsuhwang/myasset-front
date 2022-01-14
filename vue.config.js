@@ -1,7 +1,7 @@
 module.exports = {
     devServer: {
         overlay: false,
-        port: 8081,
+        port: 8080,
         proxy: {
           '^/myasset':{
             target: 'http://myasset.ddns.net:8090',
