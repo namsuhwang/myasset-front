@@ -40,7 +40,7 @@ export default {
             selMenuItem: menuItems[0],
             menuItems: menuItems,
             subItems: menuItems[0].subMenus,
-            developer: "황남수"
+            developer: "황남수",
         };
     },
     methods: {
