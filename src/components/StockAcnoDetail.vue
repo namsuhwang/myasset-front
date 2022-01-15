@@ -89,7 +89,7 @@ export default {
             
             this.stockAsset.orgName = this.$getCodeNameFromCodeList(this.$store.state.StoreCommon.stockCodeList, this.stockAsset.orgCd); 
             console.log("bankAsset.orgName = " + this.stockAsset.orgName);
-            this.stockAsset.assetName = "증권-" + this.stockAsset.orgName;
+            this.stockAsset.assetName = "증권-" + this.stockAsset.orgName + "_" + this.stockAsset.stockAcno;
             console.log("stockAsset = " + JSON.stringify(this.stockAsset));
             axios.post('/myasset/stock/acno/reg', this.stockAsset)
             .then((response)=>{

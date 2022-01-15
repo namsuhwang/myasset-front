@@ -7,7 +7,7 @@ const StoreCommon = {
       bankAcnoTypeList: Object,
       stockCodeList: Object,
       assetTypeList: Object,
-      reTypeList: Object,
+      reTypeList: Object, 
 	},
 	getters: {
         getBankCodeList(state) {
@@ -24,7 +24,7 @@ const StoreCommon = {
         },
         getReTypeList(state) {
             return state.reTypeList;
-        }, 
+        },  
 	},
 	mutations: {		
         setBankCodeList(state, commonCodeList){
@@ -41,7 +41,7 @@ const StoreCommon = {
         },	
         setReTypeList(state, commonCodeList){
             state.reTypeList = commonCodeList;
-        },
+        }, 
 	},
 	actions: { 
 		getCommonCodeInit({commit, state}) {	

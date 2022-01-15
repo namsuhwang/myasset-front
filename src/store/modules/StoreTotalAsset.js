@@ -20,7 +20,8 @@ const StoreTotalAsset = {
 	actions: {
         // 종합현황 
 		getTotalAsset({commit, state}, memberId) {	          
-            axios.post('/myasset/asset/total', { memberId: memberId })
+            axios.post(process.env.VUE_APP_REST_BASE_URL 
+                +'/myasset/asset/total', { memberId: memberId })
             .then((response)=>{
                 console.log(response.data); 
                 commit('setTotalAsset', response.data);

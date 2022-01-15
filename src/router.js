@@ -3,6 +3,7 @@ import TotalAsset from './components/TotalAsset.vue';
 import BankMain from './components/BankMain.vue';
 import BankDetail from './components/BankDetail.vue';
 import StockAcnoDetail from './components/StockAcnoDetail.vue';
+import StockKindDetail from './components/StockKindDetail.vue';
 
 const routes = [
   {
@@ -19,6 +20,10 @@ const routes = [
   {
     // 주식 계좌 등록
     path: "/asset/stock/acno/reg", component: StockAcnoDetail
+  },
+  {
+    // 주식 종목 등록
+    path: "/asset/stock/kind/reg", component: StockKindDetail
   }
 
   
