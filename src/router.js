@@ -4,6 +4,7 @@ import BankMain from './components/BankMain.vue';
 import BankDetail from './components/BankDetail.vue';
 import StockAcnoDetail from './components/StockAcnoDetail.vue';
 import StockKindDetail from './components/StockKindDetail.vue';
+import StockKindList from './components/StockKindList.vue';
 
 const routes = [
   {
@@ -16,6 +17,10 @@ const routes = [
   {
     // 은행 계좌 등록
     path: "/asset/bank/reg", component: BankDetail
+  },
+  {
+    // 보유 주식
+    path: "/asset/stock/kind/list", component: StockKindList
   },
   {
     // 주식 계좌 등록
