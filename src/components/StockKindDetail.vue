@@ -91,7 +91,19 @@ export default {
                 curUnitPrice : null,   // 현재가
                 curTotPrice : null     // 현재평가금액
             },
-            stockInfo : null,
+            stockInfo : {
+                baseTime : '',            // 기준일시
+                kindCode : '',             // 종목코드
+                stockName : '',            // 종목명
+                stockType : '',            // 코스피/코스닥
+                price : '',                // 현재가
+                ydPrice : '',              // 전일가
+                diffAmount : '',           // 전일비(전일대비 차이)
+                dayRange : '',             // 등락률(전일대비 등락율)
+                highPrice : '',            // 당일 고가
+                lowPrice : ''        
+            },
+            // stockInfoChangeCnt : 0,
             // stockAssetList : [{assetId : "", assetName : ""}],
             stockAssetList : null,
         }
@@ -121,16 +133,18 @@ export default {
             });
         }, 
 		getStockKind() {	
-            axios.post(process.env.VUE_APP_REST_BASE_URL 
-                + '/myasset/scrap/stockkind', {kindCode : this.stockKind.stockKindCd} )
-            .then((response)=>{
-                // console.log("종목 조회 _ 결과 : " + JSON.stringify(response.data)); 
-                this.stockInfo = response.data;
-                console.log("종목 조회 _ 결과 : " + JSON.stringify(this.stockInfo)); 
-                this.stockKind.stockKindName = this.stockInfo.stockName;
-                this.curUnitPrice = this.stockInfo.price;                
-            });
+            this.stockInfo = this.$getStockKindInfo(this.stockKind.stockKindCd);
+            this.stockInfoChangeCnt++;
 		}, 
+        callGetStockInfo(stockKindCd){
+                return this.$getStockKindInfo(stockKindCd, this.stockInfo);
+        },
+        setStockNameAndCurUnitPrice(){
+            console.log("setStockNameAndCurUnitPrice " + JSON.stringify(this.stockInfo));
+            //this.stockInfo = stockInfo;
+            ////this.stockKind.stockKindName = this.stockInfo.stockName;
+            //this.curUnitPrice = this.stockInfo.price;                
+        },
         setBuyTotPrice(){
             if(this.buyAvgPrice != null && this.$isNumeric(this.buyAvgPrice) && this.quantity != null  && this.$isNumeric(this.quantity) ){
                 this.buyTotPrice = this.$comma3(this.$uncomma(this.buyAvgPrice) * this.$uncomma(this.quantity));
@@ -150,6 +164,21 @@ export default {
                 console.log("주식 자산 조회 _ 결과 : " + JSON.stringify(this.stockAssetList)); 
             });
 		}, 
+    },
+    watch:{
+        // 'stockInfoChangeCnt' : function(val){   
+        //     console.log("watch stockInfoChangeCnt 1 : " + val);
+        //     console.log("watch stockInfoChangeCnt 1 : " + this.stockInfoChangeCnt);
+        //     console.log("watch stockInfo :" + JSON.stringify(this.stockInfo));
+        // },
+        'stockInfo.stockName' : function(val){   
+            this.stockKind.stockKindName = val;
+        },
+        'stockInfo.price' : function(val){   
+            this.curUnitPrice = val;
+        }
+    },
+    created(){
     },
     computed: {
     },
