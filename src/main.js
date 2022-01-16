@@ -3,9 +3,10 @@ import App from './App.vue'
 import mitt from 'mitt'
 import 'bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
-import router from './router';
-import commonUtil from "./assets/commonUtil";
-import store from './store/store';
+import router from './router'
+import commonUtil from './assets/commonUtil'
+import restStock from './assets/restStock'
+import store from './store/store'
 
 let emitter = mitt();
 let app = createApp(App)
@@ -16,4 +17,9 @@ app.config.globalProperties.emitter = emitter;
 
 // import './registerServiceWorker'
 
-app.use(store).use(router).use(commonUtil).mount('#app')
+app
+.use(store)
+.use(router)
+.use(commonUtil)
+.use(restStock)
+.mount('#app')

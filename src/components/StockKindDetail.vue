@@ -14,7 +14,7 @@
             <div class="input-group">
                 <span class="input-group-text">종목</span>
                 <input v-model="stockKind.stockKindCd" type="text" class="form-control" placeholder="종목코드">
-                <button type="button" @click="getStockKind" class="btn btn-secondary">종목조회</button> 
+                <button type="button" @click="callStockKind" class="btn btn-secondary">종목조회</button> 
                 <input v-model="stockKind.stockKindName" type="text" class="form-control" placeholder="종목명">                
             </div>
         </div>
@@ -132,13 +132,10 @@ export default {
                 alert("보유 주식 등록이 완료되었습니다.");
             });
         }, 
-		getStockKind() {	
+		callStockKind() {	
             this.stockInfo = this.$getStockKindInfo(this.stockKind.stockKindCd);
             this.stockInfoChangeCnt++;
 		}, 
-        callGetStockInfo(stockKindCd){
-                return this.$getStockKindInfo(stockKindCd, this.stockInfo);
-        },
         setStockNameAndCurUnitPrice(){
             console.log("setStockNameAndCurUnitPrice " + JSON.stringify(this.stockInfo));
             //this.stockInfo = stockInfo;
@@ -166,11 +163,6 @@ export default {
 		}, 
     },
     watch:{
-        // 'stockInfoChangeCnt' : function(val){   
-        //     console.log("watch stockInfoChangeCnt 1 : " + val);
-        //     console.log("watch stockInfoChangeCnt 1 : " + this.stockInfoChangeCnt);
-        //     console.log("watch stockInfo :" + JSON.stringify(this.stockInfo));
-        // },
         'stockInfo.stockName' : function(val){   
             this.stockKind.stockKindName = val;
         },

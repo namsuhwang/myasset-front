@@ -14,13 +14,13 @@ export default
         ]
     },
     {
-        id:'menu_03', name:'주식', path: '/asset/stock/list',
+        id:'menu_03', name:'주식', path: '/asset/stock',
         subMenus:[      
-            {id:'menu_03_01', name:'보유 주식', path: '/asset/stock/list'},
-            {id:'menu_03_02', name:'주식 계좌 등록', path: '/asset/stock/acno/reg'},
-            {id:'menu_03_02', name:'주식 종목 등록', path: '/asset/stock/kind/reg'},
-            {id:'menu_03_03', name:'주식 거래 등록', path: '/asset/stock/trade/reg'},
-            {id:'menu_03_04', name:'주식 물타기 계산', path: '/asset/stock/avgcalc'}
+            {id:'menu_03_01', name:'보유 주식', path: '/asset/stock/total'},
+            {id:'menu_03_02', name:'계좌 등록', path: '/asset/stock/acno/reg'},
+            {id:'menu_03_03', name:'종목 등록', path: '/asset/stock/kind/reg'},
+          //  {id:'menu_03_03', name:'주식 거래 등록', path: '/asset/stock/trade/reg'},
+          //  {id:'menu_03_04', name:'주식 물타기 계산', path: '/asset/stock/avgcalc'}
         ]
     },
     {

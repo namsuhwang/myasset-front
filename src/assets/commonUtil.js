@@ -92,22 +92,6 @@ const methods = {
                 return codeList[idx].codeName;
         }
     },
-    getStockKindInfo(stockKindCode) {	    
-        console.log("공통함수 종목 조회 _ 시작 : " + stockKindCode);     
-        axios.post(process.env.VUE_APP_REST_BASE_URL 
-            + '/myasset/scrap/stockkind', {kindCode : stockKindCode} )
-        .then((response)=>{
-            // console.log("종목 조회 _ 결과 : " + JSON.stringify(response.data)); 
-            this.stockInfo = response.data;
-            console.log("공통함수 종목 조회 _ 결과 : " + JSON.stringify(this.stockInfo)); 
-            // stockInfo = this.stockInfo;
-            return this.stockInfo;
-        })
-        .catch((error)=>{
-            console.log("getStockKindInfo error");
-            console.log(error);
-        });
-    }, 
 }
     
 export default{
@@ -116,7 +100,6 @@ export default{
         Vue.config.globalProperties.$won = methods.won;
         Vue.config.globalProperties.$uncomma = methods.uncomma;
         Vue.config.globalProperties.$getCodeNameFromCodeList = methods.getCodeNameFromCodeList;
-        Vue.config.globalProperties.$isNumeric = methods.isNumeric;
-        Vue.config.globalProperties.$getStockKindInfo = methods.getStockKindInfo;
+        Vue.config.globalProperties.$isNumeric = methods.isNumeric; 
     }
 }

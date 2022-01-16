@@ -4,7 +4,7 @@ import BankMain from './components/BankMain.vue';
 import BankDetail from './components/BankDetail.vue';
 import StockAcnoDetail from './components/StockAcnoDetail.vue';
 import StockKindDetail from './components/StockKindDetail.vue';
-import StockKindList from './components/StockKindList.vue';
+import StockKindTotal from './components/StockKindTotal.vue';
 
 const routes = [
   {
@@ -20,7 +20,7 @@ const routes = [
   },
   {
     // 보유 주식
-    path: "/asset/stock/kind/list", component: StockKindList
+    path: "/asset/stock/total", component: StockKindTotal
   },
   {
     // 주식 계좌 등록
