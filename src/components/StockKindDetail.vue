@@ -133,14 +133,14 @@ export default {
             });
         }, 
 		callStockKind() {	
-            this.stockInfo = this.$getStockKindInfo(this.stockKind.stockKindCd);
+            this.stockInfo = this.$getStockKindInfo(this.stockKind.stockKindCd, this.callBackStockKindInfo);
             this.stockInfoChangeCnt++;
 		}, 
-        setStockNameAndCurUnitPrice(){
-            console.log("setStockNameAndCurUnitPrice " + JSON.stringify(this.stockInfo));
-            //this.stockInfo = stockInfo;
-            ////this.stockKind.stockKindName = this.stockInfo.stockName;
-            //this.curUnitPrice = this.stockInfo.price;                
+        callBackStockKindInfo(stockInfo){
+            console.log("setStockNameAndCurUnitPrice " + JSON.stringify(stockInfo));
+            this.stockInfo = stockInfo;
+            this.stockKind.stockKindName = this.stockInfo.stockName;
+            this.curUnitPrice = this.stockInfo.price;                
         },
         setBuyTotPrice(){
             if(this.buyAvgPrice != null && this.$isNumeric(this.buyAvgPrice) && this.quantity != null  && this.$isNumeric(this.quantity) ){
@@ -163,12 +163,6 @@ export default {
 		}, 
     },
     watch:{
-        'stockInfo.stockName' : function(val){   
-            this.stockKind.stockKindName = val;
-        },
-        'stockInfo.price' : function(val){   
-            this.curUnitPrice = val;
-        }
     },
     created(){
     },

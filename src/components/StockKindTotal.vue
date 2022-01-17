@@ -1,45 +1,83 @@
 <template>
-    <h5>보유 주식</h5> 
     <div class="m-4">   
+        <h5>보유 주식</h5> 
+        <h12 class="textLeft">&nbsp;{{stockKindTotal.baseTime}}</h12>
         <div class="mb-3">
             <table class="table table-borderless table-light">
                 <tbody>
                     <tr>
                         <td>총매입액</td>
-                        <td>{{this.$comma3(stockKindTotal.totBuyPrice)}}</td>
+                        <td align="right">{{this.$comma3(stockKindTotal.totBuyPrice)}}</td>
                         <td>손익금액</td>
-                        <td>{{this.$comma3(stockKindTotal.totPnlAmt)}}</td>
+                        <td align="right">{{this.$comma3(stockKindTotal.totPnlAmt)}}</td>
                     </tr>
                     <tr>
                         <td>총평가액</td>
-                        <td>{{this.$comma3(stockKindTotal.totCurPrice)}}</td>
+                        <td align="right">{{this.$comma3(stockKindTotal.totCurPrice)}}</td>
                         <td>손익율</td>
-                        <td>{{this.$comma3(stockKindTotal.totPnlRate)}}&nbsp;%</td>
+                        <td align="right">{{this.$comma3(stockKindTotal.totPnlRate)}}&nbsp;%</td>
                     </tr>  
                 </tbody>
             </table>
         </div>  
+        <br/>
         <div class="col-12">
             <div class="input-group">
-                <h5>시세  </h5><h9>&nbsp;&nbsp;&nbsp;{{stockKindTotal.baseTime}}</h9>
-                <table class="table table-sm">
+                <h5>시세  </h5>
+                <!-- <table class="table table-sm"> -->
+                <table class="table table-sm" cellspacing="0" width="100%">
                     <thead class="table-light">
                         <tr>
                             <th>종목명</th>
                             <th>현재가</th>
                             <th>전일대비</th>
-                            <th>등락률</th>
+                            <th>등락률(%)</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="(stockKind, i) in stockKindTotal.list" :key="i">
                             <td>{{stockKind.stockKindName}}</td>
-                            <td>{{this.$comma3(stockKind.curUnitPrice)}}</td>
-                            <td>{{this.$comma3(stockKind.diffAmount)}}</td>
-                            <td>{{this.$comma3(stockKind.dayRange)}}</td>
+                            <td align="right">{{this.$comma3(stockKind.curUnitPrice)}}</td>
+                            <td align="right">{{this.$comma3(stockKind.diffAmount)}}</td>
+                            <td align="right">{{this.$comma3(stockKind.dayRange)}}</td>
                         </tr>                    
                     </tbody>
                 </table>
+            </div>
+        </div> 
+        <br/>
+        <div class="col-12">
+            <div >
+                <div class="input-group">
+                    <h5>종목별 손익  </h5>
+                </div>    
+                <div style="overflow: auto">
+                    <table class="table table-sm" style="font-size: 12px; width: 600px;">
+                    <!-- <table class="table table-sm" style="font-size: 12px; width: 100%; cellspacing:0;"> -->
+                        <thead class="table-light">
+                            <tr>
+                                <th>종목명</th>
+                                <th>보유수</th>
+                                <th>손익액</th>
+                                <th>손익율(%)</th>
+                                <th>평단가</th>
+                                <th>매입가</th>
+                                <th>평가액</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(stockKind, i) in stockKindTotal.list" :key="i">
+                                <td>{{stockKind.stockKindName}}</td>
+                                <td align="right">{{this.$comma3(stockKind.quantity)}}</td>
+                                <td align="right">{{this.$comma3(stockKind.pnlAmt)}}</td>
+                                <td align="right">{{this.$comma3(stockKind.pnlRate)}}</td>
+                                <td align="right">{{this.$comma3(stockKind.buyAvgPrice)}}</td>
+                                <td align="right">{{this.$comma3(stockKind.buyTotPrice)}}</td>
+                                <td align="right">{{this.$comma3(stockKind.curTotPrice)}}</td>
+                            </tr>                    
+                        </tbody>
+                    </table> 
+                </div>
             </div>
         </div>
     </div>
@@ -53,34 +91,6 @@ export default {
     name: 'StockKindTotal',
     data(){
         return {
-            // baseTime : '',     
-            // totBuyPrice : '',
-            // totCurPrice : '',
-            // totPnlRate : '',
-            // totPnlAmt : '', 
-            // stockKind : {
-            //     stockKindId : '',
-            //     assetId : '',
-            //     stockKindCd : '',
-            //     stockKindName : '',
-            //     quantity : '',
-            //     buyAvgPrice : '',
-            //     buyTotPrice : '',
-            //     curUnitPrice : '',
-            //     curTotPrice : '',
-            //     pnlRate : '',
-            //     pnlAmt : '',
-            //     diffAmount: '',
-            //     dayRange : '',
-            //     highPrice : '',
-            //     lowPrice : '',
-            //     deleteYn : '',
-            //     memberId : '',
-            //     baseTime : '',
-            //     regDatetime : '',
-            //     lastUpdateDatetime : ''
-            // },
-            // stockKindList : null,
             stockKindTotal : {
                 baseTime : '',     
                 totBuyPrice : '',
@@ -114,44 +124,15 @@ export default {
     },    
     methods : { 
         callGetStockKindTotal(){ 
-            // var result = await this.$getStockKindTotal(1);
-            // console.log("callGetStockKindTotal " + JSON.stringify(result));
-            // this.stockKindTotal = result;
-            var memberId = 1;    
-            console.log("callGetStockKindTotal 주식 종합 조회 _ 시작 회원ID : " + memberId);     
-            axios.post(process.env.VUE_APP_REST_BASE_URL 
-                + '/myasset/stock/total', {memberId : memberId} )
-            .then((response)=>{ 
-                this.stockKindTotal = response.data;
-                //this.stockKindList = this.stockKindTotal.stockKindList;
-                console.log("callGetStockKindTotal 주식 종합 조회 _ 결과 : " + JSON.stringify(this.stockKindTotal));  
-                return stockKindTotal;
-            })
-            .catch((error)=>{
-                console.log("getStockKindTotal error");
-                console.log(error);
-            });
+            this.$getStockKindTotal(1, this.callbackStockKindTotal);
         },
-
+        callbackStockKindTotal(stockKindTotal){
+            this.stockKindTotal = stockKindTotal;
+        },
     },
     watch:{
-        'stockKindTotal.baseTime' : function(val){   
-            console.log("watch stockKindTotal.baseTime : " + val);
-            console.log("watch stockKindTotal : " + JSON.stringify(this.stockKindTotal));
-            this.baseTime = val;
-            console.log("watch stockKindTotal " + JSON.stringify(this.stockKindTotal));
-        },
-        // stockKindTotal: {
-        //     deep : true,
-        //     handler(val){
-        //         console.log("watch stockKindTotal_1 : " + JSON.stringify(val));
-
-        //     }
-        // }
     },
     created(){
-        // this.callGetStockKindTotal();
-        // this.stockKindTotal = this.$getStockKindTotal(1);
     },
     computed: {
     },
@@ -166,5 +147,7 @@ export default {
 </script>
 
 <style>
-
+.textLeft{
+    text-align: left;
+}
 </style>
