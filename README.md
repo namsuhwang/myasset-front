@@ -24,3 +24,9 @@ npm run lint
 See [Configuration Reference](https://cli.vuejs.org/config/).
 
 sudo npm i @vue/cli-service 반드시 설치
+
+npm install axios 
+npm install bootstrap
+npm install mitt
+npm install vue-router
+npm install vuex

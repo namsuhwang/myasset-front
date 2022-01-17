@@ -52,14 +52,14 @@
                     <h5>종목별 손익  </h5>
                 </div>    
                 <div style="overflow: auto">
-                    <table class="table table-sm" style="font-size: 12px; width: 600px;">
+                    <table class="table table-sm" style="font-size: 12px; width: 550px;">
                     <!-- <table class="table table-sm" style="font-size: 12px; width: 100%; cellspacing:0;"> -->
                         <thead class="table-light">
                             <tr>
                                 <th>종목명</th>
-                                <th>보유수</th>
+                                <th width="40px">보유수</th>
                                 <th>손익액</th>
-                                <th>손익율(%)</th>
+                                <th width="60px">손익율(%)</th>
                                 <th>평단가</th>
                                 <th>매입가</th>
                                 <th>평가액</th>
