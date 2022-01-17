@@ -9,13 +9,13 @@
                         <td>총매입액</td>
                         <td align="right">{{this.$comma3(stockKindTotal.totBuyPrice)}}</td>
                         <td>손익금액</td>
-                        <td align="right">{{this.$comma3(stockKindTotal.totPnlAmt)}}</td>
+                        <td id="totPnlAmt" align="right">{{this.$comma3(stockKindTotal.totPnlAmt)}}</td>
                     </tr>
                     <tr>
                         <td>총평가액</td>
                         <td align="right">{{this.$comma3(stockKindTotal.totCurPrice)}}</td>
                         <td>손익율</td>
-                        <td align="right">{{this.$comma3(stockKindTotal.totPnlRate)}}&nbsp;%</td>
+                        <td id="totPnlRate" align="right">{{this.$comma3(stockKindTotal.totPnlRate)}}&nbsp;%</td>
                     </tr>  
                 </tbody>
             </table>
@@ -38,8 +38,8 @@
                         <tr v-for="(stockKind, i) in stockKindTotal.list" :key="i">
                             <td>{{stockKind.stockKindName}}</td>
                             <td align="right">{{this.$comma3(stockKind.curUnitPrice)}}</td>
-                            <td align="right">{{this.$comma3(stockKind.diffAmount)}}</td>
-                            <td align="right">{{this.$comma3(stockKind.dayRange)}}</td>
+                            <td id="diffAmount" align="right">{{this.$comma3(stockKind.diffAmount)}}</td>
+                            <td id="datRange" align="right">{{this.$comma3(stockKind.dayRange)}}</td>
                         </tr>                    
                     </tbody>
                 </table>
@@ -69,8 +69,8 @@
                             <tr v-for="(stockKind, i) in stockKindTotal.list" :key="i">
                                 <td>{{stockKind.stockKindName}}</td>
                                 <td align="right">{{this.$comma3(stockKind.quantity)}}</td>
-                                <td align="right">{{this.$comma3(stockKind.pnlAmt)}}</td>
-                                <td align="right">{{this.$comma3(stockKind.pnlRate)}}</td>
+                                <td id="pnlAmt" align="right">{{this.$comma3(stockKind.pnlAmt)}}</td>
+                                <td id="pnlRate" align="right">{{this.$comma3(stockKind.pnlRate)}}</td>
                                 <td align="right">{{this.$comma3(stockKind.buyAvgPrice)}}</td>
                                 <td align="right">{{this.$comma3(stockKind.buyTotPrice)}}</td>
                                 <td align="right">{{this.$comma3(stockKind.curTotPrice)}}</td>
@@ -128,6 +128,16 @@ export default {
         },
         callbackStockKindTotal(stockKindTotal){
             this.stockKindTotal = stockKindTotal;
+            if(this.stockKindTotal.totPnlRate > 0) totPnlRate.style.color = "red"; else if(this.stockKindTotal.totPnlRate < 0) totPnlRate.style.color = "blue"; else totPnlRate.style.color = "black" ;
+            if(this.stockKindTotal.totPnlAmt > 0) totPnlAmt.style.color = "red"; else if(this.stockKindTotal.totPnlAmt < 0) totPnlAmt.style.color = "blue"; else totPnlAmt.style.color = "black" ;
+            // if(this.stockKindTotal.diffAmount > 0) diffAmount.style.color = "red"; else if(this.stockKindTotal.diffAmount < 0) diffAmount.style.color = "blue"; else diffAmount.style.color = "black" ;
+            // if(this.stockKindTotal.dayRange > 0) dayRange.style.color = "red"; else if(this.stockKindTotal.dayRange < 0) dayRange.style.color = "blue"; else dayRange.style.color = "black" ;
+            // if(this.stockKindTotal.pnlAmt > 0) pnlAmt.style.color = "red"; else if(this.stockKindTotal.pnlAmt < 0) pnlAmt.style.color = "blue"; else pnlAmt.style.color = "black" ;
+            // totPnlAmt
+            // diffAmount
+            // datRange.style.color = "red";
+            // pnlAmt
+            // pnlRate
         },
     },
     watch:{
