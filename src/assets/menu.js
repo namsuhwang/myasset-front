@@ -10,15 +10,15 @@ export default
     {id:'menu_02', name:'계좌', path: '/asset/bank',
         subMenus:[      
             {id:'menu_02_01', name:'계좌 보유현황', path: '/asset/bank'},
-            {id:'menu_02_02', name:'계좌 등록', path: '/asset/bank/reg'}
+            {id:'menu_02_02', name:'계좌 등록', path: '/asset/bank/detail'}
         ]
     },
     {
         id:'menu_03', name:'주식', path: '/asset/stock',
         subMenus:[      
             {id:'menu_03_01', name:'보유 주식', path: '/asset/stock/total'},
-            {id:'menu_03_02', name:'계좌 등록', path: '/asset/stock/acno/reg'},
-            {id:'menu_03_03', name:'종목 등록', path: '/asset/stock/kind/reg'},
+            {id:'menu_03_02', name:'계좌 등록', path: '/asset/stock/acno/detail'},
+            {id:'menu_03_03', name:'종목 등록', path: '/asset/stock/kind/detail'},
           //  {id:'menu_03_03', name:'주식 거래 등록', path: '/asset/stock/trade/reg'},
           //  {id:'menu_03_04', name:'주식 물타기 계산', path: '/asset/stock/avgcalc'}
         ]
@@ -27,7 +27,7 @@ export default
         id:'menu_04', name:'부동산', path: '/asset/re',
         subMenus:[      
            {id:'menu_04_01', name:'부동산 보유현황', path: '/asset/re'},
-           {id:'menu_04_02', name:'부동산 매수 등록', path: '/asset/re/buy/reg'},
+           {id:'menu_04_02', name:'부동산 매수 등록', path: '/asset/re/buy/detail'},
            {id:'menu_04_03', name:'부동산 매도 등록', path: '/asset/re/buy/sale'}
         ]
     },

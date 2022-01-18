@@ -108,6 +108,10 @@ export default {
             stockAssetList : null,
         }
     },    
+    props:{
+        memberId : Number,
+        stockCode : String,
+    },
     methods : {
         stockKindReg(){
             if(!this.$isNumeric(this.quantity)) return;
@@ -140,7 +144,8 @@ export default {
             console.log("setStockNameAndCurUnitPrice " + JSON.stringify(stockInfo));
             this.stockInfo = stockInfo;
             this.stockKind.stockKindName = this.stockInfo.stockName;
-            this.curUnitPrice = this.stockInfo.price;                
+            this.curUnitPrice = this.stockInfo.price;       
+            this.setCurTotPrice();
         },
         setBuyTotPrice(){
             if(this.buyAvgPrice != null && this.$isNumeric(this.buyAvgPrice) && this.quantity != null  && this.$isNumeric(this.quantity) ){
@@ -155,8 +160,7 @@ export default {
 		getStockAsset() {	
             axios.post(process.env.VUE_APP_REST_BASE_URL 
                 + '/myasset/asset/list', {assetType : "STOCK"} )
-            .then((response)=>{
-                // console.log("종목 조회 _ 결과 : " + JSON.stringify(response.data)); 
+            .then((response)=>{ 
                 this.stockAssetList = response.data;
                 console.log("주식 자산 조회 _ 결과 : " + JSON.stringify(this.stockAssetList)); 
             });
@@ -173,8 +177,16 @@ export default {
         this.$nextTick(function () {
             axios.post('/myasset/asset/list', {"assetType":"STOCK"})
             .then((response)=>{
-                this.stockAssetList = response.data;
-                console.log("stockAssetList : " + JSON.stringify(this.stockAssetList));
+                this.stockAssetList = response.data; 
+
+                console.log("this.$route.params.stockKind =" + this.$route.params.stockKind );
+                if(this.$route.params.stockKind != null){ 
+                    this.stockKind = JSON.parse(this.$route.params.stockKind);
+                    this.quantity = this.stockKind.quantity;
+                    this.buyAvgPrice = this.stockKind.buyAvgPrice;
+                    this.buyTotPrice = this.stockKind.buyTotPrice;
+                    this.callStockKind();
+                }
             });
         })
     } 

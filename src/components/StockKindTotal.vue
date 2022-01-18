@@ -36,7 +36,8 @@
                     </thead>
                     <tbody>
                         <tr v-for="(stockKind, i) in stockKindTotal.list" :key="i">
-                            <td>{{stockKind.stockKindName}}</td>
+                            <!-- <td ><router-link :to="{name: 'StockKindDetail', params:{memberId: 1, stockKindObj: stockKind, assetId: stockKind.assetId, stockCode: stockKind.stockKindCd}}">{{stockKind.stockKindName}}</router-link></td> -->
+                            <td @click="clickRouterPushStockKind(stockKind)">{{stockKind.stockKindName}}</td>
                             <td align="right">{{this.$comma3(stockKind.curUnitPrice)}}</td>
                             <td id="diffAmount" align="right">{{this.$comma3(stockKind.diffAmount)}}</td>
                             <td id="datRange" align="right">{{this.$comma3(stockKind.dayRange)}}</td>
@@ -139,6 +140,11 @@ export default {
             // pnlAmt
             // pnlRate
         },
+        clickRouterPushStockKind(stockKind){ 
+            this.$router.push( 
+                {name: 'StockKindDetail', params:{stockKind: JSON.stringify(stockKind)}}
+            )
+        }
     },
     watch:{
     },

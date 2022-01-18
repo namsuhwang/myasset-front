@@ -6,29 +6,29 @@ import StockAcnoDetail from './components/StockAcnoDetail.vue';
 import StockKindDetail from './components/StockKindDetail.vue';
 import StockKindTotal from './components/StockKindTotal.vue';
 
-const routes = [
+const routes = [  
   {
     // 자산 종합 조회
-    path: "/asset/total", component: TotalAsset
+    name: 'TotalAsset', path: "/asset/total", component: TotalAsset
   },
   {
-    path: "/asset/bank", component: BankMain
+    name: 'BankMain', path: "/asset/bank", component: BankMain
   },
   {
     // 은행 계좌 등록
-    path: "/asset/bank/reg", component: BankDetail
+    name: 'BankDetail', path: "/asset/bank/detail", component: BankDetail
   },
   {
     // 보유 주식
-    path: "/asset/stock/total", component: StockKindTotal
+    name: 'StockKindTotal', path: "/asset/stock/total", component: StockKindTotal, props: true
   },
   {
     // 주식 계좌 등록
-    path: "/asset/stock/acno/reg", component: StockAcnoDetail
+    name: 'StockAcnoDetail', path: "/asset/stock/acno/detail", component: StockAcnoDetail
   },
   {
     // 주식 종목 등록
-    path: "/asset/stock/kind/reg", component: StockKindDetail
+    name: 'StockKindDetail', path: "/asset/stock/kind/detail", component: StockKindDetail
   }
 
   
