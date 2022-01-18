@@ -21,7 +21,7 @@
         <div class="col-12">
             <div class="input-group">
                 <span class="input-group-text">보유수량</span>
-                <input type="text" v-model="quantity" class="form-control" placeholder="원단위 입력" 
+                <input type="text" v-model="quantity" class="form-control" placeholder="" 
                   @input="e=>quantity=this.$comma3(this.$uncomma(e.target.value))">
                 <span class="input-group-text">주</span>
             </div>
@@ -182,9 +182,9 @@ export default {
                 console.log("this.$route.params.stockKind =" + this.$route.params.stockKind );
                 if(this.$route.params.stockKind != null){ 
                     this.stockKind = JSON.parse(this.$route.params.stockKind);
-                    this.quantity = this.stockKind.quantity;
-                    this.buyAvgPrice = this.stockKind.buyAvgPrice;
-                    this.buyTotPrice = this.stockKind.buyTotPrice;
+                    this.quantity = this.$comma3(this.stockKind.quantity);
+                    this.buyAvgPrice = this.$comma3(this.stockKind.buyAvgPrice);
+                    this.buyTotPrice = this.$comma3(this.stockKind.buyTotPrice);
                     this.callStockKind();
                 }
             });
