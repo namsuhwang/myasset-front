@@ -92,6 +92,21 @@ const methods = {
                 return codeList[idx].codeName;
         }
     },
+    numColor(numVal){
+        if(numVal > 0){
+            return "num-plus";            
+        }else if(numVal < 0){ 
+            return "num-minus";           
+        
+        }else if(numVal.includes('▲')){
+            return "num-plus";            
+        }else if(numVal.includes('▼')){
+            return "num-minus";           
+        }else{
+            return "num-zero";           
+        }            
+    }
+     
 }
     
 export default{
@@ -101,5 +116,6 @@ export default{
         Vue.config.globalProperties.$uncomma = methods.uncomma;
         Vue.config.globalProperties.$getCodeNameFromCodeList = methods.getCodeNameFromCodeList;
         Vue.config.globalProperties.$isNumeric = methods.isNumeric; 
+        Vue.config.globalProperties.$numColor = methods.numColor; 
     }
 }

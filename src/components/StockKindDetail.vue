@@ -21,7 +21,7 @@
         <div class="col-12">
             <div class="input-group">
                 <span class="input-group-text">보유수량</span>
-                <input type="text" v-model="quantity" class="form-control" style='text-align:right;' :readonly=readOnlyYn placeholder="" 
+                <input type="text" v-model="quantity" class="form-control"  :readonly=readOnlyYn placeholder="" 
                   @input="e=>quantity=this.$comma3(this.$uncomma(e.target.value))">
                 <span class="input-group-text">주</span>
             </div>
