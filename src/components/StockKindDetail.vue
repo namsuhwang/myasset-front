@@ -21,7 +21,7 @@
         <div class="col-12">
             <div class="input-group">
                 <span class="input-group-text">보유수량</span>
-                <input type="text" v-model="quantity" class="form-control" placeholder="" 
+                <input type="text" v-model="quantity" class="form-control" style='text-align:right;' placeholder="" 
                   @input="e=>quantity=this.$comma3(this.$uncomma(e.target.value))">
                 <span class="input-group-text">주</span>
             </div>
@@ -29,7 +29,7 @@
         <div class="col-12">
             <div class="input-group">
                 <span class="input-group-text">평균단가</span>
-                <input type="text" v-model="buyAvgPrice" class="form-control" placeholder="원단위 입력" 
+                <input type="text" v-model="buyAvgPrice" class="form-control" style='text-align:right;' placeholder="원단위 입력" 
                   @input="e=>buyAvgPrice=this.$comma3(this.$uncomma(e.target.value))">
                 <span class="input-group-text">원</span>
             </div>
@@ -37,7 +37,7 @@
         <div class="col-12">
             <div class="input-group">
                 <span class="input-group-text">매입총액</span>
-                <input type="text" v-model="buyTotPrice" class="form-control" placeholder="원단위 입력" 
+                <input type="text" v-model="buyTotPrice" class="form-control" style='text-align:right;' placeholder="원단위 입력" 
                   @click="setBuyTotPrice"
                   @input="e=>buyTotPrice=this.$comma3(this.$uncomma(e.target.value))">
                 <span class="input-group-text">원</span>
@@ -46,7 +46,7 @@
         <div class="col-12">
             <div class="input-group">
                 <span class="input-group-text">현재단가</span>
-                <input type="text" v-model="curUnitPrice" class="form-control" placeholder="원단위 입력" 
+                <input type="text" v-model="curUnitPrice" class="form-control" style='text-align:right;' placeholder="원단위 입력" 
                   @input="e=>curUnitPrice=this.$comma3(this.$uncomma(e.target.value))">
                 <span class="input-group-text">원</span>
             </div>
@@ -54,7 +54,7 @@
         <div class="col-12">
             <div class="input-group">
                 <span class="input-group-text">평가금액</span>
-                <input type="text" v-model="curTotPrice" class="form-control" placeholder="원단위 입력" 
+                <input type="text" v-model="curTotPrice" class="form-control" style='text-align:right;' placeholder="원단위 입력" 
                   @click="setCurTotPrice"
                   @input="e=>curTotPrice=this.$comma3(this.$uncomma(e.target.value))">
                 <span class="input-group-text">원</span>
