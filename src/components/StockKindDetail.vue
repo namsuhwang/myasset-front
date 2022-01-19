@@ -1,10 +1,10 @@
 <template>
     <h5>주식 종목</h5> 
-    <div class="row g-2 m-4"> 
+    <div class="row g-2 m-4" > 
         <div class="col-12">
             <div class="input-group">
                 <label class="input-group-text">증권계좌</label>
-                <select class="form-select" v-model="stockKind.assetId">
+                <select class="form-select" v-model="stockKind.assetId" :readonly=readOnlyYn >
                     <option v-for="(stockAsset, i) in stockAssetList" :key="i" 
                     :value="stockAsset.assetId">{{ stockAsset.assetName }}</option>
                 </select>
@@ -13,28 +13,31 @@
         <div class="col-12">
             <div class="input-group">
                 <span class="input-group-text">종목</span>
-                <input v-model="stockKind.stockKindCd" type="text" class="form-control" placeholder="종목코드">
+                <input v-model="stockKind.stockKindCd" type="text" class="form-control" :readonly=readOnlyYn placeholder="종목코드">
                 <button type="button" @click="callStockKind" class="btn btn-secondary">종목조회</button> 
-                <input v-model="stockKind.stockKindName" type="text" class="form-control" placeholder="종목명">                
+                <input v-model="stockKind.stockKindName" type="text" class="form-control" :readonly=readOnlyYn placeholder="종목명">                
             </div>
         </div>
         <div class="col-12">
             <div class="input-group">
                 <span class="input-group-text">보유수량</span>
-                <input type="text" v-model="quantity" class="form-control" style='text-align:right;' placeholder="" 
+                <input type="text" v-model="quantity" class="form-control" style='text-align:right;' :readonly=readOnlyYn placeholder="" 
                   @input="e=>quantity=this.$comma3(this.$uncomma(e.target.value))">
                 <span class="input-group-text">주</span>
             </div>
         </div>
         <div class="col-12">
             <div class="input-group">
-                <span class="input-group-text">평균단가</span>
-                <input type="text" v-model="buyAvgPrice" class="form-control" style='text-align:right;' placeholder="원단위 입력" 
+                <span class="input-group-text">평단가</span>
+                <input type="text" v-model="buyAvgPrice" class="form-control" :readonly=readOnlyYn style='text-align:right;' placeholder="원단위 입력" 
                   @input="e=>buyAvgPrice=this.$comma3(this.$uncomma(e.target.value))">
-                <span class="input-group-text">원</span>
+                <span class="input-group-text">매입액</span>
+                <input type="text" v-model="buyTotPrice" class="form-control" :readonly=true style='text-align:right;' placeholder="원단위 입력" 
+                  @click="setBuyTotPrice"
+                  @input="e=>buyTotPrice=this.$comma3(this.$uncomma(e.target.value))">
             </div>
         </div>
-        <div class="col-12">
+        <!-- <div class="col-12">
             <div class="input-group">
                 <span class="input-group-text">매입총액</span>
                 <input type="text" v-model="buyTotPrice" class="form-control" style='text-align:right;' placeholder="원단위 입력" 
@@ -42,16 +45,19 @@
                   @input="e=>buyTotPrice=this.$comma3(this.$uncomma(e.target.value))">
                 <span class="input-group-text">원</span>
             </div>
-        </div>
+        </div> -->
         <div class="col-12">
             <div class="input-group">
-                <span class="input-group-text">현재단가</span>
-                <input type="text" v-model="curUnitPrice" class="form-control" style='text-align:right;' placeholder="원단위 입력" 
+                <span class="input-group-text">현재가</span>
+                <input type="text" v-model="curUnitPrice" class="form-control" :readonly=readOnlyYn style='text-align:right;' placeholder="원단위 입력" 
                   @input="e=>curUnitPrice=this.$comma3(this.$uncomma(e.target.value))">
-                <span class="input-group-text">원</span>
+                <span class="input-group-text">평가액</span>
+                <input type="text" v-model="curTotPrice" class="form-control" :readonly=true style='text-align:right;' placeholder="원단위 입력" 
+                  @click="setCurTotPrice"
+                  @input="e=>curTotPrice=this.$comma3(this.$uncomma(e.target.value))">
             </div>
         </div>
-        <div class="col-12">
+        <!-- <div class="col-12">
             <div class="input-group">
                 <span class="input-group-text">평가금액</span>
                 <input type="text" v-model="curTotPrice" class="form-control" style='text-align:right;' placeholder="원단위 입력" 
@@ -59,10 +65,11 @@
                   @input="e=>curTotPrice=this.$comma3(this.$uncomma(e.target.value))">
                 <span class="input-group-text">원</span>
             </div>
-        </div>
+        </div> -->
     </div>
     <div class="m-4">
         <button type="button" @click="stockKindReg" class="btn btn-primary btn-lg">등록</button> 
+        <button type="button" @click="readOnlyYn=false" class="btn btn-primary btn-lg">수정</button> 
     </div>
 </template>
 
@@ -74,6 +81,7 @@ export default {
     name: 'StockKindDetail',
     data(){
         return {
+            readOnlyYn : false,
             stockKindCd : '',     
             quantity : null,
             buyAvgPrice : null,
@@ -135,7 +143,7 @@ export default {
                 console.log("보유 주식 등록 결과 : " + JSON.stringify(response.data)); 
                 alert("보유 주식 등록이 완료되었습니다.");
             });
-        }, 
+        },
 		callStockKind() {	
             this.stockInfo = this.$getStockKindInfo(this.stockKind.stockKindCd, this.callBackStockKindInfo);
             this.stockInfoChangeCnt++;
@@ -164,7 +172,7 @@ export default {
                 this.stockAssetList = response.data;
                 console.log("주식 자산 조회 _ 결과 : " + JSON.stringify(this.stockAssetList)); 
             });
-		}, 
+		},  
     },
     watch:{
     },
@@ -186,6 +194,7 @@ export default {
                     this.buyAvgPrice = this.$comma3(this.stockKind.buyAvgPrice);
                     this.buyTotPrice = this.$comma3(this.stockKind.buyTotPrice);
                     this.callStockKind();
+                    this.readOnlyYn = true;
                 }
             });
         })
