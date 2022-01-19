@@ -13,15 +13,15 @@
         <div class="col-12">
             <div class="input-group">
                 <span class="input-group-text">종목</span>
-                <input v-model="stockKind.stockKindCd" type="text" class="form-control" :readonly=readOnlyYn placeholder="종목코드">
+                <input v-model="stockKind.stockKindCd" type="text" class="form-control" :readonly=readOnlyYn style='background-color:white;'  placeholder="종목코드">
                 <button type="button" @click="callStockKind" class="btn btn-secondary">종목조회</button> 
-                <input v-model="stockKind.stockKindName" type="text" class="form-control" :readonly=readOnlyYn placeholder="종목명">                
+                <input v-model="stockKind.stockKindName" type="text" class="form-control" :readonly=readOnlyYn style='background-color:white;' placeholder="종목명">                
             </div>
         </div>
         <div class="col-12">
             <div class="input-group">
                 <span class="input-group-text">보유수량</span>
-                <input type="text" v-model="quantity" class="form-control"  :readonly=readOnlyYn placeholder="" 
+                <input type="text" v-model="quantity" class="form-control"  :readonly=readOnlyYn style='text-align:right;background-color:white;'  placeholder="" 
                   @input="e=>quantity=this.$comma3(this.$uncomma(e.target.value))">
                 <span class="input-group-text">주</span>
             </div>
@@ -29,43 +29,35 @@
         <div class="col-12">
             <div class="input-group">
                 <span class="input-group-text">평단가</span>
-                <input type="text" v-model="buyAvgPrice" class="form-control" :readonly=readOnlyYn style='text-align:right;' placeholder="원단위 입력" 
+                <input type="text" v-model="buyAvgPrice" class="form-control" :readonly=readOnlyYn style='text-align:right;background-color:white;' placeholder="원단위 입력" 
                   @input="e=>buyAvgPrice=this.$comma3(this.$uncomma(e.target.value))">
                 <span class="input-group-text">매입액</span>
-                <input type="text" v-model="buyTotPrice" class="form-control" :readonly=true style='text-align:right;' placeholder="원단위 입력" 
+                <input type="text" v-model="buyTotPrice" class="form-control" :readonly=true style='text-align:right;background-color:white;'  placeholder="" 
                   @click="setBuyTotPrice"
                   @input="e=>buyTotPrice=this.$comma3(this.$uncomma(e.target.value))">
             </div>
-        </div>
-        <!-- <div class="col-12">
-            <div class="input-group">
-                <span class="input-group-text">매입총액</span>
-                <input type="text" v-model="buyTotPrice" class="form-control" style='text-align:right;' placeholder="원단위 입력" 
-                  @click="setBuyTotPrice"
-                  @input="e=>buyTotPrice=this.$comma3(this.$uncomma(e.target.value))">
-                <span class="input-group-text">원</span>
-            </div>
-        </div> -->
+        </div> 
         <div class="col-12">
             <div class="input-group">
                 <span class="input-group-text">현재가</span>
-                <input type="text" v-model="curUnitPrice" class="form-control" :readonly=readOnlyYn style='text-align:right;' placeholder="원단위 입력" 
+                <input type="text" v-model="curUnitPrice" class="form-control" :readonly=readOnlyYn style='text-align:right;background-color:white;' placeholder="원단위 입력" 
                   @input="e=>curUnitPrice=this.$comma3(this.$uncomma(e.target.value))">
                 <span class="input-group-text">평가액</span>
-                <input type="text" v-model="curTotPrice" class="form-control" :readonly=true style='text-align:right;' placeholder="원단위 입력" 
+                <input type="text" v-model="curTotPrice" class="form-control" :readonly=true style='text-align:right;background-color:white;'  placeholder="" 
                   @click="setCurTotPrice"
                   @input="e=>curTotPrice=this.$comma3(this.$uncomma(e.target.value))">
             </div>
         </div>
-        <!-- <div class="col-12">
+        <div class="col-12">
             <div class="input-group">
-                <span class="input-group-text">평가금액</span>
-                <input type="text" v-model="curTotPrice" class="form-control" style='text-align:right;' placeholder="원단위 입력" 
-                  @click="setCurTotPrice"
-                  @input="e=>curTotPrice=this.$comma3(this.$uncomma(e.target.value))">
-                <span class="input-group-text">원</span>
+                <span class="input-group-text">손익율</span>
+                <input type="text" v-model="stockKind.pnlRate" :class="this.$numColor(stockKind.pnlRate)" class="form-control" style='text-align:right;background-color:white;' :readonly=true placeholder="" 
+                  @input="e=>stockKind.pnlAmt=this.$comma3(this.$uncomma(e.target.value))">
+                <span class="input-group-text">손익액</span>
+                <input type="text" v-model="stockKind.pnlAmt" :class="this.$numColor(stockKind.pnlAmt)" class="form-control" style='text-align:right;background-color:white;' :readonly=true placeholder=""                   
+                  @input="e=>stockKind.pnlAmt=this.$comma3(this.$uncomma(e.target.value))">
             </div>
-        </div> -->
+        </div> 
     </div>
     <div class="m-4">
         <button type="button" @click="stockKindReg" class="btn btn-primary btn-lg">등록</button> 
@@ -88,16 +80,27 @@ export default {
             buyTotPrice : null,
             curUnitPrice : null,
             curTotPrice : null ,  
-            stockKind : {
-                memberId : 1,          // 회원ID
-                assetId : '',          // 자산ID
-                stockKindCd : '',      // 주식종목코드
-                stockKindName : '',    // 주식종목명
-                quantity : null,       // 보유수량
-                buyAvgPrice : null,    // 매입평균단가
-                buyTotPrice : null,    // 매임총금액
-                curUnitPrice : null,   // 현재가
-                curTotPrice : null     // 현재평가금액
+            stockKind : {      // 현재평가금액
+                stockKindId : '',
+                assetId : '',
+                stockKindCd : '',
+                stockKindName : '',
+                quantity : '',
+                buyAvgPrice : '',
+                buyTotPrice : '',
+                curUnitPrice : '',
+                curTotPrice : '',
+                pnlRate : '',
+                pnlAmt : '',
+                diffAmount: '',
+                dayRange : '',
+                highPrice : '',
+                lowPrice : '',
+                deleteYn : '',
+                memberId : '',
+                baseTime : '',
+                regDatetime : '',
+                lastUpdateDatetime : ''
             },
             stockInfo : {
                 baseTime : '',            // 기준일시
