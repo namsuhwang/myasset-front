@@ -59,9 +59,14 @@
             </div>
         </div> 
     </div>
+    <div class="m-4"> 
+        <button id='btnBuy' type="button" @click="buyLink" class="btn btn-primary btn-sm">매수 등록</button>&nbsp;
+        <button id='btnSale' type="button" @click="saleLink" class="btn btn-primary btn-sm">매도 등록</button>&nbsp;
+    </div>
     <div class="m-4">
-        <button type="button" @click="stockKindReg" class="btn btn-primary btn-lg">등록</button> 
-        <button type="button" @click="readOnlyYn=false" class="btn btn-primary btn-lg">수정</button> 
+        <button id='btnReg' type="button" @click="stockKindReg" :disabled="mode != 'REG'" class="btn btn-primary btn-sm">등록</button>&nbsp;
+        <button id='btnMod' type="button" @click="readOnlyYn=false" class="btn btn-primary btn-sm">수정</button>&nbsp;
+        <button id='btnDel' type="button" @click="stockKindDel" class="btn btn-primary btn-sm">삭제</button>&nbsp; 
     </div>
 </template>
 
@@ -104,18 +109,18 @@ export default {
                 regDatetime : '',
                 lastUpdateDatetime : ''
             },
-            stockInfo : {
-                baseTime : '',            // 기준일시
-                kindCode : '',             // 종목코드
-                stockName : '',            // 종목명
-                stockType : '',            // 코스피/코스닥
-                price : '',                // 현재가
-                ydPrice : '',              // 전일가
-                diffAmount : '',           // 전일비(전일대비 차이)
-                dayRange : '',             // 등락률(전일대비 등락율)
-                highPrice : '',            // 당일 고가
-                lowPrice : ''        
-            },
+            // stockInfo : {
+            //     baseTime : '',            // 기준일시
+            //     kindCode : '',             // 종목코드
+            //     stockName : '',            // 종목명
+            //     stockType : '',            // 코스피/코스닥
+            //     price : '',                // 현재가
+            //     ydPrice : '',              // 전일가
+            //     diffAmount : '',           // 전일비(전일대비 차이)
+            //     dayRange : '',             // 등락률(전일대비 등락율)
+            //     highPrice : '',            // 당일 고가
+            //     lowPrice : ''        
+            // },
             // stockInfoChangeCnt : 0,
             // stockAssetList : [{assetId : "", assetName : ""}],
             stockAssetList : null,
@@ -150,14 +155,20 @@ export default {
             });
         },
 		callStockKind() {	
-            this.stockInfo = this.$getStockKindInfo(this.stockKind.stockKindCd, this.callBackStockKindInfo);
-            this.stockInfoChangeCnt++;
+            this.$getStockKindInfo(this.stockKind.stockKindCd, this.callBackStockKindInfo);
+            //this.stockKind = this.$getStockKindInfo(this.stockKind.stockKindCd, this.callBackStockKindInfo);
+            // this.stockInfoChangeCnt++;
 		}, 
-        callBackStockKindInfo(stockInfo){
+        callBackStockKindInfo(stockKind){
             console.log("setStockNameAndCurUnitPrice " + JSON.stringify(stockInfo));
-            this.stockInfo = stockInfo;
-            this.stockKind.stockKindName = this.stockInfo.stockName;
-            this.curUnitPrice = this.stockInfo.price;       
+            this.stockKind = stockKind;
+            //this.stockKind.stockKindName = this.stockInfo.stockName;
+            this.curUnitPrice = this.$comma3(this.this.stockKind.curUnitPrice);    
+            this.quantity = this.$comma3(this.stockKind.quantity);
+            this.buyAvgPrice = this.$comma3(this.stockKind.buyAvgPrice);
+            this.buyTotPrice = this.$comma3(this.stockKind.buyTotPrice);
+            this.pnlAmt = this.$comma3(this.stockKind.pnlAmt);
+            this.pnlRate = this.$comma3(this.stockKind.pnlRate);   
             this.setCurTotPrice();
         },
         setBuyTotPrice(){
