@@ -51,11 +51,11 @@
         <div class="col-12">
             <div class="input-group">
                 <span class="input-group-text">손익율</span>
-                <input type="text" v-model="stockKind.pnlRate" :class="this.$numColor(stockKind.pnlRate)" class="form-control" style='text-align:right;background-color:white;' :readonly=true placeholder="" 
-                  @input="e=>stockKind.pnlAmt=this.$comma3(this.$uncomma(e.target.value))">
+                <input type="text" v-model="pnlRate" :class="this.$numColor(stockKind.pnlRate)" class="form-control" style='text-align:right;background-color:white;' :readonly=true placeholder="" 
+                  @input="e=>stockKind.pnlRate=this.$comma3(this.$uncomma(e.target.value))">
                 <span class="input-group-text">손익액</span>
-                <input type="text" v-model="stockKind.pnlAmt" :class="this.$numColor(stockKind.pnlAmt)" class="form-control" style='text-align:right;background-color:white;' :readonly=true placeholder=""                   
-                  @input="e=>stockKind.pnlAmt=this.$comma3(this.$uncomma(e.target.value))">
+                <input type="text" v-model="pnlAmt" :class="this.$numColor(stockKind.pnlAmt)" class="form-control" style='text-align:right;background-color:white;' :readonly=true placeholder=""                   
+                  @input="e=>value=this.$comma3(e.target.value)">
             </div>
         </div> 
     </div>
@@ -80,6 +80,8 @@ export default {
             buyTotPrice : null,
             curUnitPrice : null,
             curTotPrice : null ,  
+            pnlRate : '',
+            pnlAmt : '',
             stockKind : {      // 현재평가금액
                 stockKindId : '',
                 assetId : '',
@@ -168,6 +170,17 @@ export default {
                 this.curTotPrice = this.$comma3(this.$uncomma(this.curUnitPrice) * this.$uncomma(this.quantity));
             }
         },
+        setPnl(){
+            console.log("this.stockKind.curTotPrice=" + this.stockKind.curTotPrice + ", this.stockKind.buyTotPrice=" + this.stockKind.buyTotPrice);
+            var pAmt = this.stockKind.curTotPrice - this.stockKind.buyTotPrice;
+            var pRate = pAmt / this.stockKind.buyTotPrice * 100.0;
+            pRate = Math.round((pRate + Number.EPSILON) * 100) / 100;
+            console.log("pAmt=" + pAmt + ", pRate=" + pRate);
+            this.stockKind.pnlAmt = pAmt;
+            this.stockKind.pnlRate = pRate;
+            this.pnlAmt = this.$comma3(pAmt);
+            this.pnlRate = this.$comma3(pRate);
+        },
 		getStockAsset() {	
             axios.post(process.env.VUE_APP_REST_BASE_URL 
                 + '/myasset/asset/list', {assetType : "STOCK"} )
@@ -178,6 +191,38 @@ export default {
 		},  
     },
     watch:{
+        'quantity': function(val){
+            this.stockKind.quantity = this.$uncomma(val); 
+            this.setBuyTotPrice();
+            this.setCurTotPrice(); 
+        },
+        'buyAvgPrice': function(val){ 
+            this.stockKind.buyAvgPrice = this.$uncomma(val);            
+            this.setBuyTotPrice(); 
+        },
+        'buyTotPrice': function(val){ 
+            this.stockKind.buyTotPrice = this.$uncomma(val);
+            this.setPnl();
+        },
+        'curAvgPrice': function(val){ 
+            this.stockKind.curUnitPrice = this.$uncomma(val);            
+            this.setCurTotPrice();
+        },
+        'curTotPrice': function(val){ 
+            this.stockKind.curTotPrice = this.$uncomma(val);
+            this.setPnl();
+        },
+        'pnlAmt': function(val){ 
+            this.stockKind.pnlAmt = this.$uncomma(val);
+        },
+        'pnlRate': function(val){ 
+            this.stockKind.pnlRate = this.$uncomma(val); 
+        },
+        'curUnitPrice': function(val) {
+            this.stockKind.curUnitPrice = this.$uncomma(val);
+            this.setCurTotPrice();
+            this.setPnl();
+        }
     },
     created(){
     },
@@ -196,6 +241,8 @@ export default {
                     this.quantity = this.$comma3(this.stockKind.quantity);
                     this.buyAvgPrice = this.$comma3(this.stockKind.buyAvgPrice);
                     this.buyTotPrice = this.$comma3(this.stockKind.buyTotPrice);
+                    this.pnlAmt = this.$comma3(this.stockKind.pnlAmt);
+                    this.pnlRate = this.$comma3(this.stockKind.pnlRate);
                     this.callStockKind();
                     this.readOnlyYn = true;
                 }
