@@ -93,11 +93,18 @@ const methods = {
         }
     },
     numColor(numVal){
+        // console.log("numVal=" + numVal + ", isNumeric=" + this.isNumeric(numVal));
+        
+        if(numVal == null || isNaN(numVal)){
+            return null;
+        }
+
         if(numVal > 0){
             return "num-plus";            
         }else if(numVal < 0){ 
-            return "num-minus";           
-        
+            return "num-minus";          
+        }else if(numVal == 0){
+            return "num-zero";
         }else if(numVal.includes('▲')){
             return "num-plus";            
         }else if(numVal.includes('▼')){

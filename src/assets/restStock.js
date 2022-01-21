@@ -7,13 +7,12 @@ const methods = {
             + '/myasset/scrap/stockkind', {kindCode : stockKindCode} )
         .then((response)=>{
             // console.log("종목 조회 _ 결과 : " + JSON.stringify(response.data)); 
-            var stockInfo = response.data;
-            console.log("공통함수 종목 조회 _ 결과 : " + JSON.stringify(stockInfo)); 
-            // return stockInfo;
-            callbackFunc(stockInfo);
+            var stockRealTimeInfo = response.data;
+            console.log("공통함수 종목 조회 _ 결과 : " + JSON.stringify(stockRealTimeInfo));  
+            callbackFunc(stockRealTimeInfo);
         })
         .catch((error)=>{
-            console.log("getStockKindInfo error");
+            console.log("stockKind error");
             console.log(error);
         });
     }, 
@@ -23,8 +22,7 @@ const methods = {
             + '/myasset/stock/total', {memberId : memberId} )
         .then((response)=>{ 
             var stockKindTotal = response.data;
-            console.log("공통함수 주식 종합 조회 _ 결과 : " + JSON.stringify(stockKindTotal));  
-            //return stockKindTotal;
+            console.log("공통함수 주식 종합 조회 _ 결과 : " + JSON.stringify(stockKindTotal)); 
             callbackFunc(stockKindTotal);
         })
         .catch((error)=>{

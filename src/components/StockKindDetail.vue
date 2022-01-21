@@ -14,7 +14,7 @@
             <div class="input-group">
                 <span class="input-group-text">종목</span>
                 <input v-model="stockKind.stockKindCd" type="text" class="form-control" :readonly=readOnlyYn style='background-color:white;'  placeholder="종목코드">
-                <button type="button" @click="callStockKind" class="btn btn-secondary">종목조회</button> 
+                <button type="button" @click="callStockKind" class="btn btn-secondary">조회</button> 
                 <input v-model="stockKind.stockKindName" type="text" class="form-control" :readonly=readOnlyYn style='background-color:white;' placeholder="종목명">                
             </div>
         </div>
@@ -109,21 +109,20 @@ export default {
                 regDatetime : '',
                 lastUpdateDatetime : ''
             },
-            // stockInfo : {
-            //     baseTime : '',            // 기준일시
-            //     kindCode : '',             // 종목코드
-            //     stockName : '',            // 종목명
-            //     stockType : '',            // 코스피/코스닥
-            //     price : '',                // 현재가
-            //     ydPrice : '',              // 전일가
-            //     diffAmount : '',           // 전일비(전일대비 차이)
-            //     dayRange : '',             // 등락률(전일대비 등락율)
-            //     highPrice : '',            // 당일 고가
-            //     lowPrice : ''        
-            // },
-            // stockInfoChangeCnt : 0,
-            // stockAssetList : [{assetId : "", assetName : ""}],
+            stockRealTimeInfo : {
+                baseTime : '',            // 기준일시
+                kindCode : '',             // 종목코드
+                stockName : '',            // 종목명
+                stockType : '',            // 코스피/코스닥
+                price : '',                // 현재가
+                ydPrice : '',              // 전일가
+                diffAmount : '',           // 전일비(전일대비 차이)
+                dayRange : '',             // 등락률(전일대비 등락율)
+                highPrice : '',            // 당일 고가
+                lowPrice : ''        
+            }, 
             stockAssetList : null,
+            mode: ""
         }
     },    
     props:{
@@ -131,6 +130,9 @@ export default {
         stockCode : String,
     },
     methods : {
+        /*-------------------------------------------------------------------------------------*
+         *      Button Click Function Start                                                   */
+        // 종목 정보 등록
         stockKindReg(){
             if(!this.$isNumeric(this.quantity)) return;
             this.stockKind.quantity = this.$uncomma(this.quantity);
@@ -154,23 +156,49 @@ export default {
                 alert("보유 주식 등록이 완료되었습니다.");
             });
         },
+         /*      Button Click Function End                                                     *
+         --------------------------------------------------------------------------------------*/
+        
+        /*-------------------------------------------------------------------------------------*
+         *      Rest Call Function Start                                                       */
+        // Rest Call :: 실시간 주가 정보 조회
 		callStockKind() {	
             this.$getStockKindInfo(this.stockKind.stockKindCd, this.callBackStockKindInfo);
-            //this.stockKind = this.$getStockKindInfo(this.stockKind.stockKindCd, this.callBackStockKindInfo);
-            // this.stockInfoChangeCnt++;
 		}, 
-        callBackStockKindInfo(stockKind){
-            console.log("setStockNameAndCurUnitPrice " + JSON.stringify(stockInfo));
-            this.stockKind = stockKind;
-            //this.stockKind.stockKindName = this.stockInfo.stockName;
-            this.curUnitPrice = this.$comma3(this.this.stockKind.curUnitPrice);    
-            this.quantity = this.$comma3(this.stockKind.quantity);
-            this.buyAvgPrice = this.$comma3(this.stockKind.buyAvgPrice);
-            this.buyTotPrice = this.$comma3(this.stockKind.buyTotPrice);
-            this.pnlAmt = this.$comma3(this.stockKind.pnlAmt);
-            this.pnlRate = this.$comma3(this.stockKind.pnlRate);   
+
+        // Rest Call :: 증권사 계좌 목록 조회. 1개이면 바로 세팅
+		getStockAsset() {	
+            axios.post(process.env.VUE_APP_REST_BASE_URL 
+                + '/myasset/asset/list', {assetType : "STOCK", memberId : 1} )
+            .then((response)=>{ 
+                this.stockAssetList = response.data;
+                if(this.stockAssetList.length == 1){
+                    this.stockKind.assetId = this.stockAssetList[0].assetId;
+                }
+            });
+		},  
+         /*      Rest Call End                                                                 *
+         --------------------------------------------------------------------------------------*/
+
+
+        /*-------------------------------------------------------------------------------------*
+         *      CallBack Function Start                                                        */
+        // CallBack :: 실시간 주가 정보 조회 
+        callBackStockKindInfo(stockRealTimeInfo){
+            console.log("callBackStockKindInfo " + JSON.stringify(stockRealTimeInfo));
+            this.stockRealTimeInfo = stockRealTimeInfo;
+            this.curUnitPrice = this.$comma3(this.stockRealTimeInfo.price);  
+            this.stockKind.curUnitPrice = this.$comma3(this.stockRealTimeInfo.price);    
+            this.stockKind.stockKindCd = stockRealTimeInfo.kindCode;
+            this.stockKind.stockKindName = stockRealTimeInfo.stockName;   
             this.setCurTotPrice();
         },
+         /*      CallBack Function End                                                         *
+         --------------------------------------------------------------------------------------*/
+
+
+        /*-------------------------------------------------------------------------------------*
+         *      v-model Calculattion Function Start                                            */
         setBuyTotPrice(){
             if(this.buyAvgPrice != null && this.$isNumeric(this.buyAvgPrice) && this.quantity != null  && this.$isNumeric(this.quantity) ){
                 this.buyTotPrice = this.$comma3(this.$uncomma(this.buyAvgPrice) * this.$uncomma(this.quantity));
@@ -181,8 +209,12 @@ export default {
                 this.curTotPrice = this.$comma3(this.$uncomma(this.curUnitPrice) * this.$uncomma(this.quantity));
             }
         },
+        // 손익 정보 계산
         setPnl(){
             console.log("this.stockKind.curTotPrice=" + this.stockKind.curTotPrice + ", this.stockKind.buyTotPrice=" + this.stockKind.buyTotPrice);
+            if(this.stockKind.curTotPrice == "" && this.stockKind.buyTotPrice == ""){
+                return;
+            }
             var pAmt = this.stockKind.curTotPrice - this.stockKind.buyTotPrice;
             var pRate = pAmt / this.stockKind.buyTotPrice * 100.0;
             pRate = Math.round((pRate + Number.EPSILON) * 100) / 100;
@@ -192,15 +224,9 @@ export default {
             this.pnlAmt = this.$comma3(pAmt);
             this.pnlRate = this.$comma3(pRate);
         },
-		getStockAsset() {	
-            axios.post(process.env.VUE_APP_REST_BASE_URL 
-                + '/myasset/asset/list', {assetType : "STOCK"} )
-            .then((response)=>{ 
-                this.stockAssetList = response.data;
-                console.log("주식 자산 조회 _ 결과 : " + JSON.stringify(this.stockAssetList)); 
-            });
-		},  
-    },
+         /*      v-model Calculattion Function  End                                            *
+         --------------------------------------------------------------------------------------*/
+    }, 
     watch:{
         'quantity': function(val){
             this.stockKind.quantity = this.$uncomma(val); 
@@ -235,29 +261,27 @@ export default {
             this.setPnl();
         }
     },
-    created(){
-    },
     computed: {
+    },
+    created(){
     },
     mounted(){ 
         // 전체 화면내용이 렌더링된 후에 아래의 코드가 실행됩니다.
         this.$nextTick(function () {
-            axios.post('/myasset/asset/list', {"assetType":"STOCK"})
-            .then((response)=>{
-                this.stockAssetList = response.data; 
+		    this.getStockAsset(); 	
 
-                console.log("this.$route.params.stockKind =" + this.$route.params.stockKind );
-                if(this.$route.params.stockKind != null){ 
-                    this.stockKind = JSON.parse(this.$route.params.stockKind);
-                    this.quantity = this.$comma3(this.stockKind.quantity);
-                    this.buyAvgPrice = this.$comma3(this.stockKind.buyAvgPrice);
-                    this.buyTotPrice = this.$comma3(this.stockKind.buyTotPrice);
-                    this.pnlAmt = this.$comma3(this.stockKind.pnlAmt);
-                    this.pnlRate = this.$comma3(this.stockKind.pnlRate);
-                    this.callStockKind();
-                    this.readOnlyYn = true;
-                }
-            });
+            // 보유주식 목록에서 라우터 링크로 넘어온 경우 처리
+            console.log("this.$route.params.stockKind =" + this.$route.params.stockKind );
+            if(this.$route.params.stockKind != null){ 
+                this.stockKind = JSON.parse(this.$route.params.stockKind);
+                this.quantity = this.$comma3(this.stockKind.quantity);
+                this.buyAvgPrice = this.$comma3(this.stockKind.buyAvgPrice);
+                this.buyTotPrice = this.$comma3(this.stockKind.buyTotPrice);
+                this.pnlAmt = this.$comma3(this.stockKind.pnlAmt);
+                this.pnlRate = this.$comma3(this.stockKind.pnlRate);
+                this.callStockKind();
+                this.readOnlyYn = true;
+            }
         })
     } 
 }
