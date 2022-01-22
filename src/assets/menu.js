@@ -1,13 +1,14 @@
 export default 
 [
     {
-        id:'menu_01', name:'홈', path: '/asset/total',
+        id:'menu_01', name:'홈', path: '/asset/stock/total',
         subMenus:[      
             {id:'menu_01_01', name:'종합현황', path: '/asset/total'},
             {id:'menu_01_02', name:'자산조회', path: '/asset/total'}
         ]
     },
-    {id:'menu_02', name:'계좌', path: '/asset/bank',
+    {
+        id:'menu_02', name:'계좌', path: '/asset/bank',
         subMenus:[      
             {id:'menu_02_01', name:'계좌 보유현황', path: '/asset/bank'},
             {id:'menu_02_02', name:'계좌 등록', path: '/asset/bank/detail'}

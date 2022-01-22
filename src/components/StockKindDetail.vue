@@ -1,6 +1,8 @@
 <template>
     <h5>주식 종목</h5> 
     <div class="row g-2 m-4" > 
+        <StockTrade v-if="modalVisible" @closeStockTrade="modalVisible = false">
+        </StockTrade>
         <div class="col-12">
             <div class="input-group">
                 <label class="input-group-text">증권계좌</label>
@@ -60,8 +62,8 @@
         </div> 
     </div>
     <div class="m-4"> 
-        <button id='btnBuy' type="button" @click="buyLink" class="btn btn-primary btn-sm">매수 등록</button>&nbsp;
-        <button id='btnSale' type="button" @click="saleLink" class="btn btn-primary btn-sm">매도 등록</button>&nbsp;
+        <button id='btnBuy' type="button" @click="openTradeModal" class="btn btn-primary btn-sm">매수 등록</button>&nbsp;
+        <button id='btnSale' type="button" @click="openTradeModal" class="btn btn-primary btn-sm">매도 등록</button>&nbsp;
     </div>
     <div class="m-4">
         <button id='btnReg' type="button" @click="stockKindReg" :disabled="mode != 'REG'" class="btn btn-primary btn-sm">등록</button>&nbsp;
@@ -73,6 +75,8 @@
 <script>
 import axios from 'axios';
 import { onMounted, ref, reactive, toRefs, watch, computed } from 'vue';
+import { mapGetters, mapActions} from 'vuex'
+import StockTrade from './StockTrade.vue';
 
 export default {
     name: 'StockKindDetail',
@@ -122,12 +126,14 @@ export default {
                 lowPrice : ''        
             }, 
             stockAssetList : null,
-            mode: ""
+            mode: "",
+            modalVisible : false
         }
     },    
     props:{
-        memberId : Number,
-        stockCode : String,
+    },
+    components:{
+        StockTrade: StockTrade
     },
     methods : {
         /*-------------------------------------------------------------------------------------*
@@ -155,6 +161,10 @@ export default {
                 console.log("보유 주식 등록 결과 : " + JSON.stringify(response.data)); 
                 alert("보유 주식 등록이 완료되었습니다.");
             });
+        },
+        openTradeModal(){
+            this.modalVisible = !this.modalVisible;
+            console.log("openTradeModal modalVisible=" + this.modalVisible);
         },
          /*      Button Click Function End                                                     *
          --------------------------------------------------------------------------------------*/

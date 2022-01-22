@@ -1,73 +1,65 @@
 <template>
-    <h5>주식 종목</h5> 
-    <div class="row g-2 m-4" > 
-        <div class="col-12">
-            <div class="input-group">
-                <label class="input-group-text">증권계좌</label>
-                <select class="form-select" v-model="stockKind.assetId" :readonly=readOnlyYn >
-                    <option v-for="(stockAsset, i) in stockAssetList" :key="i" 
-                    :value="stockAsset.assetId">{{ stockAsset.assetName }}</option>
-                </select>
+    <transition name="StockTrade">
+        <div class="modal-mask">
+            <div class="modal-wrapper">
+                <div class="modal-container">                    
+                    <div class="row g-2 m-4" > 
+                        <h5>주식 매매</h5> 
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="rdoTrade" id="rdoTradeBuy" value="buy">
+                            <label class="form-check-label" for="rdoTradeBuy">매수</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="rdoTrade" id="rdoTradeSale" value="sale">
+                            <label class="form-check-label" for="rdoTradeSale">매도</label>
+                        </div>
+                        <div class="col-12">
+                            <div class="input-group">
+                                <span class="input-group-text">종목</span>
+                                <input v-model="stockKind.stockKindCd" type="text" class="form-control" :readonly=readOnlyYn style='background-color:white;'  placeholder="종목코드">
+                                <button type="button" @click="callStockKind" class="btn btn-secondary">조회</button> 
+                                <input v-model="stockKind.stockKindName" type="text" class="form-control" :readonly=readOnlyYn style='background-color:white;' placeholder="종목명">                
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="input-group">
+                                <span class="input-group-text">보유수량</span>
+                                <input type="text" v-model="quantity" class="form-control"  :readonly=readOnlyYn style='text-align:right;background-color:white;'  placeholder="" 
+                                @input="e=>quantity=this.$comma3(this.$uncomma(e.target.value))">
+                                <span class="input-group-text">주</span>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="input-group">
+                                <span class="input-group-text">평단가</span>
+                                <input type="text" v-model="buyAvgPrice" class="form-control" :readonly=readOnlyYn style='text-align:right;background-color:white;' placeholder="원단위 입력" 
+                                @input="e=>buyAvgPrice=this.$comma3(this.$uncomma(e.target.value))">
+                                <span class="input-group-text">매입액</span>
+                                <input type="text" v-model="buyTotPrice" class="form-control" :readonly=true style='text-align:right;background-color:white;'  placeholder="" 
+                                @click="setBuyTotPrice"
+                                @input="e=>buyTotPrice=this.$comma3(this.$uncomma(e.target.value))">
+                            </div>
+                        </div> 
+                        <div class="col-12">
+                            <div class="input-group">
+                                <span class="input-group-text">현재가</span>
+                                <input type="text" v-model="curUnitPrice" class="form-control" :readonly=readOnlyYn style='text-align:right;background-color:white;' placeholder="원단위 입력" 
+                                @input="e=>curUnitPrice=this.$comma3(this.$uncomma(e.target.value))">
+                                <span class="input-group-text">평가액</span>
+                                <input type="text" v-model="curTotPrice" class="form-control" :readonly=true style='text-align:right;background-color:white;'  placeholder="" 
+                                @click="setCurTotPrice"
+                                @input="e=>curTotPrice=this.$comma3(this.$uncomma(e.target.value))">
+                            </div>
+                        </div>
+                        <div class="m-4"> 
+                            <button id='btnBuy' type="button" @click="buyLink" class="btn btn-primary btn-sm">매수 등록</button>&nbsp;
+                            <button id='btnSale' type="button" @click="$emit('closeStockTrade')" class="btn btn-primary btn-sm">닫기</button>&nbsp;
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="col-12">
-            <div class="input-group">
-                <span class="input-group-text">종목</span>
-                <input v-model="stockKind.stockKindCd" type="text" class="form-control" :readonly=readOnlyYn style='background-color:white;'  placeholder="종목코드">
-                <button type="button" @click="callStockKind" class="btn btn-secondary">조회</button> 
-                <input v-model="stockKind.stockKindName" type="text" class="form-control" :readonly=readOnlyYn style='background-color:white;' placeholder="종목명">                
-            </div>
-        </div>
-        <div class="col-12">
-            <div class="input-group">
-                <span class="input-group-text">보유수량</span>
-                <input type="text" v-model="quantity" class="form-control"  :readonly=readOnlyYn style='text-align:right;background-color:white;'  placeholder="" 
-                  @input="e=>quantity=this.$comma3(this.$uncomma(e.target.value))">
-                <span class="input-group-text">주</span>
-            </div>
-        </div>
-        <div class="col-12">
-            <div class="input-group">
-                <span class="input-group-text">평단가</span>
-                <input type="text" v-model="buyAvgPrice" class="form-control" :readonly=readOnlyYn style='text-align:right;background-color:white;' placeholder="원단위 입력" 
-                  @input="e=>buyAvgPrice=this.$comma3(this.$uncomma(e.target.value))">
-                <span class="input-group-text">매입액</span>
-                <input type="text" v-model="buyTotPrice" class="form-control" :readonly=true style='text-align:right;background-color:white;'  placeholder="" 
-                  @click="setBuyTotPrice"
-                  @input="e=>buyTotPrice=this.$comma3(this.$uncomma(e.target.value))">
-            </div>
-        </div> 
-        <div class="col-12">
-            <div class="input-group">
-                <span class="input-group-text">현재가</span>
-                <input type="text" v-model="curUnitPrice" class="form-control" :readonly=readOnlyYn style='text-align:right;background-color:white;' placeholder="원단위 입력" 
-                  @input="e=>curUnitPrice=this.$comma3(this.$uncomma(e.target.value))">
-                <span class="input-group-text">평가액</span>
-                <input type="text" v-model="curTotPrice" class="form-control" :readonly=true style='text-align:right;background-color:white;'  placeholder="" 
-                  @click="setCurTotPrice"
-                  @input="e=>curTotPrice=this.$comma3(this.$uncomma(e.target.value))">
-            </div>
-        </div>
-        <div class="col-12">
-            <div class="input-group">
-                <span class="input-group-text">손익율</span>
-                <input type="text" v-model="pnlRate" :class="this.$numColor(stockKind.pnlRate)" class="form-control" style='text-align:right;background-color:white;' :readonly=true placeholder="" 
-                  @input="e=>stockKind.pnlRate=this.$comma3(this.$uncomma(e.target.value))">
-                <span class="input-group-text">손익액</span>
-                <input type="text" v-model="pnlAmt" :class="this.$numColor(stockKind.pnlAmt)" class="form-control" style='text-align:right;background-color:white;' :readonly=true placeholder=""                   
-                  @input="e=>value=this.$comma3(e.target.value)">
-            </div>
-        </div> 
-    </div>
-    <div class="m-4"> 
-        <button id='btnBuy' type="button" @click="buyLink" class="btn btn-primary btn-sm">매수 등록</button>&nbsp;
-        <button id='btnSale' type="button" @click="saleLink" class="btn btn-primary btn-sm">매도 등록</button>&nbsp;
-    </div>
-    <div class="m-4">
-        <button id='btnReg' type="button" @click="stockKindReg" :disabled="mode != 'REG'" class="btn btn-primary btn-sm">등록</button>&nbsp;
-        <button id='btnMod' type="button" @click="readOnlyYn=false" class="btn btn-primary btn-sm">수정</button>&nbsp;
-        <button id='btnDel' type="button" @click="stockKindDel" class="btn btn-primary btn-sm">삭제</button>&nbsp; 
-    </div>
+    </transition>
 </template>
 
 <script>
@@ -75,7 +67,7 @@ import axios from 'axios';
 import { onMounted, ref, reactive, toRefs, watch, computed } from 'vue';
 
 export default {
-    name: 'StockKindDetail',
+    name: 'StockTrade',
     data(){
         return {
             readOnlyYn : false,
@@ -126,8 +118,11 @@ export default {
         }
     },    
     props:{
-        memberId : Number,
-        stockCode : String,
+        modalVisible: {
+            type: Boolean,
+            require: true,
+            default: false
+        }
     },
     methods : {
         /*-------------------------------------------------------------------------------------*

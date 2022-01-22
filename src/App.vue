@@ -12,7 +12,7 @@
         </li>
       </ul>
       <!-- <a v-for="(subMenu, j) in selMenuItem.subMenus" :key="j" href="#" class="nav-item nav-link active">{{ subMenu.name }}</a> -->
-      <router-link v-for="(subMenu, j) in selMenuItem.subMenus" :key="j" :to="subMenu.path" class="nav-item nav-link active">{{ subMenu.name }}
+      <router-link v-for="(subMenu, j) in selMenuItem.subMenus" :key="j" :to="subMenu.path"   class="nav-item nav-link active">{{ subMenu.name }}
 
       </router-link>
     </nav>
@@ -27,47 +27,39 @@
 import { mapMutations, mapState, mapActions } from 'vuex';
 import menuItems from './assets/menu.js';
 import axios from 'axios';
-// import TotalAsset from './components/TotalAsset.vue';
-
-// axios.defaults.baseURL = 'http://namsuhwang.synology.me:8090/myasset';
-// axios.defaults.headers.post['Content-Type'] = 'application/json;charset=utf-8';
-// axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
 
 export default {
     name: "App",
     data() {
         return {
-            selMenuItem: menuItems[0],
-            menuItems: menuItems,
-            subItems: menuItems[0].subMenus,
+            menuItems: menuItems, 
+            selMenuItem: menuItems[2], 
             developer: "황남수",
         };
     },
     methods: {
         restTestCallPost() {
-            // alert("1");
             var callUrl = "/myasset/test/post";
-            //alert(callUrl);
             axios.post(callUrl, { param1: "3333" })
                 .then((response) => {
                 // 성공시 처리
                 var data = response.data;
                 alert(data);
             });
-            //alert(callUrl);
         },
         restTestCallGet() {
-            // alert("1");
             var callUrl = "/myasset/test/get";
-            //alert(callUrl);
             axios.get(callUrl)
                 .then((response) => {
                 // 성공시 처리
                 var data = response.data;
                 alert(data);
             });
-            //alert(callUrl);
         }
+    },
+    created(){
+        // 첫화면으로 주식 보유 현황 설정
+        this.$router.push(menuItems[2].subMenus[0].path);
     },
     mounted() {
         this.$store.dispatch('StoreCommon/getCommonCodeInit');
