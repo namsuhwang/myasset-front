@@ -1,7 +1,7 @@
 <template>
     <div class="m-4">   
         <h5>보유 주식</h5> 
-        <h12 class="textLeft">&nbsp;{{stockKindTotal.baseTime}}</h12>
+        <h6 align="left">&nbsp;{{stockKindTotal.baseTime}}</h6>
         <div class="mb-3">
             <table class="table table-borderless table-light">
                 <tbody>

@@ -1,8 +1,11 @@
 <template>
-    <h5>주식 종목</h5> 
-    <div class="row g-2 m-4" > 
-        <StockTrade v-if="modalVisible" @closeStockTrade="modalVisible = false">
-        </StockTrade>
+    <transition name="modalFade">
+        <StockTradeModal  :stockKind="stockKind" :stockTradeModalVisible="stockTradeModalVisible" :trType="trType" @closeModal="closeStockTradeModal"/>
+    </transition>
+    <div>
+        <h5>주식 종목</h5> 
+    </div>
+    <div class="row g-2 m-4" >  
         <div class="col-12">
             <div class="input-group">
                 <label class="input-group-text">증권계좌</label>
@@ -16,8 +19,8 @@
             <div class="input-group">
                 <span class="input-group-text">종목</span>
                 <input v-model="stockKind.stockKindCd" type="text" class="form-control" :readonly=readOnlyYn style='background-color:white;'  placeholder="종목코드">
-                <button type="button" @click="callStockKind" class="btn btn-secondary">조회</button> 
-                <input v-model="stockKind.stockKindName" type="text" class="form-control" :readonly=readOnlyYn style='background-color:white;' placeholder="종목명">                
+                <input v-model="stockKind.stockKindName" type="text" class="form-control" :readonly=readOnlyYn style='background-color:white;' placeholder="종목명">      
+                <button type="button" @click="callStockKind" class="btn btn-secondary">조회</button>           
             </div>
         </div>
         <div class="col-12">
@@ -62,21 +65,21 @@
         </div> 
     </div>
     <div class="m-4"> 
-        <button id='btnBuy' type="button" @click="openTradeModal" class="btn btn-primary btn-sm">매수 등록</button>&nbsp;
-        <button id='btnSale' type="button" @click="openTradeModal" class="btn btn-primary btn-sm">매도 등록</button>&nbsp;
+        <button id='btnBuy' type="button" @click="openTradeModal('BUY')" class="btn btn-primary btn-sm">매수 등록</button>&nbsp;
+        <button id='btnSale' type="button" @click="openTradeModal('SALE')" class="btn btn-primary btn-sm">매도 등록</button>&nbsp;
     </div>
     <div class="m-4">
         <button id='btnReg' type="button" @click="stockKindReg" :disabled="mode != 'REG'" class="btn btn-primary btn-sm">등록</button>&nbsp;
         <button id='btnMod' type="button" @click="readOnlyYn=false" class="btn btn-primary btn-sm">수정</button>&nbsp;
         <button id='btnDel' type="button" @click="stockKindDel" class="btn btn-primary btn-sm">삭제</button>&nbsp; 
-    </div>
+    </div> 
 </template>
 
 <script>
 import axios from 'axios';
 import { onMounted, ref, reactive, toRefs, watch, computed } from 'vue';
-import { mapGetters, mapActions} from 'vuex'
-import StockTrade from './StockTrade.vue';
+import { mapGetters, mapActions} from 'vuex';
+import StockTradeModal from './StockTradeModal.vue';
 
 export default {
     name: 'StockKindDetail',
@@ -127,13 +130,14 @@ export default {
             }, 
             stockAssetList : null,
             mode: "",
-            modalVisible : false
+            stockTradeModalVisible : false,
+            trType : ''
         }
     },    
     props:{
     },
     components:{
-        StockTrade: StockTrade
+        StockTradeModal
     },
     methods : {
         /*-------------------------------------------------------------------------------------*
@@ -162,9 +166,10 @@ export default {
                 alert("보유 주식 등록이 완료되었습니다.");
             });
         },
-        openTradeModal(){
-            this.modalVisible = !this.modalVisible;
-            console.log("openTradeModal modalVisible=" + this.modalVisible);
+        openTradeModal(trType){
+            this.stockTradeModalVisible = !this.stockTradeModalVisible;
+            this.trType = trType;
+            console.log("openTradeModal stockTradeModalVisible=" + this.stockTradeModalVisible);
         },
          /*      Button Click Function End                                                     *
          --------------------------------------------------------------------------------------*/
@@ -236,6 +241,14 @@ export default {
         },
          /*      v-model Calculattion Function  End                                            *
          --------------------------------------------------------------------------------------*/
+        /*-------------------------------------------------------------------------------------*
+         *      modal Function Start                                                           */
+        closeStockTradeModal(){
+            this.stockTradeModalVisible = false;
+            console.log("closeStockTradeModal stockTradeModalVisible=" + this.stockTradeModalVisible);
+        },
+         /*     modal Function  End                                                            *
+         --------------------------------------------------------------------------------------*/
     }, 
     watch:{
         'quantity': function(val){
@@ -298,5 +311,52 @@ export default {
 </script>
 
 <style>
+
+body {
+  margin: 0
+}
+div {
+  box-sizing: border-box;
+}
+.black-bg {
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.5);
+  position: fixed; padding: 20px;
+}
+.start{
+  opacity: 0;
+  transition: all 1s;
+}
+.end{
+  opacity: 1;
+}
+.white-bg {
+  width: 100%; background: white;
+  border-radius: 8px;
+  padding: 20px;
+}
+.modalFade-enter-from{
+  opacity: 0;
+  transform: translateY(-1000px);
+}
+.modalFade-enter-active{
+  transition: all 1s;
+}
+.modalFade-enter-to{
+  opacity: 1;
+  transform: translateY(0px);
+}
+
+.modalFade-leave-from{
+  opacity: 1;
+  transform: translateY(0px);
+}
+.modalFade-leave-active{
+  transition: all 1s;
+}
+.modalFade-leave-to{
+  opacity: 0;
+  transform: translateY(-1000px);
+}
 
 </style>
