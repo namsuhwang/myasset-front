@@ -1,30 +1,66 @@
 <template>
     <div class="black-bg" v-if="stockTradeModalVisible==true"  style="z-index:100;">  
         <div class="white-bg">
-            <h5>주식 매매</h5>             
-            <div class>
+            <h5>주식 매매</h5><br>  
+            <div class="row g-2">  
                 <div class="col-12">
-                    <div class="m-4"> 
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="rdoTrade" :checked="trType=='BUY'" v-model="trType" @change="radioChange('buy')" id="rdoTradeBuy" value="BUY">
-                            <label class="form-check-label" for="rdoTradeBuy">매수</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="rdoTrade" :checked="trType=='SALE'" v-model="trType" @change="radioChange('sale')" id="rdoTradeSale" value="SALE">
-                            <label class="form-check-label" for="rdoTradeSale">매도</label>
-                        </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="rdoTrade" :checked="trType=='BUY'" v-model="trType" @change="radioChange('buy')" id="rdoTradeBuy" value="BUY">
+                        <label class="form-check-label" for="rdoTradeBuy">매수</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="rdoTrade" :checked="trType=='SALE'" v-model="trType" @change="radioChange('sale')" id="rdoTradeSale" value="SALE">
+                        <label class="form-check-label" for="rdoTradeSale">매도</label>
                     </div>
                 </div>
                 <div class="col-12">
                     <div class="input-group">
-                        <span class="input-group-text">종목</span>
+                        <span class="input-group-text">거래종목</span>
                         <input v-model="stockKind.stockKindCd" type="text" class="form-control" :readonly=readOnlyYn style='background-color:white;'  placeholder="종목코드">
                         <input v-model="stockKind.stockKindName" type="text" class="form-control" :readonly=readOnlyYn style='background-color:white;' placeholder="종목명">                
                     </div>
                 </div>
-                <div class="m-4"> 
-                    <button id='btnBuy' type="button" @click="buyLink" class="btn btn-primary btn-sm">매수 등록</button>&nbsp;
-                    <button id='btnSale' type="button" @click="closeClick" class="btn btn-primary btn-sm">닫기</button>&nbsp;
+                <div class="col-12">
+                    <div class="input-group">
+                        <span class="input-group-text">거래일자</span>
+                        <input type="date" class="form-control" v-model="trDate" placeholder="YYYY.MM.DD">
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="input-group">
+                        <span class="input-group-text">거래수량</span>
+                        <input type="text" v-model="quantity" class="form-control"  :readonly=readOnlyYn style='text-align:right;background-color:white;'  placeholder="" 
+                        @input="e=>quantity=this.$comma3(this.$uncomma(e.target.value))">
+                        <span class="input-group-text">주</span>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="input-group">
+                        <span class="input-group-text">거래단가</span>
+                        <input type="text" v-model="unitCost" class="form-control"  :readonly=readOnlyYn style='text-align:right;background-color:white;'  placeholder="" 
+                        @input="e=>unitCost=this.$comma3(this.$uncomma(e.target.value))">
+                        <span class="input-group-text">원</span>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="input-group">
+                        <span class="input-group-text">거래세금</span>
+                        <input type="text" v-model="taxAmt" class="form-control"  :readonly=readOnlyYn style='text-align:right;background-color:white;'  placeholder="" 
+                        @input="e=>taxAmt=this.$comma3(this.$uncomma(e.target.value))">
+                        <span class="input-group-text">원</span>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="input-group">
+                        <span class="input-group-text">수수료</span>
+                        <input type="text" v-model="feeAmt" class="form-control"  :readonly=readOnlyYn style='text-align:right;background-color:white;'  placeholder="" 
+                        @input="e=>feeAmt=this.$comma3(this.$uncomma(e.target.value))">
+                        <span class="input-group-text">원</span>
+                    </div>
+                </div>
+                <div class=""> 
+                    <button id='btnBuy' type="button" @click="stockTradeReg" class="btn btn-primary btn-sm">등록</button>&nbsp;
+                    <button id='btnSale' type="button" @click="closeClick" class="btn btn-primary btn-sm">닫기</button>
                 </div>
             </div>
         </div>
@@ -40,35 +76,29 @@ export default {
     data(){
         return {
             readOnlyYn : false, 
-            // stockKind : {      // 현재평가금액
-            //     stockKindId : '',
-            //     assetId : '',
-            //     stockKindCd : '',
-            //     stockKindName : '',
-            //     quantity : '',
-            //     buyAvgPrice : '',
-            //     buyTotPrice : '',
-            //     curUnitPrice : '',
-            //     curTotPrice : '',
-            //     pnlRate : '',
-            //     pnlAmt : '',
-            //     diffAmount: '',
-            //     dayRange : '',
-            //     highPrice : '',
-            //     lowPrice : '',
-            //     deleteYn : '',
-            //     memberId : '',
-            //     baseTime : '',
-            //     regDatetime : '',
-            //     lastUpdateDatetime : ''
-            // }, 
+            trDate : '',
+            quantity : '',
+            unitCost : '',
+            taxAmt : '',
+            feeAmt : '',
+            trData : {
+                memberId : '',
+                assetId : '',
+                stockKindId : '',
+                stockKindCd : '',
+                exchange : '',
+                trDate : '',
+                quantity : 0,
+                unitCost : 0,
+                taxAmt : 0,
+                feeAmt : 0,
+            }
         }
     },    
     props:{
         stockTradeModalVisible: Boolean ,
         stockKind : Object,
         trType : String,
-
     },
     methods : {
         /*-------------------------------------------------------------------------------------*
@@ -76,6 +106,22 @@ export default {
         // 매매 정보 등록
         stockTradeReg(){
             console.log("stockTradeReg");
+            this.trData.assetId = this.stockKind.assetId;
+            this.trData.memberId = this.stockKind.memberId;
+            this.trData.stockKindId = this.stockKind.stockKindId;
+            this.trData.quantity = this.$uncomma(this.quantity);
+            this.trData.unitCost = this.$uncomma(this.unitCost);
+            this.trData.feeAmt = this.$uncomma(this.feeAmt);            
+            this.trData.trDate = this.$uncomma(this.trDate);
+            if(this.trType == "SALE"){
+                if(this.exchange == "KOSPI" || this.exchange == "kospi" || this.exchange == "코스피"){
+                    this.trData.taxAmt = this.trData.quantity * this.trData.unitCost * 0.0023;
+                }else{
+                    this.trData.taxAmt = this.trData.quantity * this.trData.unitCost  * 0.0025;
+                }
+            }else{
+                this.trData.taxAmt = this.$uncomma(this.taxAmt);
+            }
         },
          /*      Button Click Function End                                                     *
          --------------------------------------------------------------------------------------*/
@@ -116,9 +162,9 @@ export default {
     mounted(){ 
         // 전체 화면내용이 렌더링된 후에 아래의 코드가 실행됩니다.
         this.$nextTick(function () { 
-
             // 보유주식 목록에서 라우터 링크로 넘어온 경우 처리
             console.log("Modal this.$route.params.stockKind =" + this.$route.params.stockKind ); 
+
             // this.setTrType(this.trType);
         })
     } 
