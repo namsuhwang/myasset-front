@@ -89,7 +89,7 @@ export default {
                 exchange : '',
                 trDate : '',
                 quantity : 0,
-                unitCost : 0,
+                unitPrice : 0,
                 taxAmt : 0,
                 feeAmt : 0,
             }
@@ -110,7 +110,7 @@ export default {
             this.trData.memberId = this.stockKind.memberId;
             this.trData.stockKindId = this.stockKind.stockKindId;
             this.trData.quantity = this.$uncomma(this.quantity);
-            this.trData.unitCost = this.$uncomma(this.unitCost);
+            this.trData.unitPrice = this.$uncomma(this.unitPrice);
             this.trData.feeAmt = this.$uncomma(this.feeAmt);            
             this.trData.trDate = this.$uncomma(this.trDate);
             if(this.trType == "SALE"){
