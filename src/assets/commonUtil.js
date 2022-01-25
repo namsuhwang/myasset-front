@@ -80,9 +80,9 @@ const methods = {
             numYn = false;  
         }
 
-        if(!numYn){
-            alert("숫자만 입력 가능! [" + num + "]");
-        }
+        // if(!numYn){
+        //     alert("숫자만 입력 가능! [" + num + "]");
+        // }
         return numYn;
     },
     getCodeNameFromCodeList(codeList, code){ 
@@ -112,6 +112,22 @@ const methods = {
         }else{
             return "num-zero";           
         }            
+    },
+    getDateNow(dateType){
+        var today = new Date();
+
+        var year = today.getFullYear();
+        var month = ('0' + (today.getMonth() + 1)).slice(-2);
+        var day = ('0' + today.getDate()).slice(-2);
+        
+        var dateString = "";
+        if(dateType == "8"){
+            dateString = year + month + day;
+        }else if(dateType == "10"){
+            dateString = year + "-" + month + "-" + day;
+        }
+
+        return dateString;
     }
      
 }
@@ -124,5 +140,6 @@ export default{
         Vue.config.globalProperties.$getCodeNameFromCodeList = methods.getCodeNameFromCodeList;
         Vue.config.globalProperties.$isNumeric = methods.isNumeric; 
         Vue.config.globalProperties.$numColor = methods.numColor; 
+        Vue.config.globalProperties.$getDateNow = methods.getDateNow; 
     }
 }

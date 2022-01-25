@@ -99,6 +99,7 @@ export default {
                 assetId : '',
                 stockKindCd : '',
                 stockKindName : '',
+                stockType : '',
                 quantity : '',
                 buyAvgPrice : '',
                 buyTotPrice : '',
@@ -205,7 +206,8 @@ export default {
             this.curUnitPrice = this.$comma3(this.stockRealTimeInfo.price);  
             this.stockKind.curUnitPrice = this.$comma3(this.stockRealTimeInfo.price);    
             this.stockKind.stockKindCd = stockRealTimeInfo.kindCode;
-            this.stockKind.stockKindName = stockRealTimeInfo.stockName;   
+            this.stockKind.stockKindName = stockRealTimeInfo.stockName;  
+            this.stockKind.stockType = stockRealTimeInfo.stockType; 
             this.setCurTotPrice();
         },
          /*      CallBack Function End                                                         *

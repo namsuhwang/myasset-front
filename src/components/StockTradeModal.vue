@@ -37,8 +37,16 @@
                 <div class="col-12">
                     <div class="input-group">
                         <span class="input-group-text">거래단가</span>
-                        <input type="text" v-model="unitCost" class="form-control"  :readonly=readOnlyYn style='text-align:right;background-color:white;'  placeholder="" 
-                        @input="e=>unitCost=this.$comma3(this.$uncomma(e.target.value))">
+                        <input type="text" v-model="unitPrice" class="form-control"  :readonly=readOnlyYn style='text-align:right;background-color:white;'  placeholder="" 
+                        @input="e=>unitPrice=this.$comma3(this.$uncomma(e.target.value))">
+                        <span class="input-group-text">원</span>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="input-group">
+                        <span class="input-group-text">거래금액</span>
+                        <input type="text" v-model="trAmt" class="form-control"  :readonly=true style='text-align:right;background-color:white;'  placeholder="" 
+                        @input="e=>trAmt=this.$comma3(this.$uncomma(e.target.value))">
                         <span class="input-group-text">원</span>
                     </div>
                 </div>
@@ -59,7 +67,7 @@
                     </div>
                 </div>
                 <div class=""> 
-                    <button id='btnBuy' type="button" @click="stockTradeReg" class="btn btn-primary btn-sm">등록</button>&nbsp;
+                    <button id='btnBuy' type="button" @click="regStockTrade" class="btn btn-primary btn-sm">등록</button>&nbsp;
                     <button id='btnSale' type="button" @click="closeClick" class="btn btn-primary btn-sm">닫기</button>
                 </div>
             </div>
@@ -76,14 +84,16 @@ export default {
     data(){
         return {
             readOnlyYn : false, 
-            trDate : '',
-            quantity : '',
-            unitCost : '',
-            taxAmt : '',
-            feeAmt : '',
+            trDate : this.$getDateNow(10),
+            quantity : null,
+            unitPrice : null,
+            taxAmt : 0,
+            feeAmt : 0,
+            trAmt : 0,
             trData : {
                 memberId : '',
                 assetId : '',
+                trType : '',                
                 stockKindId : '',
                 stockKindCd : '',
                 exchange : '',
@@ -104,24 +114,30 @@ export default {
         /*-------------------------------------------------------------------------------------*
          *      Button Click Function Start                                                   */
         // 매매 정보 등록
-        stockTradeReg(){
+        regStockTrade(){
             console.log("stockTradeReg");
             this.trData.assetId = this.stockKind.assetId;
             this.trData.memberId = this.stockKind.memberId;
             this.trData.stockKindId = this.stockKind.stockKindId;
+            this.trData.trType = this.trType;
             this.trData.quantity = this.$uncomma(this.quantity);
             this.trData.unitPrice = this.$uncomma(this.unitPrice);
             this.trData.feeAmt = this.$uncomma(this.feeAmt);            
             this.trData.trDate = this.$uncomma(this.trDate);
-            if(this.trType == "SALE"){
-                if(this.exchange == "KOSPI" || this.exchange == "kospi" || this.exchange == "코스피"){
-                    this.trData.taxAmt = this.trData.quantity * this.trData.unitCost * 0.0023;
-                }else{
-                    this.trData.taxAmt = this.trData.quantity * this.trData.unitCost  * 0.0025;
-                }
-            }else{
-                this.trData.taxAmt = this.$uncomma(this.taxAmt);
-            }
+            this.trData.taxAmt = this.$uncomma(this.taxAmt);
+              
+            console.log("거래등록 _ 시작 : " + JSON.stringify(this.trData));             
+            axios.post(process.env.VUE_APP_REST_BASE_URL 
+                + '/myasset/stock/trade/reg', this.trData )
+            .then((response)=>{ 
+                var result = response.data;
+                console.log("거래등록 _ 결과 : " + JSON.stringify(result));   
+                alert("거래등록이 완료되었습니다.");
+            })
+            .catch((error)=>{
+                console.log("regStockTrade error");
+                console.log(error);
+            });
         },
          /*      Button Click Function End                                                     *
          --------------------------------------------------------------------------------------*/
@@ -154,8 +170,48 @@ export default {
          --------------------------------------------------------------------------------------*/
     }, 
     watch:{ 
+        'quantity': function(val){
+            this.trAmt = this.calcTrAmt;
+        },
+        'unitPrice': function(val){
+            this.trAmt = this.calcTrAmt;
+        },
+        'trType': function(val){
+            this.trAmt = this.calcTrAmt;
+        },
+        'trDate': function(val){
+            console.log("trDate=" + val);
+        },
     },
     computed: {
+        // 거래금액 계산
+        calcTrAmt: function() {
+            var trAmt = 0;
+            if(this.$isNumeric(this.quantity) && this.$isNumeric(this.unitPrice)){  
+                console.log("calcTrAmt quantity=" + this.quantity + ", unitPrice=" + this.unitPrice + ", " + this.stockKind.stockType);
+                trAmt = this.$uncomma(this.quantity) * this.$uncomma(this.unitPrice);
+                console.log("calcTrAmt trAmt=" + trAmt);
+                var taxAmt = 0;              
+                if(this.trType == "SALE"){
+                    if(this.stockKind.stockType == "KOSPI" || this.stockKind.stockType == "kospi" || this.stockKind.stockType == "코스피"){
+                        taxAmt = trAmt * 0.0023;
+                    }else{
+                        taxAmt = trAmt  * 0.0025;
+                    }
+                }else{
+                    taxAmt = 0;
+                }
+                console.log("taxAmt=" + taxAmt);
+                if(taxAmt > 0){
+                    this.taxAmt = this.$comma3(this.$uncomma(taxAmt));
+                    this.trData.taxAmt = taxAmt;
+                }else{
+                    taxAmt = 0;
+                    this.trData.taxAmt = 0;
+                } 
+            }
+            return this.$comma3(this.$uncomma(trAmt));
+        },
     },
     created(){
     },
@@ -164,8 +220,6 @@ export default {
         this.$nextTick(function () { 
             // 보유주식 목록에서 라우터 링크로 넘어온 경우 처리
             console.log("Modal this.$route.params.stockKind =" + this.$route.params.stockKind ); 
-
-            // this.setTrType(this.trType);
         })
     } 
 }
