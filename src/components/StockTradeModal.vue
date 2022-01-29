@@ -22,8 +22,9 @@
                 </div>
                 <div class="col-12">
                     <div class="input-group">
-                        <span class="input-group-text">거래일자</span>
+                        <span class="input-group-text">거래일시</span>
                         <input type="date" class="form-control" v-model="trDate" placeholder="YYYY.MM.DD">
+                        <input type="time" class="form-control" v-model="trTime" placeholder="">
                     </div>
                 </div>
                 <div class="col-12">
@@ -84,7 +85,8 @@ export default {
     data(){
         return {
             readOnlyYn : false, 
-            trDate : this.$getDateNow(10),
+            trDate : this.$getDate(10),
+            trTime : '',
             quantity : null,
             unitPrice : null,
             taxAmt : 0,
@@ -98,6 +100,7 @@ export default {
                 stockKindCd : '',
                 exchange : '',
                 trDate : '',
+                trTime : '',
                 quantity : 0,
                 unitPrice : 0,
                 taxAmt : 0,
@@ -119,11 +122,13 @@ export default {
             this.trData.assetId = this.stockKind.assetId;
             this.trData.memberId = this.stockKind.memberId;
             this.trData.stockKindId = this.stockKind.stockKindId;
+            this.trData.stockKindCd = this.stockKind.stockKindCd;
             this.trData.trType = this.trType;
             this.trData.quantity = this.$uncomma(this.quantity);
             this.trData.unitPrice = this.$uncomma(this.unitPrice);
             this.trData.feeAmt = this.$uncomma(this.feeAmt);            
-            this.trData.trDate = this.$uncomma(this.trDate);
+            this.trData.trDate = this.$uncomma(this.trDate);          
+            this.trData.trTime = this.$uncomma(this.trTime);
             this.trData.taxAmt = this.$uncomma(this.taxAmt);
               
             console.log("거래등록 _ 시작 : " + JSON.stringify(this.trData));             

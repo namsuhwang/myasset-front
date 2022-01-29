@@ -113,20 +113,31 @@ const methods = {
             return "num-zero";           
         }            
     },
-    getDateNow(dateType){
+    getDate(dateLength, addType, addNum, delimiter){
         var today = new Date();
+        if(addType != null){
+            if(addType == "M"){
+                today = new Date(today.setMonth(today.getMonth() + addNum));
+            }else if(addType == "D"){
+                today = new Date(today.setDate(today.getDate() + addNum));
+            }
+        }
 
         var year = today.getFullYear();
         var month = ('0' + (today.getMonth() + 1)).slice(-2);
         var day = ('0' + today.getDate()).slice(-2);
         
         var dateString = "";
-        if(dateType == "8"){
+        if(dateLength == "8"){
             dateString = year + month + day;
-        }else if(dateType == "10"){
+        }else if(dateLength == "10"){
             dateString = year + "-" + month + "-" + day;
         }
 
+        if(delimiter != null){
+            dateString.replaceAll("-", delimiter);
+        }
+        console.log("getDate : " + dateString);
         return dateString;
     }
      
@@ -140,6 +151,6 @@ export default{
         Vue.config.globalProperties.$getCodeNameFromCodeList = methods.getCodeNameFromCodeList;
         Vue.config.globalProperties.$isNumeric = methods.isNumeric; 
         Vue.config.globalProperties.$numColor = methods.numColor; 
-        Vue.config.globalProperties.$getDateNow = methods.getDateNow; 
+        Vue.config.globalProperties.$getDate = methods.getDate; 
     }
 }

@@ -129,31 +129,12 @@ export default {
         },
         callbackStockKindTotal(stockKindTotal){
             this.stockKindTotal = stockKindTotal;
-            //if(this.stockKindTotal.totPnlRate > 0) totPnlRate.style.color = "red"; else if(this.stockKindTotal.totPnlRate < 0) totPnlRate.style.color = "blue"; else totPnlRate.style.color = "black" ;
-            //if(this.stockKindTotal.totPnlAmt > 0) totPnlAmt.style.color = "red"; else if(this.stockKindTotal.totPnlAmt < 0) totPnlAmt.style.color = "blue"; else totPnlAmt.style.color = "black" ;
-            // if(this.stockKindTotal.diffAmount > 0) diffAmount.style.color = "red"; else if(this.stockKindTotal.diffAmount < 0) diffAmount.style.color = "blue"; else diffAmount.style.color = "black" ;
-            // if(this.stockKindTotal.dayRange > 0) dayRange.style.color = "red"; else if(this.stockKindTotal.dayRange < 0) dayRange.style.color = "blue"; else dayRange.style.color = "black" ;
-            // if(this.stockKindTotal.pnlAmt > 0) pnlAmt.style.color = "red"; else if(this.stockKindTotal.pnlAmt < 0) pnlAmt.style.color = "blue"; else pnlAmt.style.color = "black" ;
-            // totPnlAmt
-            // diffAmount
-            // datRange.style.color = "red";
-            // pnlAmt
-            // pnlRate
         },
         clickRouterPushStockKind(stockKind){ 
             this.$router.push( 
                 {name: 'StockKindDetail', params:{stockKind: JSON.stringify(stockKind)}}
             )
         },
-        // numColor(numVal){
-        //     if(numVal > 0){
-        //         return "num-plus";            
-        //     }else if(numVal < 0){ 
-        //         return "num-minus";           
-        //     }else{
-        //         return "num-zero";           
-        //     }
-        // }
     },
     watch:{
     },

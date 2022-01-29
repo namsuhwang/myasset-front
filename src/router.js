@@ -5,6 +5,7 @@ import BankDetail from './components/BankDetail.vue';
 import StockAcnoDetail from './components/StockAcnoDetail.vue';
 import StockKindDetail from './components/StockKindDetail.vue';
 import StockKindTotal from './components/StockKindTotal.vue';
+import StockTradeHistory from './components/StockTradeHistory.vue';
 
 const routes = [  
   {
@@ -29,6 +30,10 @@ const routes = [
   {
     // 주식 종목 등록
     name: 'StockKindDetail', path: "/asset/stock/kind/detail", component: StockKindDetail
+  },
+  {
+    // 주식 거래 내역
+    name: 'StockTradeHistory', path: "/asset/stock/trade/history", component: StockTradeHistory
   }
 
   
