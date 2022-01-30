@@ -15,7 +15,7 @@ export default
         ]
     },
     {
-        id:'menu_03', name:'주식', path: '/asset/stock',
+        id:'menu_03', name:'주식', path: '/asset/stock/total',
         subMenus:[      
             {id:'menu_03_01', name:'[보유주식]', path: '/asset/stock/total'},
             {id:'menu_03_02', name:'[계좌등록]', path: '/asset/stock/acno/detail'},
@@ -40,11 +40,11 @@ export default
             {id:'menu_05_02', name:'[손익조회]'}
         ]
     },
-    {id:'menu_06', name:'정보',
+    {id:'menu_06', name:'시스템', path: '/system/myinfo',
         subMenus:[      
-            {id:'menu_06_01', name:'[나의 정보]'},
-            {id:'menu_06_02', name:'[시스템 기본 정보]'},
-            {id:'menu_06_03', name:'[로그 아웃]'}
+            {id:'menu_06_01', name:'[로그인]', path: '/system/login'},
+            {id:'menu_06_02', name:'[나의정보]', path: '/system/myinfo'},
+            {id:'menu_06_03', name:'[로그아웃]', path: '/system/logout'}
         ]
     }
 ]

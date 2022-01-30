@@ -6,7 +6,8 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import './assets/css/myasset.css'
 import router from './router'
 import commonUtil from './assets/commonUtil'
-import restStock from './assets/restStock'
+import restStock from './assets/rest/restStock'
+import restSystem from './assets/rest/restSystem'
 import store from './store/store'
 
 let emitter = mitt();
@@ -23,4 +24,5 @@ app
 .use(router)
 .use(commonUtil)
 .use(restStock)
+.use(restSystem)
 .mount('#app')

@@ -1,11 +1,13 @@
 import { createWebHistory, createRouter } from "vue-router";
 import TotalAsset from './components/TotalAsset.vue';
-import BankMain from './components/BankMain.vue';
-import BankDetail from './components/BankDetail.vue';
-import StockAcnoDetail from './components/StockAcnoDetail.vue';
-import StockKindDetail from './components/StockKindDetail.vue';
-import StockKindTotal from './components/StockKindTotal.vue';
-import StockTradeHistory from './components/StockTradeHistory.vue';
+import BankMain from './components/bank/BankMain.vue';
+import BankDetail from './components/bank/BankDetail.vue';
+import StockAcnoDetail from './components/stock/StockAcnoDetail.vue';
+import StockKindDetail from './components/stock/StockKindDetail.vue';
+import StockKindTotal from './components/stock/StockKindTotal.vue';
+import StockTradeHistory from './components/stock/StockTradeHistory.vue';
+import Login from './components/system/Login.vue';
+import MemberReg from './components/system/MemberReg.vue';
 
 const routes = [  
   {
@@ -34,6 +36,14 @@ const routes = [
   {
     // 주식 거래 내역
     name: 'StockTradeHistory', path: "/asset/stock/trade/history", component: StockTradeHistory
+  },
+  {
+    // 로그인
+    name: 'Login', path: "/system/login", component: Login
+  },
+  {
+    // 회원가입
+    name: 'MemberReg', path: "/system/memberReg", component: MemberReg
   }
 
   
