@@ -10,9 +10,9 @@
         <li v-for="(menuItem, i) in menuItems" :key="i" >
           <a class="dropdown-item" @click="selMenuItem = menuItem" href="#">{{menuItem.name}}</a>
         </li>
-      </ul>
-      <!-- <a v-for="(subMenu, j) in selMenuItem.subMenus" :key="j" href="#" class="nav-item nav-link active">{{ subMenu.name }}</a> -->
-      <router-link v-for="(subMenu, j) in selMenuItem.subMenus" :key="j" :to="subMenu.path"   class="nav-item nav-link active">{{ subMenu.name }}
+      </ul>&nbsp;&nbsp;
+      <!-- <router-link v-for="(subMenu, j) in selMenuItem.subMenus" :key="j" :to="subMenu.path"   class="nav-item nav-link active">{{ subMenu.name }} -->
+      <router-link v-for="(subMenu, j) in selMenuItem.subMenus" :key="j" :to="subMenu.path" class="">{{ subMenu.name }}
 
       </router-link>
     </nav>

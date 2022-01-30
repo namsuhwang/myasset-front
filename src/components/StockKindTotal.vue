@@ -38,8 +38,8 @@
                         <tr v-for="(stockKind, i) in stockKindTotal.list" :key="i">
                             <!-- <td ><router-link :to="{name: 'StockKindDetail', params:{memberId: 1, stockKindObj: stockKind, assetId: stockKind.assetId, stockCode: stockKind.stockKindCd}}">{{stockKind.stockKindName}}</router-link></td> -->
                             <td @click="clickRouterPushStockKind(stockKind)">{{stockKind.stockKindName}}</td>
-                            <td :class="this.$numColor(stockKind.diffAmount)">{{this.$comma3(stockKind.curUnitPrice)}}</td>
-                            <td :class="this.$numColor(stockKind.diffAmount)">{{this.$comma3(stockKind.diffAmount)}}</td>
+                            <td :class="this.$numColor(this.$uncomma(stockKind.diffAmount))">{{this.$comma3(stockKind.curUnitPrice)}}</td>
+                            <td :class="this.$numColor(this.$uncomma(stockKind.diffAmount))">{{this.$comma3(stockKind.diffAmount)}}</td>
                             <td :class="this.$numColor(stockKind.dayRange)">{{this.$comma3(stockKind.dayRange)}}</td>
                         </tr>                    
                     </tbody>
@@ -121,6 +121,8 @@ export default {
                     lastUpdateDatetime : ''
                 }]
             },
+            timerStatus : false,
+            timerExec : null,
         }
     },    
     methods : { 
@@ -135,6 +137,16 @@ export default {
                 {name: 'StockKindDetail', params:{stockKind: JSON.stringify(stockKind)}}
             )
         },
+        timerStart(){
+            this.timerStatus = true;
+            this.timerExec = setInterval(() => {
+                this.callGetStockKindTotal();
+            }, 5000)
+        },
+        timerStop(){
+            this.timerStatus = false;
+            clearInterval(this.timerExec);
+        }
     },
     watch:{
     },
@@ -144,10 +156,13 @@ export default {
     },
     mounted(){ 
         // 전체 화면내용이 렌더링된 후에 아래의 코드가 실행됩니다.        
-        this.$nextTick(function () {            
-            this.callGetStockKindTotal();
-        })
-        
+        this.$nextTick(function () { 
+            this.callGetStockKindTotal();           
+            this.timerStart();
+        })        
+    },
+    beforeUnmount(){
+        this.timerStop();
     } 
 }
 </script>

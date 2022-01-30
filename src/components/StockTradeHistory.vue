@@ -26,7 +26,7 @@
         </div>
         <div class="col-12">
             <div class="input-group">
-                <span class="input-group-text">거래기간</span>
+                <span class="input-group-text">기간</span>
                 <input type="date" class="form-control" v-model="tradeSearch.searchStartDate" placeholder="YYYY.MM.DD">
                 <input type="date" class="form-control" v-model="tradeSearch.searchEndDate" placeholder="YYYY.MM.DD">
             </div>
@@ -37,6 +37,8 @@
         </div>
         <br/>
         <br/>
+        <h6 align="left">실현손익금액&nbsp;:&nbsp;{{this.$comma3(stockTradeHistory.realPnlAmt)}}&nbsp;원, &nbsp;&nbsp;실현손익율&nbsp;:&nbsp;{{this.$comma3(stockTradeHistory.realPnlRate)}}&nbsp;%</h6>
+        <br/>
         <div class="col-12">
             <div >  
                 <div style="overflow: auto">
@@ -44,14 +46,14 @@
                         <thead class="table-light">
                             <tr>
                                 <th>거래일시</th>
-                                <th>거래유형</th>
-                                <th>종목명</th>
+                                <th>거래</th>
+                                <th>종목</th>
                                 <th>단가</th>
                                 <th>수량</th>
                                 <th>거래금액</th>
                                 <th>손익금액</th>
                                 <th>손익율(%)</th>
-                                <th>거래비용</th>
+                                <th>비용</th>
                             </tr>
                         </thead>
                         <tbody>
