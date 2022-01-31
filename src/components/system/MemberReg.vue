@@ -31,11 +31,11 @@
                     </div>
                     <div class="col-12">
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="rdoGender" :checked="memberRegInfo.sex=='M'" v-model="trType" @change="radioChange('M')" id="rdoMale" value="M">
+                            <input class="form-check-input" type="radio" name="rdoGender" :checked="memberRegInfo.gender=='M'" v-model="memberRegInfo.gender" @change="radioChange('M')" id="rdoMale" value="M">
                             <label class="form-check-label" for="rdoMale">남성</label>
                         </div>
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="rdoGender" :checked="memberRegInfo.sex=='F'" v-model="trType" @change="radioChange('F')" id="rdoFemale" value="F">
+                            <input class="form-check-input" type="radio" name="rdoGender" :checked="memberRegInfo.gender=='F'" v-model="memberRegInfo.gender" @change="radioChange('F')" id="rdoFemale" value="F">
                             <label class="form-check-label" for="rdoFemale">여성</label>
                         </div>
                     </div>

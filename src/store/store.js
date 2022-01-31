@@ -1,11 +1,11 @@
 import { createStore } from 'vuex'
-import StoreTotalAsset from './modules/StoreTotalAsset';
 import StoreCommon from './modules/StoreCommon';
+import StoreAuth from './modules/StoreAuth';
 
 const store = createStore({
-  modules:{
-    StoreTotalAsset,
-    StoreCommon
+  modules:{ 
+    StoreCommon,
+    StoreAuth
   }
 });
 

@@ -6,13 +6,13 @@
                     <h2 class="text-center">로그인</h2>   
                     <div class="col-12">
                         <div class="input-group">
-                            <span class="input-group-text" style="width: 90px;">Email</span>
+                            <span class="input-group-text" style="width: 90px;">이메일</span>
                             <input type="text" id="myassetEmail" v-model="loginInfo.email" class="form-control" placeholder="" >
                         </div>
                     </div>  
                     <div class="col-12">
                         <div class="input-group">
-                            <span class="input-group-text" style="width: 90px;">Password</span>
+                            <span class="input-group-text" style="width: 90px;">비밀번호</span>
                             <input type="text" id="myassetPwd" v-model="loginInfo.pwd" class="form-control" placeholder="" >
                         </div>
                     </div>   
