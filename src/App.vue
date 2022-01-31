@@ -38,31 +38,16 @@ export default {
         };
     },
     methods: {
-        restTestCallPost() {
-            var callUrl = "/myasset/test/post";
-            axios.post(callUrl, { param1: "3333" })
-                .then((response) => {
-                // 성공시 처리
-                var data = response.data;
-                alert(data);
-            });
-        },
-        restTestCallGet() {
-            var callUrl = "/myasset/test/get";
-            axios.get(callUrl)
-                .then((response) => {
-                // 성공시 처리
-                var data = response.data;
-                alert(data);
-            });
-        }
     },
     created(){
+        this.$store.dispatch('storeCommon/getCommonCodeInit');
+        
         // 첫화면으로 주식 보유 현황 설정
-        this.$router.push(menuItems[2].subMenus[0].path);
+        this.$router.push({name : "StockKindTotal"}, );
+        // this.$router.push({name : "Login"}, );
+        
     },
     mounted() {
-        this.$store.dispatch('StoreCommon/getCommonCodeInit');
     },
     components: { 
       // TotalAsset 

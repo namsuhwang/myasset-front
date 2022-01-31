@@ -1,11 +1,12 @@
 import axios from 'axios'
-import { StoreAuth } from '@/store/modules/StoreAuth.js'
+import storeAuth from '@/store/modules/storeAuth'
+import router from '../../router'
 
 // axios 인스턴스 생성
 const api = axios.create({
   baseURL: process.env.VUE_APP_REST_BASE_URL ,
   headers: {
-    'accesstoken': StoreAuth.state.token
+    'accesstoken': storeAuth.state.token
   },
   timeout: 1000
 })
@@ -28,6 +29,10 @@ api.interceptors.response.use(
   },
   function (error) {
     // 응답에 문제가 발생한(200을 제외한 나머지) 경우 호출
+    console.log("api.interceptors.response.use error : "  + error);
+    // window.location.href = "/system/login";
+    
+    router.push({name: 'Login', });
     return error
   }
 )

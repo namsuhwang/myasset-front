@@ -1,6 +1,6 @@
 <template>
     <div class="login-form">
-        <form @submit.prevent="submitForm">
+        <!-- <form @submit.prevent="submitForm"> -->
             <div class="form-group">
                 <div class="row g-2">  
                     <h2 class="text-center">로그인</h2>   
@@ -21,7 +21,7 @@
                     </div>   
                 </div>
             </div>
-        </form>
+        <!-- </form> -->
         <!-- <p class="text-center"><a href="#">신규가입</a></p> -->
       <router-link to="/system/memberReg" class="">신규가입</router-link>
     </div>  
@@ -89,10 +89,7 @@ export default {
     },
     mounted(){ 
         // 전체 화면내용이 렌더링된 후에 아래의 코드가 실행됩니다.        
-        this.$nextTick(function () {            
-            this.callGetStockKindList();
-            this.tradeSearch.searchStartDate = this.$getDate(10, 'M', -12, ".");
-            this.tradeSearch.searchEndDate = this.$getDate(10, null, null, ".");
+        this.$nextTick(function () {        
         })
         
     } 

@@ -1,6 +1,6 @@
-import axios from 'axios';
+import api from '@/assets/rest/api'
 
-const StoreCommon = {
+const storeCommon = {
 	namespaced: true,
 	state: {
       bankCodeList: Object,
@@ -45,36 +45,34 @@ const StoreCommon = {
 	},
 	actions: { 
 		getCommonCodeInit({commit, state}) {	
-            axios.post(process.env.VUE_APP_REST_BASE_URL 
-                + '/myasset/common/codelist', {divCode : 'FC_CODE', codeDesc : 'BANK'} )
+            api.post('/myasset/common/codelist', {divCode : 'FC_CODE', codeDesc : 'BANK'} )
             .then((response)=>{
                 console.log(response.data); 
                 commit('setBankCodeList', response.data);
+            })
+            .catch(err => {
+                console.log(err.response.data)
             });
                      
-            axios.post(process.env.VUE_APP_REST_BASE_URL 
-                + '/myasset/common/codelist', {divCode : 'BANK_ACNO_TYPE', codeDesc : ''} )
+            api.post('/myasset/common/codelist', {divCode : 'BANK_ACNO_TYPE', codeDesc : ''} )
             .then((response)=>{
                 console.log(response.data); 
                 commit('setBankAcnoTypeList', response.data);
             });
                      
-            axios.post(process.env.VUE_APP_REST_BASE_URL 
-                + '/myasset/common/codelist', {divCode : 'FC_CODE', codeDesc : 'STOCK'} )
+            api.post('/myasset/common/codelist', {divCode : 'FC_CODE', codeDesc : 'STOCK'} )
             .then((response)=>{
                 console.log(response.data); 
                 commit('setStockCodeList', response.data);
             });
                      
-            axios.post(process.env.VUE_APP_REST_BASE_URL 
-                + '/myasset/common/codelist', {divCode : 'ASSET_TYPE', codeDesc : ''} )
+            api.post('/myasset/common/codelist', {divCode : 'ASSET_TYPE', codeDesc : ''} )
             .then((response)=>{
                 console.log(response.data); 
                 commit('setAssetTypeList', response.data);
             });
                      
-            axios.post(process.env.VUE_APP_REST_BASE_URL 
-                + '/myasset/common/codelist', {divCode : 'RE_TYPE', codeDesc : ''} )
+            api.post('/myasset/common/codelist', {divCode : 'RE_TYPE', codeDesc : ''} )
             .then((response)=>{
                 console.log(response.data); 
                 commit('setReTypeList', response.data);
@@ -83,4 +81,4 @@ const StoreCommon = {
 	}
 };
 
-export default StoreCommon;
+export default storeCommon;

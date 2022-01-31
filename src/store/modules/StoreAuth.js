@@ -5,7 +5,7 @@ const persistedState = createPersistedState({
     paths: ['token', 'memberId', 'email', 'role']
 })
 
-const StoreAuth = {
+const storeAuth = {
 	namespaced: true,
 	state: {
         token: null,
@@ -58,4 +58,4 @@ const StoreAuth = {
 	}
 };
 
-export default StoreAuth;
+export default storeAuth;
