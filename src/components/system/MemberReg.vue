@@ -14,33 +14,33 @@
                     <div class="col-12">
                         <div class="input-group">
                             <span class="input-group-text" style="width: 90px;">비밀번호</span>
-                            <input type="text" id="myassetPwd" v-model="memberRegInfo.pwd" class="form-control" placeholder="" >
+                            <input type="password" id="myassetPwd" v-model="memberRegInfo.pwd" class="form-control" placeholder="" >
                         </div>
                     </div>   
                     <div class="col-12">
                         <div class="input-group">
                             <span class="input-group-text" style="width: 90px;">비밀번호</span>
-                            <input type="text" id="myassetPwd" v-model="pwdConfirm" class="form-control" placeholder="비밀번호 재입력" >
+                            <input type="password" id="myassetPwd" v-model="pwdConfirm" class="form-control" placeholder="비밀번호 재입력" >
                         </div>
                     </div>   
                     <div class="col-12">
                         <div class="input-group">
                             <span class="input-group-text" style="width: 90px;">생년월일</span>
-                            <input type="date" class="form-control" v-model="birth" placeholder="YYYY.MM.DD">
+                            <input type="date" class="form-control" v-model="memberRegInfo.birth" placeholder="YYYY.MM.DD">
                         </div>
                     </div>
                     <div class="col-12">
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="rdoGender" :checked="memberRegInfo.gender=='M'" v-model="memberRegInfo.gender" @change="radioChange('M')" id="rdoMale" value="M">
+                            <input class="form-check-input" type="radio" name="rdoGender" :checked="memberRegInfo.gender=='M'" v-model="memberRegInfo.gender"  id="rdoMale" value="M">
                             <label class="form-check-label" for="rdoMale">남성</label>
                         </div>
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="rdoGender" :checked="memberRegInfo.gender=='F'" v-model="memberRegInfo.gender" @change="radioChange('F')" id="rdoFemale" value="F">
+                            <input class="form-check-input" type="radio" name="rdoGender" :checked="memberRegInfo.gender=='F'" v-model="memberRegInfo.gender"  id="rdoFemale" value="F">
                             <label class="form-check-label" for="rdoFemale">여성</label>
                         </div>
                     </div>
                     <div class="col-12">
-                        <button type="submit" class="btn btn-primary btn-block">가입</button>
+                        <button type="submit" @click="memberReg" class="btn btn-primary btn-block">가입</button>
                     </div>   
                 </div>
             </div>
@@ -50,6 +50,9 @@
 </template>
 
 <script>
+import api from '@/assets/rest/api'
+import { onMounted, ref, reactive, toRefs, watch, computed } from 'vue';
+
 export default {
     name : 'MemberReg',
     data() {
@@ -58,30 +61,34 @@ export default {
             memberRegInfo : {
                 email : '',
                 pwd : '',
-                name : '',
+                memberName : '',
                 birth : '',
                 gender : '',
             } 
         }
     },
     methods: {
-        async submitForm() { // 비동기 객체가 오기때문에 비동기 처리
-            console.log('submit');
-            const userData = {
-                username: this.username,
-                password: this.password,
-                nickname: this.nickname,
-            };
-            const { data } = await registerUser(userData); // Destructuring
-            this.logMessage = `${data.username}님이 가입되었습니다.`;
-            //template literal(백틱문법) 자바스크립변수를 문자열과 합침
-            this.initForm();
-        },
-        initForm() {
-            this.username = '';
-            this.password = '';
-            this.nickname = '';
-        },
+        memberReg(){
+            console.log("회원가입 시작 : " + JSON.stringify(this.memberRegInfo));
+            api.post('/myasset/auth/reg', this.memberRegInfo)
+            .then((response)=>{
+                let memberInfo = response.data;
+                console.log("회원 등록 결과 : " + JSON.stringify(memberInfo)); 
+                var loginInfo = new Object();
+                loginInfo.email = memberInfo.email;
+                loginInfo.pwd = memberInfo.pwd;
+                this.$store.dispatch('storeAuth/loginMember', loginInfo)
+                .then(() => {
+                    this.$router.push({name : 'StockKindTotal', });
+                })
+                .catch(e => {
+                    alert("로그인에 실패했습니다.");
+                })
+            })
+            .catch(err => {
+                console.log(err.response.data)
+            });
+        } 
     },
 };
 </script>

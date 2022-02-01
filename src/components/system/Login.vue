@@ -13,11 +13,11 @@
                     <div class="col-12">
                         <div class="input-group">
                             <span class="input-group-text" style="width: 90px;">비밀번호</span>
-                            <input type="text" id="myassetPwd" v-model="loginInfo.pwd" class="form-control" placeholder="" >
+                            <input type="password" id="myassetPwd" v-model="loginInfo.pwd" class="form-control" placeholder="" >
                         </div>
                     </div>   
                     <div class="col-12">
-                        <button type="submit" class="btn btn-primary btn-block">로그인</button>
+                        <button type="submit" @click="memberLogin" class="btn btn-primary btn-block">로그인</button>
                     </div>   
                 </div>
             </div>
@@ -44,7 +44,7 @@ export default {
          *      Button Click Function Start                                                   */
         // 로그인
         memberLogin(){
-
+            this.$store.dispatch('storeAuth/loginMember', this.loginInfo);
             // console.log("stockKind = " + JSON.stringify(this.stockKind));
             // axios.post('/myasset/stock/kind/reg', this.stockKind)
             // .then((response)=>{

@@ -1,4 +1,4 @@
-import axios from 'axios';
+import api from '@/assets/rest/api'
 import createPersistedState from "vuex-persistedstate"
 
 const persistedState = createPersistedState({
@@ -39,12 +39,13 @@ const storeAuth = {
                 "email": email,
                 "pwd": pwd
             }   
-            axios.post(process.env.VUE_APP_REST_BASE_URL 
-                + '/myasset/auth/loginMember', params, {
+            console.log("로그인 : " + JSON.stringify(params))
+            api.post('/myasset/auth/loginMember', params, {
               headers: { 'content-type': 'application/json' }
             }).then(res => {
-              alert("로그인 완료")
-              commit('loginMember', res)
+              alert("로그인 완료");
+              console.log("로그인 완료 : " + JSON.stringify(res));
+              commit('loginMember', res);
               // router.push("/posts")
             }).catch(e => {
               console.log(e)

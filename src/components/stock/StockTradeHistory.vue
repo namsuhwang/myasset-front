@@ -77,7 +77,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import api from '@/assets/rest/api'
 import { onMounted, ref, reactive, toRefs, watch, computed } from 'vue';
 
 export default {

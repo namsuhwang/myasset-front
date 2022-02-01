@@ -8,15 +8,19 @@ const api = axios.create({
   headers: {
     'accesstoken': storeAuth.state.token
   },
-  timeout: 1000
+  timeout: 30000
 })
 
 api.interceptors.request.use(
   function (config) {
+    console.log("api.interceptors.request.use 토큰:" + storeAuth.state.token);
+    config.headers.accesstoken = storeAuth.state.token;
+    console.log("api.interceptors.request.use config:" + JSON.stringify(config));
     // 요청직전에 호출되며, axios의 설정을 여기서 진행
     return config
   },
   function (error) {
+    console.log("api.interceptors.request.use error:" + JSON.stringify(error));
     // 요청 에러직전에 호출
     return Promise.reject(error)
   }
@@ -24,6 +28,7 @@ api.interceptors.request.use(
 
 api.interceptors.response.use(
   function (response) {
+    console.log("api.interceptors.response.use confresponseig:" + JSON.stringify(response));
     // 응답이 정상(200)일 경우 호출
     return response
   },
