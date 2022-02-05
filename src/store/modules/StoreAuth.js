@@ -1,5 +1,9 @@
 import api from '@/assets/rest/api'
 import createPersistedState from "vuex-persistedstate"
+import {encrypt, decrypt} from '@/assets/crypto'
+import { mapMutations, mapState, mapActions } from 'vuex';
+import router from '@/router';
+
 
 const persistedState = createPersistedState({
     paths: ['token', 'memberId', 'email', 'role']
@@ -40,16 +44,20 @@ const storeAuth = {
                 "pwd": pwd
             }   
             console.log("로그인 : " + JSON.stringify(params))
+
             api.post('/myasset/auth/loginMember', params, {
-              headers: { 'content-type': 'application/json' }
-            }).then(res => {
-              alert("로그인 완료");
-              console.log("로그인 완료 : " + JSON.stringify(res));
-              commit('loginMember', res);
-              // router.push("/posts")
-            }).catch(e => {
-              console.log(e)
-              alert("로그인 요청에 문제가 발생했습니다.")
+                headers: { 'content-type': 'application/json' }
+            })
+            .then(res => {
+                alert("로그인 완료");
+                console.log("로그인 완료 : " + JSON.stringify(res));
+                commit('loginMember', res);
+                // 첫화면으로 주식 보유 현황 설정
+                router.push({name : "StockKindTotal"}, );
+            })
+            .catch(e => {
+                console.log(e)
+                alert("로그인 요청에 문제가 발생했습니다.")
             })
       
         },

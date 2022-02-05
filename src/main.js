@@ -6,19 +6,23 @@ import 'bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css' 
 import './assets/css/myasset.css'
 import router from './router'
-//import api from './assets/rest/api'
+import api from './assets/rest/api'
 // import api from '@/assets/rest/api'
 import commonUtil from './assets/commonUtil'
+import {encrypt, decrypt} from './assets/crypto'
 import restStock from './assets/rest/restStock'
 import restSystem from './assets/rest/restSystem'
 import store from './store/store'
-
 
 let emitter = mitt();
 let app = createApp(App)
 
 // 글로벌 변수 보관함
 app.config.globalProperties.emitter = emitter;
+// app.prototype.$api = api;
+// vue.prototype.$rsaencrypt = encrypt;
+// vue.prototype.$rsasdecrypt = decrypt;
+
 
 // import './registerServiceWorker'
 

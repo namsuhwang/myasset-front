@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { JSEncrypt } from "jsencrypt";
 
 const methods = {
     comma3(str){ 
@@ -139,7 +140,27 @@ const methods = {
         }
         console.log("getDate : " + dateString);
         return dateString;
+    },
+    // encrypt는 암호화 하는 과정입니다.
+    rsaEncrypt(data) {
+        console.log("rsaEncrypt : " + data);
+      let encryptor = new JSEncrypt(),
+          replace = process.env.VUE_APP_PUBLIC_KEY.replace(/\\n/g, "\n");
+    
+      encryptor.setPublicKey(replace);
+    
+      return encryptor.encrypt(data);
+    },    
+    // decrypt는 복호화 하는 과정입니다.
+    rsaDecrypt(data) {
+      let decryptor = new JSEncrypt(),
+          replace = process.env.VUE_APP_PRIVATE_KEY.replace(/\\n/g, "\n");
+    
+      decryptor.setPrivateKey(replace);
+    
+      return decryptor.decrypt(data);
     }
+    
      
 }
     
@@ -152,5 +173,7 @@ export default{
         Vue.config.globalProperties.$isNumeric = methods.isNumeric; 
         Vue.config.globalProperties.$numColor = methods.numColor; 
         Vue.config.globalProperties.$getDate = methods.getDate; 
+        Vue.config.globalProperties.$rsaEncrypt = methods.rsaEncrypt; 
+        Vue.config.globalProperties.$rsaDecrypt = methods.rsaDecrypt; 
     }
 }
