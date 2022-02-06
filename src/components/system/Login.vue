@@ -28,8 +28,14 @@
 </template>
 
 <script>
+
 export default {
     name : "Login",
+    props: {
+        httpStatus: {
+            type: String, default : ''
+        }
+    },
     data(){
         return {
             loginInfo : {
@@ -45,12 +51,6 @@ export default {
         // 로그인
         memberLogin(){
             this.$store.dispatch('storeAuth/loginMember', this.loginInfo);
-            // console.log("stockKind = " + JSON.stringify(this.stockKind));
-            // axios.post('/myasset/stock/kind/reg', this.stockKind)
-            // .then((response)=>{
-            //     console.log("보유 주식 등록 결과 : " + JSON.stringify(response.data)); 
-            //     alert("보유 주식 등록이 완료되었습니다.");
-            // });
         },
         linkMemberReg(){ 
             this.$router.push( 
@@ -89,7 +89,31 @@ export default {
     },
     mounted(){ 
         // 전체 화면내용이 렌더링된 후에 아래의 코드가 실행됩니다.        
-        this.$nextTick(function () {        
+        this.$nextTick(function () {     
+            // 토큰이 정상이면 자동로그인 후 보유주식 화면으로 이동
+            this.$router.push({name : 'StockKindTotal', });
+            if(localStorage.getItem('token') != null && localStorage.getItem('token') != 'undefined' 
+            && localStorage.getItem('token') != ''){
+                this.$store.dispatch('storeAuth/setState', );
+                console.log("로그인=" + this.$store.state.storeAuth.token);
+                this.$router.push({name : 'StockKindTotal', });
+                this.$toastMessage('자동 로그인 완료');
+            }    
+
+            /*
+            console.log("httpStatus:" + this.$route.params.httpStatus);
+            let httpStatus = this.$route.params.httpStatus;
+            if(httpStatus == '401'){
+                console.log("Login.vue 401 토큰 재발급 시작 ");
+                this.$store.dispatch('storeAuth/getToken', );
+                console.log("Login.vue 401 토큰 재발급 완료 ");
+            }else{
+                console.log("Login.vue 토큰 : " + localStorage.getItem('token'));
+                console.log("Login.vue 이메일 : " + localStorage.getItem('email'));
+            // this.$store.dispatch('storeAuth/autoLogin', ); 
+                console.log("state.token=" + this.$store.state.storeAuth.token);
+            }
+            */
         })
         
     } 

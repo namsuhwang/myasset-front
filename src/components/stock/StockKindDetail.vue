@@ -18,7 +18,7 @@
         <div class="col-12">
             <div class="input-group">
                 <span class="input-group-text">종목</span>
-                <input v-model="stockKind.stockKindCd" type="text" class="form-control" :readonly=readOnlyYn style='background-color:white;'  placeholder="종목코드">
+                <input v-model="stockKind.stockKindCd" type="text" class="form-control" :readonly=readOnlyYn style='background-color:white;width:20px;'  placeholder="종목코드">
                 <input v-model="stockKind.stockKindName" type="text" class="form-control" :readonly=readOnlyYn style='background-color:white;' placeholder="종목명">      
                 <button type="button" @click="callStockKind" class="btn btn-secondary">조회</button>           
             </div>
@@ -34,7 +34,7 @@
         <div class="col-12">
             <div class="input-group">
                 <span class="input-group-text">평단가</span>
-                <input type="text" v-model="buyAvgPrice" class="form-control" :readonly=readOnlyYn style='text-align:right;background-color:white;' placeholder="원단위 입력" 
+                <input type="text" v-model="buyAvgPrice" class="form-control" :readonly=readOnlyYn style='text-align:right;background-color:white;width:20px;' placeholder="원단위" 
                   @input="e=>buyAvgPrice=this.$comma3(this.$uncomma(e.target.value))">
                 <span class="input-group-text">매입액</span>
                 <input type="text" v-model="buyTotPrice" class="form-control" :readonly=true style='text-align:right;background-color:white;'  placeholder="" 
@@ -42,21 +42,21 @@
                   @input="e=>buyTotPrice=this.$comma3(this.$uncomma(e.target.value))">
             </div>
         </div> 
-        <div class="col-12">
+        <div class="col-12"> 
             <div class="input-group">
                 <span class="input-group-text">현재가</span>
-                <input type="text" v-model="curUnitPrice" class="form-control" :readonly=readOnlyYn style='text-align:right;background-color:white;' placeholder="원단위 입력" 
-                  @input="e=>curUnitPrice=this.$comma3(this.$uncomma(e.target.value))">
+                <input type="text" v-model="curUnitPrice" class="form-control" :readonly=readOnlyYn style='text-align:right;background-color:white;width:20px;' placeholder="원단위" 
+                @input="e=>curUnitPrice=this.$comma3(this.$uncomma(e.target.value))"> 
                 <span class="input-group-text">평가액</span>
                 <input type="text" v-model="curTotPrice" class="form-control" :readonly=true style='text-align:right;background-color:white;'  placeholder="" 
-                  @click="setCurTotPrice"
-                  @input="e=>curTotPrice=this.$comma3(this.$uncomma(e.target.value))">
-            </div>
+                @click="setCurTotPrice"
+                @input="e=>curTotPrice=this.$comma3(this.$uncomma(e.target.value))">
+            </div> 
         </div>
         <div class="col-12">
             <div class="input-group">
                 <span class="input-group-text">손익율</span>
-                <input type="text" v-model="pnlRate" :class="this.$numColor(stockKind.pnlRate)" class="form-control" style='text-align:right;background-color:white;' :readonly=true placeholder="" 
+                <input type="text" v-model="pnlRate" :class="this.$numColor(stockKind.pnlRate)" class="form-control" style='text-align:right;background-color:white;width:20px;' :readonly=true placeholder="" 
                   @input="e=>stockKind.pnlRate=this.$comma3(this.$uncomma(e.target.value))">
                 <span class="input-group-text">손익액</span>
                 <input type="text" v-model="pnlAmt" :class="this.$numColor(stockKind.pnlAmt)" class="form-control" style='text-align:right;background-color:white;' :readonly=true placeholder=""                   
@@ -70,13 +70,13 @@
     </div>
     <div class="m-4">
         <button id='btnReg' type="button" @click="stockKindReg" :disabled="mode != 'REG'" class="btn btn-primary btn-sm">등록</button>&nbsp;
-        <button id='btnMod' type="button" @click="readOnlyYn=false" class="btn btn-primary btn-sm">수정</button>&nbsp;
-        <button id='btnDel' type="button" @click="stockKindDel" class="btn btn-primary btn-sm">삭제</button>&nbsp; 
+        <button id='btnMod' type="button" @click="stockKindMod" :disabled="mode == 'REG'" class="btn btn-primary btn-sm">수정</button>&nbsp;
+        <!-- <button id='btnDel' type="button" @click="stockKindDel" :disabled="mode == 'REG'" class="btn btn-primary btn-sm">삭제</button>&nbsp;  -->
     </div> 
 </template>
 
 <script>
-import axios from 'axios';
+import api from '@/assets/rest/api'
 import { onMounted, ref, reactive, toRefs, watch, computed } from 'vue';
 import { mapGetters, mapActions} from 'vuex';
 import StockTradeModal from './StockTradeModal.vue';
@@ -130,7 +130,7 @@ export default {
                 lowPrice : ''        
             }, 
             stockAssetList : null,
-            mode: "",
+            mode: "REG",
             stockTradeModalVisible : false,
             trType : ''
         }
@@ -161,10 +161,36 @@ export default {
             this.stockKind.curTotPrice = this.$uncomma(this.curTotPrice);
 
             console.log("stockKind = " + JSON.stringify(this.stockKind));
-            axios.post('/myasset/stock/kind/reg', this.stockKind)
+            api.post('/myasset/stock/kind/reg', this.stockKind)
             .then((response)=>{
                 console.log("보유 주식 등록 결과 : " + JSON.stringify(response.data)); 
                 alert("보유 주식 등록이 완료되었습니다.");
+                this.mode = "MOD";
+            });
+        },
+        // 종목 정보 등록
+        stockKindMod(){
+            if(!this.$isNumeric(this.quantity)) return;
+            this.stockKind.quantity = this.$uncomma(this.quantity);
+
+            if(!this.$isNumeric(this.buyAvgPrice)) return;
+            this.stockKind.buyAvgPrice = this.$uncomma(this.buyAvgPrice);
+ 
+            if(!this.$isNumeric(this.buyTotPrice)) return;
+            this.stockKind.buyTotPrice = this.$uncomma(this.buyTotPrice);
+            
+            if(!this.$isNumeric(this.curUnitPrice)) return;
+            this.stockKind.curUnitPrice = this.$uncomma(this.curUnitPrice);
+            
+            if(!this.$isNumeric(this.curTotPrice)) return;
+            this.stockKind.curTotPrice = this.$uncomma(this.curTotPrice);
+
+            console.log("stockKind = " + JSON.stringify(this.stockKind));
+            api.post('/myasset/stock/kind/mod', this.stockKind)
+            .then((response)=>{
+                console.log("보유 주식 수정 결과 : " + JSON.stringify(response.data)); 
+                alert("보유 주식 수정이 완료되었습니다.");
+                this.mode = "REG";
             });
         },
         openTradeModal(trType){
@@ -184,8 +210,7 @@ export default {
 
         // Rest Call :: 증권사 계좌 목록 조회. 1개이면 바로 세팅
 		getStockAsset() {	
-            axios.post(process.env.VUE_APP_REST_BASE_URL 
-                + '/myasset/asset/list', {assetType : "STOCK", memberId : 1} )
+            api.post('/myasset/asset/list', {assetType : "STOCK", memberId : this.$store.state.storeAuth.memberId} )
             .then((response)=>{ 
                 this.stockAssetList = response.data;
                 if(this.stockAssetList.length == 1){
@@ -229,7 +254,7 @@ export default {
         // 손익 정보 계산
         setPnl(){
             console.log("this.stockKind.curTotPrice=" + this.stockKind.curTotPrice + ", this.stockKind.buyTotPrice=" + this.stockKind.buyTotPrice);
-            if(this.stockKind.curTotPrice == "" && this.stockKind.buyTotPrice == ""){
+            if(this.stockKind.curTotPrice == "" || this.stockKind.buyTotPrice == ""){
                 return;
             }
             var pAmt = this.stockKind.curTotPrice - this.stockKind.buyTotPrice;
@@ -306,6 +331,7 @@ export default {
                 this.pnlRate = this.$comma3(this.stockKind.pnlRate);
                 this.callStockKind();
                 this.readOnlyYn = true;
+                this.mode = "MOD";
             }
         })
     } 

@@ -1,6 +1,6 @@
 import axios from 'axios'
 import storeAuth from '@/store/modules/storeAuth'
-import router from '../../router'
+import router from '../../router' 
 
 // axios 인스턴스 생성
 const api = axios.create({
@@ -28,35 +28,45 @@ api.interceptors.request.use(
 
 api.interceptors.response.use(
   function (response) {
-    console.log("api.interceptors.response.use confresponseig:" + JSON.stringify(response));
+    console.log("api.interceptors.response.use 정상 조회 결과 :" + JSON.stringify(response));
     // 응답이 정상(200)일 경우 호출
     return response;
   },
   function (error) {
     // 응답에 문제가 발생한(200을 제외한 나머지) 경우 호출
     console.log("api.interceptors.response.use error : "  + JSON.stringify(error.response));
-    console.log("api.interceptors.response.use error.status : "  + error.response.status);
   
-    if(error.response.status == 401 || error.response.status == 403){
-      router.push({name: 'Login', });
-    }else{
-      alert(error.message);
-    } 
-    
-    /* 아래 코드는 참고용. 403 인 경우 리프레쉬 토큰이용하여 자동 재접속 해야 하는 경우임
-       https://minhyeong-jang.github.io/2020/01/08/js-axios-interceptors-error */
-    /*
-    if (error.response && error.response.status === 403) {
-      return Auth.refreshToken() // token 재발행 및 반환
-        .then(token => {
-          originalRequest.headers["Authorization"] = token;
-          return _axios.request(error.config); // error.config(origin API 정보)를 다시 요청
+    if(error.response.status == 401){
+        console.log("api.interceptors.response.use error.status : "  + error.response.status); 
+        //router.push({name: 'Login', params: {httpStatus: '401'}}); 
+        //axios.post(process.env.VUE_APP_REST_BASE_URL + "/myasset/auth/getToken", )
+
+        let refreshToken = localStorage.getItem('refreshtoken');
+        console.log("토큰 만료로 재발급 위한 리프레쉬 토큰 입력 : " + refreshToken);
+        axios.post(process.env.VUE_APP_REST_BASE_URL + '/myasset/auth/getToken', null, {
+            headers: { 'content-type': 'application/json', 'refreshtoken' : refreshToken }
         })
-        .catch(error => {
-          window.location.href = "/login";
-        });
-    }*/
-    return error;
+        .then(res => {
+            console.log("토큰 재발급 완료 : " + JSON.stringify(res));       
+            storeAuth.state.token = res.data.accesstoken;
+            localStorage.setItem('token', res.data.accesstoken);
+            localStorage.setItem('refreshtoken', res.data.refreshtoken);
+            const errorApi = error.config;
+            errorApi.retry = true;
+            axios(errorApi);
+        })
+        .catch(e => {
+            console.log(e)
+            alert("토큰 재발급 요청에 문제가 발생했습니다.")
+        })
+    }else if(error.response.status == 403){
+        router.push({name: 'Login', params: {httpStatus: '403'}});
+    }else if(error.response.status == 400){
+        console.log("에러 400 : " + error.response.data.message); 
+    }else{
+        alert(error.message);
+    }  
+    return Promise.reject(error)
   }
 )
 

@@ -77,7 +77,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import api from '@/assets/rest/api'
 import { onMounted, ref, reactive, toRefs, watch, computed } from 'vue';
 
 export default {
@@ -132,8 +132,7 @@ export default {
             this.trData.taxAmt = this.$uncomma(this.taxAmt);
               
             console.log("거래등록 _ 시작 : " + JSON.stringify(this.trData));             
-            axios.post(process.env.VUE_APP_REST_BASE_URL 
-                + '/myasset/stock/trade/reg', this.trData )
+            api.post('/myasset/stock/trade/reg', this.trData )
             .then((response)=>{ 
                 var result = response.data;
                 console.log("거래등록 _ 결과 : " + JSON.stringify(result));   

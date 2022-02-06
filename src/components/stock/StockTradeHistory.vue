@@ -2,15 +2,6 @@
     <div class="row g-2 m-4">   
         <h5>주식 거래내역</h5>   
         <div class="col-12">
-            <div class="input-group">
-                <label class="input-group-text">종목</label>
-                <select class="form-select" v-model="tradeSearch.stockKindCd" >
-                    <option v-for="(stockKind, i) in stockKindList" :key="i" 
-                    :value="stockKind.stockKindCd">{{ stockKind.stockKindName }}</option>
-                </select>
-            </div>
-        </div>  
-        <div class="col-12">
             <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="rdoTrade" :checked="tradeSearch.tradeType=='ALL'" v-model="tradeSearch.tradeType" @change="radioChange('buy')" id="rdoTradeAll" value="ALL">
                 <label class="form-check-label" for="rdoTradeAll">전체</label>
@@ -24,6 +15,15 @@
                 <label class="form-check-label" for="rdoTradeSale">매도</label>
             </div>
         </div>
+        <div class="col-12">
+            <div class="input-group">
+                <label class="input-group-text">종목</label>
+                <select class="form-select" v-model="tradeSearch.stockKindCd" >
+                    <option v-for="(stockKind, i) in stockKindList" :key="i" 
+                    :value="stockKind.stockKindCd">{{ stockKind.stockKindName }}</option>
+                </select>
+            </div>
+        </div>  
         <div class="col-12">
             <div class="input-group">
                 <span class="input-group-text">기간</span>
@@ -128,7 +128,7 @@ export default {
     },    
     methods : { 
         callGetStockKindList(){ 
-            this.$getStockKindList(1, this.callbackStockKindList);
+            this.$getStockKindList(this.$store.state.storeAuth.memberId, this.callbackStockKindList);
         },
         callbackStockKindList(stockKindList){
             this.stockKindList = stockKindList;

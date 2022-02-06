@@ -70,20 +70,29 @@ export default {
     methods: {
         memberReg(){
             console.log("회원가입 시작 : " + JSON.stringify(this.memberRegInfo));
-            api.post('/myasset/auth/reg', this.memberRegInfo)
+            api.post('/myasset/member/reg', this.memberRegInfo)
             .then((response)=>{
-                let memberInfo = response.data;
-                console.log("회원 등록 결과 : " + JSON.stringify(memberInfo)); 
-                var loginInfo = new Object();
-                loginInfo.email = memberInfo.email;
-                loginInfo.pwd = memberInfo.pwd;
-                this.$store.dispatch('storeAuth/loginMember', loginInfo)
-                .then(() => {
-                    this.$router.push({name : 'StockKindTotal', });
-                })
-                .catch(e => {
-                    alert("로그인에 실패했습니다.");
-                })
+                console.log("회원 등록 결과 : " + JSON.stringify(response)); 
+                let resData = response.data;
+                console.log("회원 등록 결과 리프레쉬 토큰 : " + resData.refreshtoken);
+                console.log("회원 등록 결과 : " + JSON.stringify(resData)); 
+                var tokenObj = new Object();
+                tokenObj.accesstoken = resData.accesstoken;
+                tokenObj.refreshtoken = resData.refreshtoken;
+                // localStorage.setItem('refreshtoken', resData.refreshtoken);
+                this.$store.dispatch('storeAuth/setToken', tokenObj);
+
+                this.$router.push({name : 'StockKindTotal', });
+                // var loginInfo = new Object();
+                // loginInfo.email = resData.member.email;
+                // loginInfo.pwd = resData.member.pwd; 
+                // this.$store.dispatch('storeAuth/loginMember', loginInfo)
+                // .then(() => {
+                //     this.$router.push({name : 'StockKindTotal', });
+                // })
+                // .catch(e => {
+                //     alert("회원 가입에 실패했습니다.");
+                // })
             })
             .catch(err => {
                 console.log(err.response.data)

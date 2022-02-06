@@ -5,7 +5,7 @@
             <div class="input-group">
                 <label class="input-group-text">은행</label>
                 <select class="form-select" v-model="bankAsset.orgCd">
-                    <option v-for="(bankCode, i) in $store.state.StoreCommon.bankCodeList" :key="i" 
+                    <option v-for="(bankCode, i) in $store.state.storeCommon.bankCodeList" :key="i" 
                     :value="bankCode.code">{{ bankCode.codeName }}</option>
                 </select>
             </div>
@@ -14,7 +14,7 @@
             <div class="input-group">
                 <label class="input-group-text">계좌종류</label>
                 <select class="form-select" v-model="bankAsset.acnoType">
-                    <option v-for="(bankAcnoType, i) in $store.state.StoreCommon.bankAcnoTypeList" :key="i" 
+                    <option v-for="(bankAcnoType, i) in $store.state.storeCommon.bankAcnoTypeList" :key="i" 
                     :value="bankAcnoType.code">{{ bankAcnoType.codeName }}</option>
                 </select>
             </div>
@@ -83,7 +83,7 @@ export default {
             loanBalAmt : '',     
             loanRate : '',       
             bankAsset : {
-                memberId : 1,    
+                memberId : '',    
                 assetName : '',
                 acnoType : '',
                 orgCd : '',
@@ -110,7 +110,7 @@ export default {
             this.$isNumeric(this.loanRate);
             this.bankAsset.loanRate = this.loanRate;
             
-            this.bankAsset.orgName = this.$getCodeNameFromCodeList(this.$store.state.StoreCommon.bankCodeList, this.bankAsset.orgCd); 
+            this.bankAsset.orgName = this.$getCodeNameFromCodeList(this.$store.state.storeCommon.bankCodeList, this.bankAsset.orgCd); 
             console.log("bankAsset.orgName = " + this.bankAsset.orgName);
             this.bankAsset.assetName = "은행-" + this.bankAsset.orgName + "_" + this.bankAsset.acno;
             console.log("bankAsset = " + JSON.stringify(this.bankAsset));

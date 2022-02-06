@@ -87,6 +87,7 @@
 <script>
 import axios from 'axios';
 import { onMounted, ref, reactive, toRefs, watch, computed } from 'vue';
+import { mapMutations } from "vuex"
 
 export default {
     name: 'StockKindTotal',
@@ -126,11 +127,17 @@ export default {
         }
     },    
     methods : { 
+        // 주식종합 API 콜
         callGetStockKindTotal(){ 
-            this.$getStockKindTotal(1, this.callbackStockKindTotal);
+            this.$getStockKindTotal(this.$store.state.storeAuth.memberId, this.callbackStockKindTotal);
         },
+        // 주식종합 콜백함수
         callbackStockKindTotal(stockKindTotal){
             this.stockKindTotal = stockKindTotal;
+            if(stockKindTotal.list.length <= 0){
+                alert("등록된 주식 종목이 없습니다. 주식 계좌 등록 및 종목 등록이 필요합니다.");
+                this.timerStop();  // 조회할 내용이 없으므로 타이머 스톱
+            }
         },
         clickRouterPushStockKind(stockKind){ 
             this.$router.push( 
@@ -159,6 +166,7 @@ export default {
         this.$nextTick(function () { 
             this.callGetStockKindTotal();           
             this.timerStart();
+            console.log("토탈 토큰=" + this.$store.state.storeAuth.token);
         })        
     },
     beforeUnmount(){

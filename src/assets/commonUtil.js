@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { useToast } from "vue-toastification"; 
 import { JSEncrypt } from "jsencrypt";
 
 const methods = {
@@ -141,6 +142,19 @@ const methods = {
         console.log("getDate : " + dateString);
         return dateString;
     },
+    test(){
+        alert("테스트 공통함수");
+    },
+    toastMessage(message){ 
+        const options = {
+            position : 'bottom-center',
+            timeout : 1000,
+        };
+        console.log("공통 토스트 메시지 : " + message);
+        const toast = useToast();   
+        toast(message);
+        return toast;
+    },
     // encrypt는 암호화 하는 과정입니다.
     rsaEncrypt(data) {
         console.log("rsaEncrypt : " + data);
@@ -173,7 +187,8 @@ export default{
         Vue.config.globalProperties.$isNumeric = methods.isNumeric; 
         Vue.config.globalProperties.$numColor = methods.numColor; 
         Vue.config.globalProperties.$getDate = methods.getDate; 
+        Vue.config.globalProperties.$toastMessage = methods.toastMessage; 
         Vue.config.globalProperties.$rsaEncrypt = methods.rsaEncrypt; 
-        Vue.config.globalProperties.$rsaDecrypt = methods.rsaDecrypt; 
+        Vue.config.globalProperties.$rsaDecrypt = methods.rsaDecrypt;         
     }
 }

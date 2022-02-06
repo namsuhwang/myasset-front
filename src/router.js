@@ -7,6 +7,7 @@ import StockKindDetail from './components/stock/StockKindDetail.vue';
 import StockKindTotal from './components/stock/StockKindTotal.vue';
 import StockTradeHistory from './components/stock/StockTradeHistory.vue';
 import Login from './components/system/Login.vue';
+import Logout from './components/system/Logout.vue';
 import MemberReg from './components/system/MemberReg.vue';
 
 const routes = [  
@@ -40,6 +41,10 @@ const routes = [
   {
     // 로그인
     name: 'Login', path: "/system/login", component: Login
+  },
+  {
+    // 로그아웃
+    name: 'Logout', path: "/system/logout", component: Logout
   },
   {
     // 회원가입
