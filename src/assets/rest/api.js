@@ -51,14 +51,20 @@ api.interceptors.response.use(
             storeAuth.state.token = res.data.accesstoken;
             localStorage.setItem('token', res.data.accesstoken);
             localStorage.setItem('refreshtoken', res.data.refreshtoken);
-            const errorApi = error.config;
-            errorApi.retry = true;
-            axios(errorApi);
+            const orginalReq = error.config;
+            console.log("토큰 재발급 완료 이전 request orginalReq : " + JSON.stringify(orginalReq));     
+            // errorApi.retry = true;
+            // errorApi.headers.accesstoken = res.data.accesstoken;
+
+            axios.defaults.headers.common['accesstoken'] = res.data.accesstoken;
+            orginalReq.headers['accesstoken'] = res.data.accesstoken;
+            console.log("토큰 재발급 완료 토큰 재세팅 orginalReq : " + JSON.stringify(orginalReq));   
+            return axios(orginalReq);
         })
         .catch(e => {
             console.log(e)
             alert("토큰 재발급 요청에 문제가 발생했습니다.")
-        })
+        });
     }else if(error.response.status == 403){
         router.push({name: 'Login', params: {httpStatus: '403'}});
     }else if(error.response.status == 400){
