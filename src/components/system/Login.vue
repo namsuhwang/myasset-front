@@ -90,6 +90,7 @@ export default {
     mounted(){ 
         // 전체 화면내용이 렌더링된 후에 아래의 코드가 실행됩니다.        
         this.$nextTick(function () {     
+            /*
             // 토큰이 정상이면 자동로그인 후 보유주식 화면으로 이동
             this.$router.push({name : 'StockKindTotal', });
             if(localStorage.getItem('token') != null && localStorage.getItem('token') != 'undefined' 
@@ -98,7 +99,8 @@ export default {
                 console.log("로그인=" + this.$store.state.storeAuth.token);
                 this.$router.push({name : 'StockKindTotal', });
                 this.$toastMessage('자동 로그인 완료');
-            }    
+            } 
+            */   
 
             /*
             console.log("httpStatus:" + this.$route.params.httpStatus);

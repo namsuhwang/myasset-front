@@ -47,17 +47,23 @@ api.interceptors.response.use(
             headers: { 'content-type': 'application/json', 'refreshtoken' : refreshToken }
         })
         .then(res => {
-            console.log("토큰 재발급 완료 : " + JSON.stringify(res));       
-            storeAuth.state.token = res.data.accesstoken;
-            localStorage.setItem('token', res.data.accesstoken);
-            localStorage.setItem('refreshtoken', res.data.refreshtoken);
+            console.log("토큰 재발급 완료 : " + JSON.stringify(res));    
+            var accesstoken = res.data.accesstoken;
+            var refreshtoken = res.data.refreshtoken;
+            console.log("재발급된 엑세스 토큰 : " + accesstoken);  
+            console.log("재발급된 리프레쉬 토큰 : " + refreshtoken);  
+            
+            storeAuth.state.token = accesstoken;
+            localStorage.setItem('token', accesstoken);
+            localStorage.setItem('refreshtoken', refreshtoken);
             const orginalReq = error.config;
             console.log("토큰 재발급 완료 이전 request orginalReq : " + JSON.stringify(orginalReq));     
             // errorApi.retry = true;
             // errorApi.headers.accesstoken = res.data.accesstoken;
 
-            axios.defaults.headers.common['accesstoken'] = res.data.accesstoken;
-            orginalReq.headers['accesstoken'] = res.data.accesstoken;
+            
+            axios.defaults.headers.common['accesstoken'] = accesstoken;
+            orginalReq.headers['accesstoken'] = accesstoken;
             console.log("토큰 재발급 완료 토큰 재세팅 orginalReq : " + JSON.stringify(orginalReq));   
             return axios(orginalReq);
         })
