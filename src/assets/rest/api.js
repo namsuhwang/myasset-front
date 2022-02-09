@@ -68,8 +68,19 @@ api.interceptors.response.use(
             return axios(orginalReq);
         })
         .catch(e => {
-            console.log(e)
-            alert("토큰 재발급 요청에 문제가 발생했습니다.")
+            console.log("getToken 에러 : " + JSON.stringify(e.response));
+            var errorData = e.response.data;
+            if(errorData.status == 400){
+                if(errorData.code == "0001" || errorData.code == "0002"){
+                    console.log("자동 로그인에 실패했습니다. 다시 로그인하십시오.");
+                    localStorage.setItem('refreshtoken', null);
+                    localStorage.setItem('token', null);
+                    storeAuth.state.token = null;
+                    router.push({name: 'Login', });
+                }
+            }else{
+                alert("토큰 재발급 요청에 문제가 발생했습니다.")
+            }
         });
     }else if(error.response.status == 403){
         router.push({name: 'Login', params: {httpStatus: '403'}});
