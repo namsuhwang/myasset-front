@@ -173,6 +173,12 @@ const methods = {
       decryptor.setPrivateKey(replace);
     
       return decryptor.decrypt(data);
+    },
+    sessionInfoLog(scrId){
+        console.log(scrId + "::phase=" + process.env.VUE_APP_PHASE);
+        console.log(scrId + "::state.email=" + this.$store.state.storeAuth.email);
+        console.log(scrId + "::state.token=" + this.$store.state.storeAuth.token);
+        console.log(scrId + "::localStorage.refreshtoken=" + localStorage.getItem('refreshtoken'));
     }
     
      
@@ -188,6 +194,7 @@ export default{
         Vue.config.globalProperties.$numColor = methods.numColor; 
         Vue.config.globalProperties.$getDate = methods.getDate; 
         Vue.config.globalProperties.$toastMessage = methods.toastMessage; 
+        Vue.config.globalProperties.$sessionInfoLog = methods.sessionInfoLog; 
         Vue.config.globalProperties.$rsaEncrypt = methods.rsaEncrypt; 
         Vue.config.globalProperties.$rsaDecrypt = methods.rsaDecrypt;         
     }

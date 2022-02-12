@@ -1,5 +1,5 @@
 <template>
-  <h5>자산관리로 부자되자</h5>   
+  <h5>자산관리로 부자되자{{ phase }}</h5>   
 <!-- {{$process.env}} -->
   <div class="container-fluid">
     <nav class="nav">
@@ -27,11 +27,13 @@
 import { mapMutations, mapState, mapActions } from 'vuex';
 import menuItems from './assets/menu.js';
 import axios from 'axios';
+// import storeAuth from '@/store/modules/storeAuth'
 
 export default {
     name: "App",
     data() {
         return {
+            phase: '',
             menuItems: menuItems, 
             selMenuItem: menuItems[2], 
             developer: "황남수",
@@ -40,12 +42,19 @@ export default {
     methods: {
     },
     created(){
+        this.$sessionInfoLog("app.vue");
+        if(process.env.VUE_APP_PHASE == 'DEV'){
+            this.phase = ' [개발-' + this.$store.state.storeAuth.email + ']';
+        }
+
         this.$store.dispatch('storeCommon/getCommonCodeInit');
         
-        // 첫화면으로 주식 보유 현황 설정
-        this.$router.push({name : "StockKindTotal"}, );
-        // this.$router.push({name : "Login"}, );
-        
+        if(this.$store.state.storeAuth.token == null || this.$store.state.storeAuth.token == 'null' || this.$store.state.storeAuth.token == 'undefined'){
+            this.$router.push({name : "Login"}, );
+        }else{
+            // 첫화면으로 주식 보유 현황 설정
+            this.$router.push({name : "StockKindTotal"}, );
+        }        
     },
     mounted() {
     },
