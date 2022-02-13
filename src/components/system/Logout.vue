@@ -57,12 +57,14 @@ export default {
         /*-------------------------------------------------------------------------------------*
          *      modal Function Start                                                           */
         userInfoDelete(){
-            localStorage.setItem('refrechtoken', '');
+            localStorage.setItem('refreshtoken', '');
             localStorage.setItem('token', '');
             this.$store.state.storeAuth.token = '';
             this.$store.state.storeAuth.email = '';
             this.$store.state.storeAuth.memberId = '';
             this.$store.state.storeAuth.role = '';
+            alert("사용자정보 삭제 완료");
+            this.$sessionInfoLog("userInfoDelete");     
         }
          /*     modal Function  End                                                            *
          --------------------------------------------------------------------------------------*/
