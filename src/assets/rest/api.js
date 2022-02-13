@@ -14,7 +14,7 @@ const api = axios.create({
 api.interceptors.request.use(
   function (config) {
     console.log("api.interceptors.request.use 토큰:" + storeAuth.state.token);
-    this.$sessionInfoLog("api.interceptors.request");
+    // this.$sessionInfoLog("api.interceptors.request");
     config.headers.accesstoken = storeAuth.state.token;
     console.log("api.interceptors.request.use config:" + JSON.stringify(config));
     // 요청직전에 호출되며, axios의 설정을 여기서 진행

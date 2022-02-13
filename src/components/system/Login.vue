@@ -14,16 +14,20 @@
                         <div class="input-group">
                             <span class="input-group-text" style="width: 90px;">비밀번호</span>
                             <input type="password" id="myassetPwd" v-model="loginInfo.pwd" class="form-control" placeholder="" >
+                            <button type="submit" @click="memberLogin" class="btn btn-primary ">로그인</button>
                         </div>
                     </div>   
+                    <br>
+                    <br>
                     <div class="col-12">
-                        <button type="submit" @click="memberLogin" class="btn btn-primary btn-block">로그인</button>
+                        <!-- <button type="submit" @click="memberLogin" class="btn btn-primary btn-block">로그인</button>&nbsp;&nbsp; -->
+                        <button type="submit" @click="linkMemberReg" class="btn btn-outline-success btn-sm">신규가입</button>
                     </div>   
                 </div>
             </div>
         <!-- </form> -->
         <!-- <p class="text-center"><a href="#">신규가입</a></p> -->
-      <router-link to="/system/memberReg" class="">신규가입</router-link>
+      <!-- <router-link to="/system/memberReg" class="">신규가입</router-link> -->
     </div>  
 </template>
 
@@ -89,7 +93,8 @@ export default {
     },
     mounted(){ 
         // 전체 화면내용이 렌더링된 후에 아래의 코드가 실행됩니다.        
-        this.$nextTick(function () {                 
+        this.$nextTick(function () {           
+        this.$sessionInfoLog("Login.vue");      
             // 토큰이 정상이면 자동로그인 후 보유주식 화면으로 이동
             console.log("로그인 화면 token=" + localStorage.getItem('token') );
             console.log("로그인 화면 refreshtoken=" + localStorage.getItem('refreshtoken') );

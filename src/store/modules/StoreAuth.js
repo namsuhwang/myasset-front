@@ -48,17 +48,17 @@ const storeAuth = {
             state.email = null;
             state.refreshToken = null;
             localStorage.setItem('token', null);
-            localStorage.setItem('email', null);
-            localStorage.setItem('memberId', null);
-            localStorage.setItem('role', null);
+            // localStorage.setItem('email', null);
+            // localStorage.setItem('memberId', null);
+            // localStorage.setItem('role', null);
         },
         setState(state){
           console.log("storeAuth.js 토큰 : " + localStorage.getItem('token'));
           console.log("storeAuth.js 이메일 : " + localStorage.getItem('email'));
           state.token = localStorage.getItem('token')
           state.memberId = localStorage.getItem('memberId')
-          state.role = localStorage.getItem('role')
-          state.email = localStorage.getItem('email')
+        //   state.role = localStorage.getItem('role')
+        //   state.email = localStorage.getItem('email')
           console.log("storeAuth.js 토큰1 : " + state.token);
         },
         setToken(state, tokenObj){

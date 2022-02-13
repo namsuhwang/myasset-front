@@ -164,6 +164,7 @@ export default {
     mounted(){ 
         // 전체 화면내용이 렌더링된 후에 아래의 코드가 실행됩니다.        
         this.$nextTick(function () { 
+        this.$sessionInfoLog("StockKindTotal.vue");
             this.callGetStockKindTotal();           
             this.timerStart();
             console.log("토탈 토큰=" + this.$store.state.storeAuth.token);

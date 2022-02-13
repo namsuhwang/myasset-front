@@ -14,10 +14,10 @@
                     <span class="input-group-text" style="width: 90px;">비밀번호</span>
                     <input type="password" id="myassetPwd" v-model="loginInfo.pwd" class="form-control" placeholder="" >
                 </div>
-            </div>   
-            <div class="col-12">
-                <button type="submit" @click="memberLogin" class="btn btn-primary btn-block">로그인</button>
-            </div>    -->
+            </div>   -->
+            <div v-if="phase == 'DEV'" class="col-12">
+                <button type="submit" @click="userInfoDelete" class="btn btn-primary btn-block">사용자 정보 삭제</button>
+            </div>    
         </div>
     </div>  
 </template>
@@ -28,6 +28,7 @@ export default {
     name : "Logout",
     data(){
         return {
+            phase: ''
         }
     },    
     methods : { 
@@ -55,12 +56,21 @@ export default {
          --------------------------------------------------------------------------------------*/
         /*-------------------------------------------------------------------------------------*
          *      modal Function Start                                                           */
+        userInfoDelete(){
+            localStorage.setItem('refrechtoken', '');
+            localStorage.setItem('token', '');
+            this.$store.state.storeAuth.token = '';
+            this.$store.state.storeAuth.email = '';
+            this.$store.state.storeAuth.memberId = '';
+            this.$store.state.storeAuth.role = '';
+        }
          /*     modal Function  End                                                            *
          --------------------------------------------------------------------------------------*/
     },
     watch:{
     },
     created(){
+        this.phase = process.env.VUE_APP_PHASE;
     },
     computed: {
     },

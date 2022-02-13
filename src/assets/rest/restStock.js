@@ -15,9 +15,9 @@ const methods = {
             console.log(error);
         });
     }, 
-    getStockKindTotal(memberId, callbackFunc) {	    
-        console.log("공통함수 보유 주식 종합(시세 포함) 조회 _ 시작 회원ID : " + memberId);     
-        api.post('/myasset/stock/total', {memberId : memberId} )
+    getStockKindTotal(callbackFunc) {	    
+        // console.log("공통함수 보유 주식 종합(시세 포함) 조회 _ 시작 회원ID : " + memberId);     
+        api.post('/myasset/stock/total',  )
         .then((response)=>{ 
             var stockKindTotal = response.data;
             console.log("공통함수 보유 주식 종합(시세 포함 _ 결과 : " + JSON.stringify(stockKindTotal)); 
