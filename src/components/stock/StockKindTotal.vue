@@ -129,10 +129,11 @@ export default {
     methods : { 
         // 주식종합 API 콜
         callGetStockKindTotal(){ 
-            this.$getStockKindTotal(this.$store.state.storeAuth.memberId, this.callbackStockKindTotal);
+            this.$getStockKindTotal(this.callbackStockKindTotal);
         },
         // 주식종합 콜백함수
         callbackStockKindTotal(stockKindTotal){
+            console.log("주식보유현황 콜백함수 : " + JSON.stringify(stockKindTotal));
             this.stockKindTotal = stockKindTotal;
             if(stockKindTotal.list.length <= 0){
                 alert("등록된 주식 종목이 없습니다. 주식 계좌 등록 및 종목 등록이 필요합니다.");
