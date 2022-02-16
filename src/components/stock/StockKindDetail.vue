@@ -210,7 +210,7 @@ export default {
 
         // Rest Call :: 증권사 계좌 목록 조회. 1개이면 바로 세팅
 		getStockAsset() {	
-            api.post('/myasset/asset/list', {assetType : "STOCK", memberId : this.$store.state.storeAuth.memberId} )
+            api.post('/myasset/asset/list', {assetType : "STOCK"} )
             .then((response)=>{ 
                 this.stockAssetList = response.data;
                 if(this.stockAssetList.length == 1){
