@@ -32,6 +32,7 @@ const storeAuth = {
             state.role = item.data['role']
             state.email = item.data['email'] 
             localStorage.setItem('token', state.token);
+            localStorage.setItem('refreshtoken', item.data['refreshtoken']);
             localStorage.setItem('email', state.email);
             localStorage.setItem('memberId', state.memberId);
             localStorage.setItem('role', state.role);
@@ -85,6 +86,7 @@ const storeAuth = {
             .then(res => {
                 console.log("로그인 완료 : " + JSON.stringify(res)); 
                 console.log("로그인 완료 토큰 : " + res.data['accesstoken']);
+                console.log("로그인 완료 리프레쉬 토큰 : " + res.data['refreshtoken']);
                 
                 const toast = useToast();   
                 toast("로그인 완료");
