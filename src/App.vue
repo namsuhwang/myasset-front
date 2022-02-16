@@ -44,7 +44,7 @@ export default {
     created(){
         this.$sessionInfoLog("app.vue");
         if(process.env.VUE_APP_PHASE == 'DEV'){
-            this.phase = ' [개발-' + this.$store.state.storeAuth.email + ']';
+            this.phase = ' [개발]';
         }
 
         this.$store.dispatch('storeCommon/getCommonCodeInit');
