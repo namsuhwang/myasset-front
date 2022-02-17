@@ -106,20 +106,6 @@ export default {
                 this.$toastMessage('자동 로그인 완료');
             } 
 
-            /*
-            console.log("httpStatus:" + this.$route.params.httpStatus);
-            let httpStatus = this.$route.params.httpStatus;
-            if(httpStatus == '401'){
-                console.log("Login.vue 401 토큰 재발급 시작 ");
-                this.$store.dispatch('storeAuth/getToken', );
-                console.log("Login.vue 401 토큰 재발급 완료 ");
-            }else{
-                console.log("Login.vue 토큰 : " + localStorage.getItem('token'));
-                console.log("Login.vue 이메일 : " + localStorage.getItem('email'));
-            // this.$store.dispatch('storeAuth/autoLogin', ); 
-                console.log("state.token=" + this.$store.state.storeAuth.token);
-            }
-            */
         })
         
     } 
