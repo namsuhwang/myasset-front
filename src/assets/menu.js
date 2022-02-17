@@ -17,10 +17,11 @@ export default
     {
         id:'menu_03', name:'주식', path: '/asset/stock/total',
         subMenus:[      
-            {id:'menu_03_01', name:'[보유주식]', path: '/asset/stock/total'},
-            {id:'menu_03_02', name:'[계좌등록]', path: '/asset/stock/acno/detail'},
-            {id:'menu_03_03', name:'[종목등록]', path: '/asset/stock/kind/detail'},
-            {id:'menu_03_04', name:'[거래내역]', path: '/asset/stock/trade/history'},
+            {id:'menu_03_01', name:'[관심종목]', path: '/asset/stock/interest'}, 
+            {id:'menu_03_02', name:'[보유종목]', path: '/asset/stock/total'},
+            {id:'menu_03_03', name:'[계좌등록]', path: '/asset/stock/acno/detail'},
+            {id:'menu_03_04', name:'[보유종목등록]', path: '/asset/stock/kind/detail'},
+            {id:'menu_03_05', name:'[거래내역]', path: '/asset/stock/trade/history'},
           //  {id:'menu_03_04', name:'주식 물타기 계산', path: '/asset/stock/avgcalc'}
         ]
     },

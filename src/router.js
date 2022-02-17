@@ -5,6 +5,7 @@ import BankDetail from './components/bank/BankDetail.vue';
 import StockAcnoDetail from './components/stock/StockAcnoDetail.vue';
 import StockKindDetail from './components/stock/StockKindDetail.vue';
 import StockKindTotal from './components/stock/StockKindTotal.vue';
+import StockInterest from './components/stock/StockInterest.vue';
 import StockTradeHistory from './components/stock/StockTradeHistory.vue';
 import Login from './components/system/Login.vue';
 import Logout from './components/system/Logout.vue';
@@ -23,7 +24,11 @@ const routes = [
     name: 'BankDetail', path: "/asset/bank/detail", component: BankDetail
   },
   {
-    // 보유 주식
+    // 관심 종목
+    name: 'StockInterest', path: "/asset/stock/interest", component: StockInterest, props: true
+  },
+  {
+    // 보유 종목
     name: 'StockKindTotal', path: "/asset/stock/total", component: StockKindTotal, props: true
   },
   {

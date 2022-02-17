@@ -69,9 +69,13 @@
         <button id='btnSale' type="button" @click="openTradeModal('SALE')" class="btn btn-primary btn-sm">매도 등록</button>&nbsp;
     </div>
     <div class="m-4">
-        <button id='btnReg' type="button" @click="stockKindReg" :disabled="mode != 'REG'" class="btn btn-primary btn-sm">등록</button>&nbsp;
+        <button id='btnReg' type="button" @click="stockKindReg" class="btn btn-primary btn-sm">등록</button>&nbsp;
+        <button id='btnMod' type="button" @click="stockKindMod" class="btn btn-primary btn-sm">수정</button>&nbsp;
+        <button id='btnDel' type="button" @click="stockKindDel" class="btn btn-primary btn-sm">삭제</button>&nbsp; 
+
+        <!-- <button id='btnReg' type="button" @click="stockKindReg" :disabled="mode != 'REG'" class="btn btn-primary btn-sm">등록</button>&nbsp;
         <button id='btnMod' type="button" @click="stockKindMod" :disabled="mode == 'REG'" class="btn btn-primary btn-sm">수정</button>&nbsp;
-        <!-- <button id='btnDel' type="button" @click="stockKindDel" :disabled="mode == 'REG'" class="btn btn-primary btn-sm">삭제</button>&nbsp;  -->
+        <button id='btnDel' type="button" @click="stockKindDel" :disabled="mode == 'REG'" class="btn btn-primary btn-sm">삭제</button>&nbsp;  -->
     </div> 
 </template>
 
@@ -191,6 +195,15 @@ export default {
                 console.log("보유 주식 수정 결과 : " + JSON.stringify(response.data)); 
                 alert("보유 주식 수정이 완료되었습니다.");
                 this.mode = "REG";
+            });
+        },
+        // 종목 정보 삭제
+        stockKindDel(){
+            console.log("stockKind = " + JSON.stringify(this.stockKind));
+            api.post('/myasset/stock/kind/del', this.stockKind)
+            .then((response)=>{
+                console.log("보유 주식 삭제 결과 : " + JSON.stringify(response.data)); 
+                alert("보유 주식 삭제가 완료되었습니다.");                
             });
         },
         openTradeModal(trType){
