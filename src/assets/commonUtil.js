@@ -13,6 +13,22 @@ const methods = {
         }
         return str.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     },
+    comma3t(str){ 
+        if(str == null){
+            return "0";
+        }
+        
+        if(str.length <= 3){
+            return str;
+        }
+
+        if(str.replace(",", "") > 0){
+            str = ("▲" + str.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")).replace("-", "");
+        }else if(str.replace(",", "") < 0){
+            str = ("▼" + str.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")).replace("-", "");
+        }
+        return str;
+    },
     won(str){        
         if(str == null){
             return "0 원";
@@ -24,10 +40,8 @@ const methods = {
         return str.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " 원";
     },
     uncomma(str) {
-       // console.log("uncomma=" + str);
        str = String(str);
-       str = str.replace(/[^\d]+/g, '');
-       str = String(parseInt(str));
+       str = str.replace(/,/g, "");
        return str;
     },
     isNumeric(num, opt) {  // 좌우 trim(공백제거)을 해준다.
@@ -94,9 +108,10 @@ const methods = {
                 return codeList[idx].codeName;
         }
     },
+    numZeroColor(){
+        return "num-zero";    
+    },
     numColor(numVal){
-        // console.log("numVal=" + numVal + ", isNumeric=" + this.isNumeric(numVal));
-        
         if(numVal == null || isNaN(numVal)){
             return null;
         }
@@ -105,14 +120,8 @@ const methods = {
             return "num-plus";            
         }else if(numVal < 0){ 
             return "num-minus";          
-        }else if(numVal == 0){
-            return "num-zero";
-        }else if(numVal.includes('▲')){
-            return "num-plus";            
-        }else if(numVal.includes('▼')){
-            return "num-minus";           
         }else{
-            return "num-zero";           
+            return "num-zero";          
         }            
     },
     getDate(dateLength, addType, addNum, delimiter){
@@ -187,11 +196,13 @@ const methods = {
 export default{
     install(Vue){
         Vue.config.globalProperties.$comma3 = methods.comma3;
+        Vue.config.globalProperties.$comma3t = methods.comma3t;
         Vue.config.globalProperties.$won = methods.won;
         Vue.config.globalProperties.$uncomma = methods.uncomma;
         Vue.config.globalProperties.$getCodeNameFromCodeList = methods.getCodeNameFromCodeList;
         Vue.config.globalProperties.$isNumeric = methods.isNumeric; 
         Vue.config.globalProperties.$numColor = methods.numColor; 
+        Vue.config.globalProperties.$numZeroColor = methods.numZeroColor;
         Vue.config.globalProperties.$getDate = methods.getDate; 
         Vue.config.globalProperties.$toastMessage = methods.toastMessage; 
         Vue.config.globalProperties.$sessionInfoLog = methods.sessionInfoLog; 

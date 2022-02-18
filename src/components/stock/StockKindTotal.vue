@@ -38,9 +38,9 @@
                         <tr v-for="(stockKind, i) in stockKindTotal.list" :key="i">
                             <!-- <td ><router-link :to="{name: 'StockKindDetail', params:{memberId: 1, stockKindObj: stockKind, assetId: stockKind.assetId, stockCode: stockKind.stockKindCd}}">{{stockKind.stockKindName}}</router-link></td> -->
                             <td @click="clickRouterPushStockKind(stockKind)">{{stockKind.stockKindName}}</td>
-                            <td :class="this.$numColor(this.$uncomma(stockKind.diffAmount))">{{this.$comma3(stockKind.curUnitPrice)}}</td>
-                            <td :class="this.$numColor(this.$uncomma(stockKind.diffAmount))">{{this.$comma3(stockKind.diffAmount)}}</td>
-                            <td :class="this.$numColor(stockKind.dayRange)">{{this.$comma3(stockKind.dayRange)}}</td>
+                            <td :class="this.$numZeroColor(this.$uncomma(stockKind.curUnitPrice))">{{this.$comma3(stockKind.curUnitPrice)}}</td>
+                            <td :class="this.$numColor(this.$uncomma(stockKind.diffAmount))">{{this.$comma3t(stockKind.diffAmount)}}</td>
+                            <td :class="this.$numColor(this.$uncomma(stockKind.dayRange))">{{this.$comma3(stockKind.dayRange)}}</td>
                         </tr>                    
                     </tbody>
                 </table>
