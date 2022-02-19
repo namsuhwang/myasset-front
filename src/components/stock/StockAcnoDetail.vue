@@ -49,7 +49,7 @@
         </div>  -->
     </div>
     <div class="m-4">
-        <button type="button" @click="stockAssetReg" class="btn btn-primary btn-lg">등록</button> 
+        <button type="button" @click="stockAssetSave" class="btn btn-primary btn-lg">증권 계좌 정보 저장</button> 
     </div>
 </template>
 
@@ -77,10 +77,9 @@ export default {
         }
     },    
     methods : {
-        stockAssetReg(){
-            console.log("stockAssetReg");
-            console.log("stockAssetReg stockCodeList : " + JSON.stringify(this.$store.state.storeCommon.stockCodeList));
-            console.log("stockAssetReg isNumeric(this.ableAmt) : " + this.$isNumeric(this.ableAmt));
+        stockAssetSave(){
+            console.log("stockAssetSave stockCodeList : " + JSON.stringify(this.$store.state.storeCommon.stockCodeList));
+            console.log("stockAssetSave isNumeric(this.ableAmt) : " + this.$isNumeric(this.ableAmt));
             if(!this.$isNumeric(this.ableAmt)) return;
             this.stockAsset.ableAmt = this.$uncomma(this.ableAmt);
 
@@ -94,10 +93,10 @@ export default {
             console.log("bankAsset.orgName = " + this.stockAsset.orgName);
             this.stockAsset.assetName = "증권-" + this.stockAsset.orgName + "_" + this.stockAsset.stockAcno;
             console.log("stockAsset = " + JSON.stringify(this.stockAsset));
-            api.post('/myasset/stock/acno/reg', this.stockAsset)
+            api.post('/myasset/stock/acno/save', this.stockAsset)
             .then((response)=>{
-                console.log("증권 계좌 등록 결과 : " + JSON.stringify(response.data)); 
-                alert("증권 계좌 등록이 완료되었습니다.");
+                console.log("증권 계좌 저장 결과 : " + JSON.stringify(response.data)); 
+                alert("증권 계좌 저장이 완료되었습니다.");
             });
         }, 
     },

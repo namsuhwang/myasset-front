@@ -168,7 +168,7 @@ export default {
         /*-------------------------------------------------------------------------------------*
          *      modal Function Start                                                           */ 
         closeClick(){
-            this.$emit('closeModal');
+            this.$emit('closeTradeModal');
         }
          /*     modal Function  End                                                            *
          --------------------------------------------------------------------------------------*/

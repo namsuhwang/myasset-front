@@ -128,13 +128,15 @@ export default {
     },    
     methods : { 
         callGetStockKindList(){ 
-            this.$getStockKindList(this.$store.state.storeAuth.memberId, this.callbackStockKindList);
+            var stockSearch = new Object();
+            stockSearch.deleteYn = 'N';
+            this.$getStockKindList(this.callbackStockKindList, stockSearch);
         },
         callbackStockKindList(stockKindList){
             this.stockKindList = stockKindList;
         },
         callGetStockTradeHistory(){ 
-            this.$getStockTradeHistory(this.tradeSearch, this.callbackStockTradeHistory);
+            this.$getStockTradeHistory(this.callbackStockTradeHistory, this.tradeSearch);
         },
         callbackStockTradeHistory(stockTradeHistory){
             this.stockTradeHistory = stockTradeHistory;

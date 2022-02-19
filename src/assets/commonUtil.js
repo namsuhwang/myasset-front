@@ -148,7 +148,7 @@ const methods = {
         if(delimiter != null){
             dateString.replaceAll("-", delimiter);
         }
-        console.log("getDate : " + dateString);
+        // console.log("getDate : " + dateString);
         return dateString;
     },
     test(){

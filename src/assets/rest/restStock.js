@@ -28,9 +28,9 @@ const methods = {
             console.log(error);
         });
     }, 
-    getStockKindList(memberId, callbackFunc) {	    
-        console.log("공통함수 보유 주식 목록 조회 _ 시작 회원ID : " + memberId);     
-        api.post('/myasset/stock/kind/list', {memberId : memberId} )
+    getStockKindList(callbackFunc, params) {	    
+        console.log("공통함수 보유 주식 목록 조회 getStockKindList : ");     
+        api.post('/myasset/stock/kind/list', params)
         .then((response)=>{ 
             var stockKindList = response.data;
             console.log("공통함수 보유 주식 목록 조회 _ 결과 : " + JSON.stringify(stockKindList)); 
@@ -41,7 +41,7 @@ const methods = {
             console.log(error);
         });
     }, 
-    getStockTradeHistory(tradeSearch, callbackFunc) {	    
+    getStockTradeHistory(callbackFunc, tradeSearch) {	    
         console.log("공통함수 주식 거래내역 조회 _ 시작 입력 : " + JSON.stringify(tradeSearch));     
         api.post('/myasset/stock/trade/history', tradeSearch)
         .then((response)=>{ 

@@ -1,6 +1,6 @@
 <template>
     <transition name="modalFade">
-        <StockTradeModal  :stockKind="stockKind" :stockTradeModalVisible="stockTradeModalVisible" :trType="trType" @closeModal="closeStockTradeModal"/>
+        <StockTradeModal  :stockKind="stockKind" :stockTradeModalVisible="stockTradeModalVisible" :trType="trType" @closeTradeModal="closeStockTradeModal"/>
     </transition>
     <div>
         <h5>주식 종목</h5> 
@@ -15,12 +15,21 @@
                 </select>
             </div>
         </div>
+        <transition name="modalFade">
+            <StockKindSearch  :stockKindSearchModalVisible="stockKindSearchModalVisible" :stockKind="stockKind" @closeKindSearchModal="closeStockKindSearch"/>
+        </transition>
+        <div v-if="false" class="col-12">
+            <div class="input-group">
+                <span class="input-group-text">종목</span>
+                <input v-model="stockKind.stockKindCd" type="text" class="form-control" :readonly=true style='background-color:white;width:20px;'  placeholder="종목코드">
+                <input v-model="stockKind.stockKindName" type="text" class="form-control" :readonly=true style='background-color:white;' placeholder="종목명">                      
+            </div>
+        </div>
         <div class="col-12">
             <div class="input-group">
                 <span class="input-group-text">종목</span>
-                <input v-model="stockKind.stockKindCd" type="text" class="form-control" :readonly=readOnlyYn style='background-color:white;width:20px;'  placeholder="종목코드">
-                <input v-model="stockKind.stockKindName" type="text" class="form-control" :readonly=readOnlyYn style='background-color:white;' placeholder="종목명">      
-                <button type="button" @click="callStockKind" class="btn btn-secondary">조회</button>           
+                <input v-model="stockKindText" type="text" class="form-control" :readonly=true style='background-color:white;'>
+                <button type="button" @click="openKindSearchModal" class="btn btn-secondary">종목검색창</button>  
             </div>
         </div>
         <div class="col-12">
@@ -65,18 +74,18 @@
         </div> 
     </div>
     <div class="m-4"> 
-        <button id='btnBuy' type="button" @click="openTradeModal('BUY')" class="btn btn-primary btn-sm">매수 등록</button>&nbsp;
-        <button id='btnSale' type="button" @click="openTradeModal('SALE')" class="btn btn-primary btn-sm">매도 등록</button>&nbsp;
+        <button id='btnSave' type="button" @click="stockKindSave" class="btn btn-primary btn-sm">종목 저장</button>&nbsp;&nbsp;
+        <button id='btnDel' type="button" @click="stockKindDel" class="btn btn-primary btn-sm">종목 삭제</button>
     </div>
-    <div class="m-4">
+    <div class="m-4"> 
+        <button id='btnBuy' type="button" @click="openTradeModal('BUY')" class="btn btn-primary btn-sm">매수 등록</button>&nbsp;&nbsp;
+        <button id='btnSale' type="button" @click="openTradeModal('SALE')" class="btn btn-primary btn-sm">매도 등록</button>
+    </div>
+    <!-- <div class="m-4">
         <button id='btnReg' type="button" @click="stockKindReg" class="btn btn-primary btn-sm">등록</button>&nbsp;
         <button id='btnMod' type="button" @click="stockKindMod" class="btn btn-primary btn-sm">수정</button>&nbsp;
         <button id='btnDel' type="button" @click="stockKindDel" class="btn btn-primary btn-sm">삭제</button>&nbsp; 
-
-        <!-- <button id='btnReg' type="button" @click="stockKindReg" :disabled="mode != 'REG'" class="btn btn-primary btn-sm">등록</button>&nbsp;
-        <button id='btnMod' type="button" @click="stockKindMod" :disabled="mode == 'REG'" class="btn btn-primary btn-sm">수정</button>&nbsp;
-        <button id='btnDel' type="button" @click="stockKindDel" :disabled="mode == 'REG'" class="btn btn-primary btn-sm">삭제</button>&nbsp;  -->
-    </div> 
+    </div>  -->
 </template>
 
 <script>
@@ -84,6 +93,7 @@ import api from '@/assets/rest/api'
 import { onMounted, ref, reactive, toRefs, watch, computed } from 'vue';
 import { mapGetters, mapActions} from 'vuex';
 import StockTradeModal from './StockTradeModal.vue';
+import StockKindSearch from './StockKindSearch.vue';
 
 export default {
     name: 'StockKindDetail',
@@ -136,19 +146,21 @@ export default {
             stockAssetList : null,
             mode: "REG",
             stockTradeModalVisible : false,
+            stockKindSearchModalVisible : false,
             trType : ''
         }
     },    
     props:{
     },
     components:{
-        StockTradeModal
+        StockTradeModal,
+        StockKindSearch
     },
     methods : {
         /*-------------------------------------------------------------------------------------*
          *      Button Click Function Start                                                   */
-        // 종목 정보 등록
-        stockKindReg(){
+        // 종목 정보 저장
+        stockKindSave(){
             if(!this.$isNumeric(this.quantity)) return;
             this.stockKind.quantity = this.$uncomma(this.quantity);
 
@@ -165,38 +177,13 @@ export default {
             this.stockKind.curTotPrice = this.$uncomma(this.curTotPrice);
 
             console.log("stockKind = " + JSON.stringify(this.stockKind));
-            api.post('/myasset/stock/kind/reg', this.stockKind)
+            api.post('/myasset/stock/kind/save', this.stockKind)
             .then((response)=>{
-                console.log("보유 주식 등록 결과 : " + JSON.stringify(response.data)); 
-                alert("보유 주식 등록이 완료되었습니다.");
+                console.log("보유 주식 저장 결과 : " + JSON.stringify(response.data)); 
+                alert("보유 주식 저장이 완료되었습니다.");
                 this.mode = "MOD";
             });
-        },
-        // 종목 정보 등록
-        stockKindMod(){
-            if(!this.$isNumeric(this.quantity)) return;
-            this.stockKind.quantity = this.$uncomma(this.quantity);
-
-            if(!this.$isNumeric(this.buyAvgPrice)) return;
-            this.stockKind.buyAvgPrice = this.$uncomma(this.buyAvgPrice);
- 
-            if(!this.$isNumeric(this.buyTotPrice)) return;
-            this.stockKind.buyTotPrice = this.$uncomma(this.buyTotPrice);
-            
-            if(!this.$isNumeric(this.curUnitPrice)) return;
-            this.stockKind.curUnitPrice = this.$uncomma(this.curUnitPrice);
-            
-            if(!this.$isNumeric(this.curTotPrice)) return;
-            this.stockKind.curTotPrice = this.$uncomma(this.curTotPrice);
-
-            console.log("stockKind = " + JSON.stringify(this.stockKind));
-            api.post('/myasset/stock/kind/mod', this.stockKind)
-            .then((response)=>{
-                console.log("보유 주식 수정 결과 : " + JSON.stringify(response.data)); 
-                alert("보유 주식 수정이 완료되었습니다.");
-                this.mode = "REG";
-            });
-        },
+        }, 
         // 종목 정보 삭제
         stockKindDel(){
             console.log("stockKind = " + JSON.stringify(this.stockKind));
@@ -205,11 +192,6 @@ export default {
                 console.log("보유 주식 삭제 결과 : " + JSON.stringify(response.data)); 
                 alert("보유 주식 삭제가 완료되었습니다.");                
             });
-        },
-        openTradeModal(trType){
-            this.stockTradeModalVisible = !this.stockTradeModalVisible;
-            this.trType = trType;
-            console.log("openTradeModal stockTradeModalVisible=" + this.stockTradeModalVisible);
         },
          /*      Button Click Function End                                                     *
          --------------------------------------------------------------------------------------*/
@@ -283,9 +265,22 @@ export default {
          --------------------------------------------------------------------------------------*/
         /*-------------------------------------------------------------------------------------*
          *      modal Function Start                                                           */
+        openTradeModal(trType){
+            this.stockTradeModalVisible = !this.stockTradeModalVisible;
+            this.trType = trType;
+            console.log("openTradeModal stockTradeModalVisible=" + this.stockTradeModalVisible);
+        },
         closeStockTradeModal(){
             this.stockTradeModalVisible = false;
             console.log("closeStockTradeModal stockTradeModalVisible=" + this.stockTradeModalVisible);
+        },
+        openKindSearchModal(){
+            this.stockKindSearchModalVisible = !this.stockKindSearchModalVisible;
+            console.log("openKindSearchModal stockKindSearchModalVisible=" + this.stockKindSearchModalVisible);
+        },
+        closeStockKindSearch(){
+            this.stockKindSearchModalVisible = false;
+            console.log("closeStockKindSearch stockKindSearchModalVisible=" + this.stockKindSearchModalVisible);
         },
          /*     modal Function  End                                                            *
          --------------------------------------------------------------------------------------*/
@@ -325,6 +320,9 @@ export default {
         }
     },
     computed: {
+        stockKindText(){
+            return this.stockKind.stockKindCd + ' ' + this.stockKind.stockKindName;
+        }
     },
     created(){
     },
@@ -343,7 +341,7 @@ export default {
                 this.pnlAmt = this.$comma3(this.stockKind.pnlAmt);
                 this.pnlRate = this.$comma3(this.stockKind.pnlRate);
                 this.callStockKind();
-                this.readOnlyYn = true;
+                this.readOnlyYn = false;
                 this.mode = "MOD";
             }
         })
