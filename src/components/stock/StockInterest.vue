@@ -1,33 +1,25 @@
 <template>
     <div class="m-4">   
-        <h5>보유 주식</h5> 
-        <h6 align="left">&nbsp;{{stockKindTotal.baseTime}}</h6>
-        <div class="mb-3">
-            <table class="table table-borderless table-light">
-                <tbody>
-                    <tr>
-                        <td>총매입액</td>
-                        <td align="right">{{this.$comma3(stockKindTotal.totBuyPrice)}}</td>
-                        <td>손익금액</td>
-                        <td id="totPnlAmt" :class="this.$numColor(stockKindTotal.totPnlAmt)">{{this.$comma3(stockKindTotal.totPnlAmt)}}</td>
-                    </tr>
-                    <tr>
-                        <td>총평가액</td>
-                        <td align="right">{{this.$comma3(stockKindTotal.totCurPrice)}}</td>
-                        <td>손익율(%)</td>
-                        <td id="totPnlRate" :class="this.$numColor(stockKindTotal.totPnlRate)">{{this.$comma3(stockKindTotal.totPnlRate)}}</td>
-                    </tr>  
-                </tbody>
-            </table>
-        </div>  
+        <h5>관심 종목</h5> 
+        <h6 align="left">&nbsp;{{stockInterestData.baseTime}}</h6> 
+        <br/>
+        <transition name="modalFade">
+            <StockKindSearch  :stockKindSearchModalVisible="stockKindSearchModalVisible" :stockKind="stockKind"  @closeKindSearchModal="closeStockKindSearch"/>
+        </transition>
+        <div class="col-12">
+            <button type="button" class="btn btn-secondary btn-sm" @click="openKindSearchModal">추가</button>&nbsp;
+            <button type="button" class="btn btn-secondary btn-sm">삭제</button>&nbsp;&nbsp;
+            <button type="button" class="btn btn-secondary btn-sm">상</button>&nbsp;
+            <button type="button" class="btn btn-secondary btn-sm">하</button>&nbsp;
+            <button type="button" class="btn btn-secondary btn-sm">적용</button>
+        </div>
         <br/>
         <div class="col-12">
             <div class="input-group">
-                <h5>시세  </h5>
-                <!-- <table class="table table-sm"> -->
                 <table class="table table-sm" cellspacing="0" width="100%">
                     <thead class="table-light">
                         <tr>
+                            <th><button type="button" @click="checkVisible=true" class="btn btn-primary btn-sm">선택</button></th>
                             <th>종목명</th>
                             <th>현재가</th>
                             <th>전일대비</th>
@@ -35,115 +27,126 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="(stockKind, i) in stockKindTotal.list" :key="i">
-                            <!-- <td ><router-link :to="{name: 'StockKindDetail', params:{memberId: 1, stockKindObj: stockKind, assetId: stockKind.assetId, stockCode: stockKind.stockKindCd}}">{{stockKind.stockKindName}}</router-link></td> -->
-                            <td @click="clickRouterPushStockKind(stockKind)">{{stockKind.stockKindName}}</td>
-                            <td :class="this.$numColor(this.$uncomma(stockKind.diffAmount))">{{this.$comma3(stockKind.curUnitPrice)}}</td>
-                            <td :class="this.$numColor(this.$uncomma(stockKind.diffAmount))">{{this.$comma3(stockKind.diffAmount)}}</td>
-                            <td :class="this.$numColor(stockKind.dayRange)">{{this.$comma3(stockKind.dayRange)}}</td>
+                        <tr v-for="(stockInterest, i) in stockInterestData.list" :key="i">                            
+                            <td ><input v-if="checkVisible" @click="stockKindClick(stockInterest)" class="form-check-input" type="radio" name="stockInterest.orderId" :id="stockInterest.orderId"></td>
+                            <td @click="clickRouterPushStockKind(stockInterest)">{{stockInterest.stockKindName}}</td>
+                            <td :class="this.$numColor(this.$uncomma(stockInterest.diffAmount))">{{this.$comma3(stockInterest.curUnitPrice)}}</td>
+                            <td :class="this.$numColor(this.$uncomma(stockInterest.diffAmount))">{{this.$comma3(stockInterest.diffAmount)}}</td>
+                            <td :class="this.$numColor(stockInterest.dayRange)">{{this.$comma3(stockInterest.dayRange)}}</td>
                         </tr>                    
                     </tbody>
                 </table>
             </div>
         </div> 
-        <br/>
-        <div class="col-12">
-            <div >
-                <div class="input-group">
-                    <h5>종목별 손익  </h5>
-                </div>    
-                <div style="overflow: auto">
-                    <table class="table table-sm" style="font-size: 12px; width: 550px;">
-                    <!-- <table class="table table-sm" style="font-size: 12px; width: 100%; cellspacing:0;"> -->
-                        <thead class="table-light">
-                            <tr>
-                                <th>종목명</th>
-                                <th width="40px">보유수</th>
-                                <th>손익액</th>
-                                <th width="60px">손익율(%)</th>
-                                <th>평단가</th>
-                                <th>매입가</th>
-                                <th>평가액</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr v-for="(stockKind, i) in stockKindTotal.list" :key="i">
-                                <td>{{stockKind.stockKindName}}</td>
-                                <td align="right">{{this.$comma3(stockKind.quantity)}}</td>
-                                <td :class="this.$numColor(stockKind.pnlAmt)">{{this.$comma3(stockKind.pnlAmt)}}</td>
-                                <td :class="this.$numColor(stockKind.pnlRate)">{{this.$comma3(stockKind.pnlRate)}}</td>
-                                <td align="right">{{this.$comma3(stockKind.buyAvgPrice)}}</td>
-                                <td align="right">{{this.$comma3(stockKind.buyTotPrice)}}</td>
-                                <td align="right">{{this.$comma3(stockKind.curTotPrice)}}</td>
-                            </tr>                    
-                        </tbody>
-                    </table> 
-                </div>
-            </div>
-        </div>
     </div>
 </template>
 
 <script>
-import axios from 'axios';
+import api from '@/assets/rest/api'
 import { onMounted, ref, reactive, toRefs, watch, computed } from 'vue';
 import { mapMutations } from "vuex"
+import StockKindSearch from './StockKindSearch.vue';
 
 export default {
-    name: 'StockKindTotal',
+    name: 'StockInterest',
     data(){
         return {
-            stockKindTotal : {
+            stockInterestData : {
                 baseTime : '',     
-                totBuyPrice : '',
-                totCurPrice : '',
-                totPnlRate : '',
-                totPnlAmt : '', 
-                list : [{
-                    stockKindId : '',
-                    assetId : '',
+                list : [{    
+                    stockInterestId : '',     
                     stockKindCd : '',
                     stockKindName : '',
-                    quantity : '',
-                    buyAvgPrice : '',
-                    buyTotPrice : '',
+                    orderId : '',
+                    stockKindId : '',
+                    assetId : '',
                     curUnitPrice : '',
-                    curTotPrice : '',
-                    pnlRate : '',
-                    pnlAmt : '',
-                    diffAmount: '',
+                    diffAmount : '',
                     dayRange : '',
                     highPrice : '',
-                    lowPrice : '',
-                    deleteYn : '',
-                    memberId : '',
-                    baseTime : '',
-                    regDatetime : '',
-                    lastUpdateDatetime : ''
+                    lowPrice : ''
                 }]
             },
             timerStatus : false,
             timerExec : null,
+            checkVisible : false,
+            stockKindSearchModalVisible : false,
+            stockKind : {       
+                stockKindId : '',
+                assetId : '',
+                stockKindCd : '',
+                stockKindName : '',
+            }
         }
     },    
+    components:{ 
+        StockKindSearch
+    },
     methods : { 
         // 주식종합 API 콜
-        callGetStockKindTotal(){ 
-            this.$getStockKindTotal(this.callbackStockKindTotal);
+        getStockInterestList(){ 
+            console.log("getStockInterestList" );
+            api.post('/myasset/stock/interest/list', )
+            .then((response)=>{
+                console.log("관심 종목 검색 결과 : " + JSON.stringify(response.data)); 
+                this.stockInterestData = response.data;
+            });
+        }, 
+        saveStockInterest(){ 
+            console.log("saveStockInterest" );
+            api.post('/myasset/stock/interest/save', this.stockKind)
+            .then((response)=>{
+                console.log("관심 종목 저장 결과 : " + JSON.stringify(response.data)); 
+                this.stockInterestData = response.data;
+            });
         },
         // 주식종합 콜백함수
-        callbackStockKindTotal(stockKindTotal){
-            console.log("주식보유현황 콜백함수 : " + JSON.stringify(stockKindTotal));
-            this.stockKindTotal = stockKindTotal;
-            if(stockKindTotal.list.length <= 0){
-                alert("등록된 주식 종목이 없습니다. 주식 계좌 등록 및 종목 등록이 필요합니다.");
-                this.timerStop();  // 조회할 내용이 없으므로 타이머 스톱
-            }
+        callbackStockInterestList(stockInterestData){
+            console.log("StockInterest 관심종목현황 콜백함수 : " + JSON.stringify(stockInterestData));
+            this.stockInterestData = stockInterestData;
         },
-        clickRouterPushStockKind(stockKind){ 
+        clickRouterPushStockKind(stockInterest){  
+            this.stockKind.stockKindCd = stockInterest.stockKindCd;
+            this.stockKind.stockKindName = stockInterest.stockKindName;
+            this.stockKind.stockKindId = stockInterest.stockKindId;
+            this.stockKind.assetId = stockInterest.assetId;
             this.$router.push( 
-                {name: 'StockKindDetail', params:{stockKind: JSON.stringify(stockKind)}}
+                {name: 'StockKindDetail', params:{stockKind: JSON.stringify(this.stockKind)}}
             )
+        },
+        stockKindClick(stockInterest){
+            this.stockKind.stockKindCd = stockInterest.stockKindCd;
+            this.stockKind.stockKindName = stockInterest.stockKindName;
+            this.stockKind.stockKindId = stockInterest.stockKindId;
+            this.stockKind.assetId = stockInterest.assetId;
+        },
+        openKindSearchModal(stockInterest){
+            this.stockKind.stockKindCd = stockInterest.stockKindCd;
+            this.stockKind.stockKindName = stockInterest.stockKindName;
+            this.stockKind.stockKindId = stockInterest.stockKindId;
+            this.stockKind.assetId = stockInterest.assetId;
+            console.log("StockInterest stockKindSearchModalVisible=" + this.stockKindSearchModalVisible);
+            this.stockKindSearchModalVisible = !this.stockKindSearchModalVisible;
+        },
+        closeStockKindSearch(){
+            this.stockKindSearchModalVisible = false;
+            console.log("받은 stockKind:" + JSON.stringify(this.stockKind));
+            var existItemYn = false;
+            var list = this.stockInterestData.list;
+            for(var i = 0;  list.length; i++){
+                if(list[i].stockKindCd == this.stockKind.stockKindCd){
+                    existItemYn = true;
+                }
+            }
+            // this.stockInterestData.list.forEach(function(si, i, arr){
+            //     if(si.stockKindCd == this.stockKind.stockKindCd){
+            //         existItemYn = true;
+            //     }
+            // });
+            if(!existItemYn){
+                this.saveStockInterest();
+            }
+            console.log("StockInterest stockKindSearchModalVisible=" + this.stockKindSearchModalVisible);
         },
         timerStart(){
             this.timerStatus = true;
@@ -165,10 +168,7 @@ export default {
     mounted(){ 
         // 전체 화면내용이 렌더링된 후에 아래의 코드가 실행됩니다.        
         this.$nextTick(function () { 
-        this.$sessionInfoLog("StockKindTotal.vue");
-            this.callGetStockKindTotal();           
-            this.timerStart();
-            console.log("토탈 토큰=" + this.$store.state.storeAuth.token);
+            this.getStockInterestList();
         })        
     },
     beforeUnmount(){

@@ -28,7 +28,7 @@
         <div class="col-12">
             <div class="input-group">
                 <span class="input-group-text">종목</span>
-                <input v-model="stockKindText" type="text" class="form-control" :readonly=true style='background-color:white;'>
+                <input v-model="stockKindText" type="text" class="form-control" :readonly=true style='background-color:Snow;'>
                 <button type="button" @click="openKindSearchModal" class="btn btn-secondary">종목검색창</button>  
             </div>
         </div>
