@@ -71,7 +71,7 @@ export default {
         chooseStockKindCode(){
             this.stockKind.stockKindCd = this.stockKindCode.code;
             this.stockKind.stockKindName = this.stockKindCode.kindName;
-            this.$emit('closeKindSearchModal');
+            this.$emit('chooseStockKind', this.stockKind);
         }
          /*      Button Click Function End                                                     *
          --------------------------------------------------------------------------------------*/

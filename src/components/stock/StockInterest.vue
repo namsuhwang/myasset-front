@@ -4,7 +4,7 @@
         <h6 align="left">&nbsp;{{stockInterestData.baseTime}}</h6> 
         <br/>
         <transition name="modalFade">
-            <StockKindSearch  :stockKindSearchModalVisible="stockKindSearchModalVisible" :stockKind="stockKind"  @closeKindSearchModal="closeStockKindSearch"/>
+            <StockKindSearch  :stockKindSearchModalVisible="stockKindSearchModalVisible" :stockKind="stockKind"  @chooseStockKind="closeStockKindSearch"/>
         </transition>
         <div class="col-12">
             <button type="button" class="btn btn-secondary btn-sm" @click="openKindSearchModal">추가</button>&nbsp;
@@ -43,7 +43,7 @@
 
 <script>
 import api from '@/assets/rest/api'
-import { onMounted, ref, reactive, toRefs, watch, computed } from 'vue';
+import { onMounted, onUpdated, ref, reactive, toRefs, watch, computed } from 'vue';
 import { mapMutations } from "vuex"
 import StockKindSearch from './StockKindSearch.vue';
 
@@ -128,22 +128,21 @@ export default {
             console.log("StockInterest stockKindSearchModalVisible=" + this.stockKindSearchModalVisible);
             this.stockKindSearchModalVisible = !this.stockKindSearchModalVisible;
         },
-        closeStockKindSearch(){
+        closeStockKindSearch(chosenStockKind){
             this.stockKindSearchModalVisible = false;
-            console.log("받은 stockKind:" + JSON.stringify(this.stockKind));
+            console.log("받은 chosenStockKind:" + JSON.stringify(chosenStockKind));
             var existItemYn = false;
             var list = this.stockInterestData.list;
-            for(var i = 0;  list.length; i++){
-                if(list[i].stockKindCd == this.stockKind.stockKindCd){
+            for(var i = 0;  i < list.length; i++){
+                console.log("list[" + i + "] :" + JSON.stringify(list[i]));
+                console.log("chosenStockKind :" + JSON.stringify(chosenStockKind));
+                if(list[i].stockKindCd == chosenStockKind.stockKindCd){
                     existItemYn = true;
                 }
             }
-            // this.stockInterestData.list.forEach(function(si, i, arr){
-            //     if(si.stockKindCd == this.stockKind.stockKindCd){
-            //         existItemYn = true;
-            //     }
-            // });
             if(!existItemYn){
+                this.stockKind.stockKindCd = chosenStockKind.stockKindCd;
+                this.stockKind.stockKindName = chosenStockKind.stockKindName;
                 this.saveStockInterest();
             }
             console.log("StockInterest stockKindSearchModalVisible=" + this.stockKindSearchModalVisible);
@@ -151,7 +150,7 @@ export default {
         timerStart(){
             this.timerStatus = true;
             this.timerExec = setInterval(() => {
-                this.callGetStockKindTotal();
+                this.getStockInterestList();
             }, 5000)
         },
         timerStop(){
@@ -165,10 +164,14 @@ export default {
     },
     computed: {
     },
+    updated(){
+        // console.log("updated");
+    },
     mounted(){ 
         // 전체 화면내용이 렌더링된 후에 아래의 코드가 실행됩니다.        
         this.$nextTick(function () { 
-            this.getStockInterestList();
+            this.getStockInterestList();        
+            this.timerStart();
         })        
     },
     beforeUnmount(){
