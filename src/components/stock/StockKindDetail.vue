@@ -16,7 +16,8 @@
             </div>
         </div>
         <transition name="modalFade">
-            <StockKindSearch  :stockKindSearchModalVisible="stockKindSearchModalVisible" :stockKind="stockKind" @closeKindSearchModal="closeStockKindSearch"/>
+            <StockKindSearch  :stockKindSearchModalVisible="stockKindSearchModalVisible" :stockKind="stockKind"  @chooseStockKind="closeStockKindSearch"/>
+            <!-- <StockKindSearch  :stockKindSearchModalVisible="stockKindSearchModalVisible" :stockKind="stockKind" @chooseStockKind="closeStockKindSearch"/> -->
         </transition>
         <div v-if="false" class="col-12">
             <div class="input-group">
@@ -248,14 +249,14 @@ export default {
         },
         // 손익 정보 계산
         setPnl(){
-            console.log("this.stockKind.curTotPrice=" + this.stockKind.curTotPrice + ", this.stockKind.buyTotPrice=" + this.stockKind.buyTotPrice);
+            // console.log("this.stockKind.curTotPrice=" + this.stockKind.curTotPrice + ", this.stockKind.buyTotPrice=" + this.stockKind.buyTotPrice);
             if(this.stockKind.curTotPrice == "" || this.stockKind.buyTotPrice == ""){
                 return;
             }
             var pAmt = this.stockKind.curTotPrice - this.stockKind.buyTotPrice;
             var pRate = pAmt / this.stockKind.buyTotPrice * 100.0;
             pRate = Math.round((pRate + Number.EPSILON) * 100) / 100;
-            console.log("pAmt=" + pAmt + ", pRate=" + pRate);
+            // console.log("pAmt=" + pAmt + ", pRate=" + pRate);
             this.stockKind.pnlAmt = pAmt;
             this.stockKind.pnlRate = pRate;
             this.pnlAmt = this.$comma3(pAmt);
@@ -278,9 +279,12 @@ export default {
             this.stockKindSearchModalVisible = !this.stockKindSearchModalVisible;
             console.log("openKindSearchModal stockKindSearchModalVisible=" + this.stockKindSearchModalVisible);
         },
-        closeStockKindSearch(){
+        closeStockKindSearch(chosenStockKind){
             this.stockKindSearchModalVisible = false;
-            console.log("closeStockKindSearch stockKindSearchModalVisible=" + this.stockKindSearchModalVisible);
+            console.log("받은 chosenStockKind:" + JSON.stringify(chosenStockKind));
+            this.stockKind.stockKindCd = chosenStockKind.stockKindCd;
+            this.stockKind.stockKindName = chosenStockKind.stockKindName;
+            this.callStockKind();
         },
          /*     modal Function  End                                                            *
          --------------------------------------------------------------------------------------*/
